@@ -1,0 +1,4189 @@
+====================================================================================================
+    PICO-8 User Manual
+====================================================================================================
+
+PICO-8 v0.2.4c
+https://www.pico-8.com
+(c) Copyright 2014-2022 Lexaloffle Games LLP
+Author: Joseph White // hey@lexaloffle.com
+
+PICO-8 is built with:
+ 
+    SDL2 http://www.libsdl.org
+    Lua 5.2 http://www.lua.org  // see license.txt
+    ws281x by jgarff            // see license.txt
+    GIFLIB http://giflib.sourceforge.net/
+    WiringPi http://wiringpi.com/
+    libb64 by Chris Venter
+    miniz by Rich Geldreich
+
+Latest version of this manual (as html, txt) and other resources:
+
+https://www.lexaloffle.com/pico-8.php?page=resources
+
+:: Welcome to PICO-8!
+
+    PICO-8 is a fantasy console for making, sharing and playing tiny games and other computer  
+    programs. When you turn it on, the machine greets you with a shell for typing in Lua programs  
+    and provides simple built-in tools for creating sprites, maps and sound.
+
+    The harsh limitations of PICO-8 are carefully chosen to be fun to work with, encourage small 
+    but expressive designs and hopefully to give PICO-8 cartridges their own particular look and  
+    feel.
+
+:: Specifications
+
+    Display: 128x128, fixed 16 colour palette
+    Input:   6-button controllers
+    Carts:   32k data encoded as png files
+    Sound:   4 channel, 64 definable chip blerps
+    Code:    Lua (max 8192 tokens of code) 
+    Sprites: Single bank of 128 8x8 sprites (+128 shared)
+    Map:     128x32 8-bit cells (+128x32 shared)
+
+====================================================================================================
+    Getting Started
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+ Keys
+----------------------------------------------------------------------------------------------------
+
+    ALT+ENTER:  Toggle Fullscreen
+    ALT+F4:     Fast Quit (Windows)
+    CTRL-Q:     Fast Quit (Mac, Linux)
+    CTRL-R:     Reload / Run / Restart cartridge
+    CTRL-S:     Quick-Save working cartridge
+    CTRL-M:     Mute / Unmute Sound
+    ENTER / P:  Pause Menu (while running cart)
+
+    Player 1 default keys: Cursors + ZX / NM / CV
+    Player 2 default keys: SDFE + tab,Q / shift A
+
+    To change the default keys use the KEYCONFIG utility from inside PICO-8:
+
+    > KEYCONFIG
+
+----------------------------------------------------------------------------------------------------
+ Hello World
+----------------------------------------------------------------------------------------------------
+
+    After PICO-8 boots, try typing some of these commands followed by enter:
+
+        > PRINT("HELLO WORLD")
+        > RECTFILL(80,80,120,100,12)
+        > CIRCFILL(70,90,20,14)
+        > FOR I=1,4 DO PRINT(I) END
+
+    (Note: PICO-8 only displays upper-case characters -- just type normally without capslock!)
+
+    You can build up an interactive program by using commands like this in the code editing mode 
+    along with two special callback functions @_UPDATE and @_DRAW. For example, the following 
+    program allows you to move a circle around with the cursor keys. Press Esc to switch to the 
+    code editor and type or copy & paste the following code:
+
+        X = 64  Y = 64
+        FUNCTION _UPDATE()
+            IF (BTN(0)) THEN X=X-1 END
+            IF (BTN(1)) THEN X=X+1 END
+            IF (BTN(2)) THEN Y=Y-1 END
+            IF (BTN(3)) THEN Y=Y+1 END
+        END
+ 
+        FUNCTION _DRAW()
+            CLS(5)
+            CIRCFILL(X,Y,7,14)
+        END
+
+    Now press Esc to return to the console and type RUN (or press CTRL-R) to see it in action. 
+    Please refer to the demo cartridges for more complex programs (type INSTALL_DEMOS).
+
+    If you want to store your program for later, use the SAVE command:
+
+    > SAVE PINKCIRC
+
+    And to load it again:
+
+    > LOAD PINKCIRC
+
+----------------------------------------------------------------------------------------------------
+ Example Cartridges
+----------------------------------------------------------------------------------------------------
+
+    These cartridges are included with PICO-8 and can be installed by typing:
+
+    > INSTALL_DEMOS
+    > CD DEMOS
+    > LS	
+     
+    HELLO      Greetings from PICO-8
+    API        Demonstrates most PICO-8 functions
+    JELPI      Platform game demo w/ 2p support 
+    CAST       2.5D Raycaster demo
+    DRIPPY     Draw a drippy squiggle
+    WANDER     Simple walking simulator
+    COLLIDE    Example wall and actor collisions
+
+    To run a cartridge, open PICO-8 and type:
+
+    > LOAD JELPI
+    > RUN
+
+    Press escape to stop the program, and once more to enter editing mode.
+
+    A small collection of BBS carts can also be installed to /GAMES with: 
+
+    > INSTALL_GAMES
+
+----------------------------------------------------------------------------------------------------
+ File System
+----------------------------------------------------------------------------------------------------
+
+    These commands can be used to manage files and directories (folders):
+
+    LS          list the current directory
+    CD BLAH     change directory
+    CD ..       go up a directory
+    CD /        change back to top directory (on PICO-8's virtual drive)
+    MKDIR BLAH  make a directory
+    FOLDER      open the current directory in the host operating system's file browser
+
+    LOAD BLAH  load a cart from the current directory SAVE BLAH  save a cart to the current 
+    directory
+
+    If you want to move files around, duplicate them or delete them, use the FOLDER  command and do 
+    it in the host operating system.
+
+    The default location for PICO-8's drive is:
+
+    Windows: C:/Users/Yourname/AppData/Roaming/pico-8/carts
+    OSX: /Users/Yourname/Library/Application Support/pico-8/carts
+    Linux: ~/.lexaloffle/pico-8/carts
+
+    You can change this and other settings in pico-8/config.txt
+
+    Tip: The drive directory can be mapped to a cloud drive (provided by Dropbox, Google Drive or 
+    similar) in order to create a single disk shared between PICO-8 machines spread  across 
+    different host machines.
+
+----------------------------------------------------------------------------------------------------
+ Loading and Saving
+----------------------------------------------------------------------------------------------------
+
+    When using LOAD and SAVE, the .P8 extension can be omitted and is added automatically.
+
+    > SAVE FOO
+    SAVED FOO.P8
+
+    Cartridge files can also be dragged and dropped into PICO-8's window to load them.
+
+    Using .p8.png filename extension will write the cartridge in a special image format that looks 
+    like a cartridge. Using .p8.rom" writes in a raw 32k binary format.
+
+    Use a filename of "@clip" to load or save to the clipboard.
+
+    Use a filename of "@url" to save to clipboard as a pico-8-edu.com url if it can be encoded in 
+    2040 characters (code and gfx only).
+
+    Once a cartridge has been loaded or saved, it can also be quick-saved with CTRL-S
+
+    :: Saving .p8.png carts with a text label and preview image
+
+        To generate a label image saved with the cart, run the program first and press CTRL-7 to 
+        grab whatever is on the screen. The first two lines of the program starting with '--' are 
+        also  drawn to the cart's label.
+
+        -- OCEAN DIVER LEGENDS
+        -- BY LOOPY
+
+    :: Code size restrictions for .p8.png / .p8.rom formats
+
+        When saving in .png or .rom format, the compressed size of the code must be less than 15360 
+        bytes so that the total data is <= 32k.
+
+        To find out the current size of your code, use the INFO command. The compressed size limit  
+        is not enforced for saving in .p8 format.
+
+----------------------------------------------------------------------------------------------------
+ Using an External Text Editor
+----------------------------------------------------------------------------------------------------
+
+    It is possible to edit .p8 files directly with a separate text editor. Using CTRL-R to run a 
+    cartridge will automatically re-load the file if:
+
+        1. There are no unsaved changes in the PICO-8 editors, AND<br> 2. The file differs in 
+        content from the last loaded version.
+
+    If there are changes to both the cart on disk and in the editor, a notification is displayed:
+
+        DIDN'T RELOAD; UNSAVED CHANGES
+
+    Alternatively, .lua text files can be modified in a separate editor and then included into the  
+    cartridge's code each time it is run using @{#INCLUDE} (in the desired code location):
+
+        #INCLUDE YOURFILE.LUA
+
+----------------------------------------------------------------------------------------------------
+ Backups
+----------------------------------------------------------------------------------------------------
+
+    When quitting without saving changes, or overwriting an existing file, a backup of the 
+    cartridge  is saved to {appdata}/pico-8/backup. An extra copy of the current cartridge can also 
+    be saved to the same folder by typing BACKUP.
+
+    To open the backups folder in the host operating system's file browser, use:
+
+    > FOLDER BACKUPS
+
+    It is then possible to drag and drop files into the PICO-8 window to load them.
+
+    From 0.2.4c, periodic backups are also saved every 20 minutes when not idle in the editor, 
+    which  means the backups folder will grow by about 1MB every 5 hours. This can be disabled or 
+    adjusted in config.txt
+
+----------------------------------------------------------------------------------------------------
+ Configuration
+----------------------------------------------------------------------------------------------------
+
+        PICO-8 reads configuration settings from config.txt at the start of each session, and saves 
+        it on exit (so you should edit config.txt when PICO-8 is not running).
+
+        The location of the config.txt file depends on the host operating system:
+
+        Windows: C:/Users/Yourname/AppData/Roaming/pico-8/config.txt
+        OSX: /Users/Yourname/Library/Application Support/pico-8/config.txt
+        Linux: ~/.lexaloffle/pico-8/config.txt
+
+        Use the -home switch (below) to use a different path to store config.txt and other data.
+
+        Some settings can be changed while running PICO-8 by typing CONFIG SETTING VALUE. (type 
+        CONFIG by itself for a list)
+
+    :: Commandline parameters
+
+        // note: these override settings found in config.txt
+
+        pico8 [switches] [filename.p8]
+
+        -width n                set the window width 
+        -height n               set the window height 
+        -windowed n             set windowed mode off (0) or on (1)
+        -volume n               set audio volume 0..256
+        -joystick n             joystick controls starts at player n (0..7)
+        -pixel_perfect n        1 for unfiltered screen stretching at integer scales (on by default)
+        -preblit_scale n        scale the display by n before blitting to screen (useful with -pixel_perfect 0)
+        -draw_rect x,y,w,h      absolute window coordinates and size to draw pico-8's screen 
+        -run filename           load and run a cartridge
+        -x filename             execute a PICO-8 cart headless and then quit (experimental!)
+        -export param_str       run EXPORT command in headless mode and exit (see notes under export)
+        -p param_str            pass a parameter string to the specified cartridge
+        -splore                 boot in splore mode
+        -home path              set the path to store config.txt and other user data files
+        -root_path path         set the path to store cartridge files
+        -desktop path           set a location for screenshots and gifs to be saved
+        -screenshot_scale n     scale of screenshots.  default: 3 (368x368 pixels)
+        -gif_scale n            scale of gif captures. default: 2 (256x256 pixels)
+        -gif_len n              set the maximum gif length in seconds (1..120)
+        -gui_theme n            use 1 for a higher contrast editor colour scheme
+        -timeout n              how many seconds to wait before downloads timeout (default: 30)
+        -software_blit n        use software blitting mode off (0) or on (1)
+        -foreground_sleep_ms n  how many milliseconds to sleep between frames.
+        -background_sleep_ms n  how many milliseconds to sleep between frames when running in background
+        -accept_future n        1 to allow loading cartridges made with future versions of PICO-8
+        -global_api n           1 to leave api functions in global scope (useful for debugging)
+
+:: Controller Setup
+
+    PICO-8 uses the SDL2 controller configuration scheme. It will detect common controllers on 
+    startup and also looks for custom mappings in sdl_controllers.txt in the same directory  as 
+    config.txt. sdl_controllers.txt has one mapping per line.
+
+    To generate a custom mapping string for your controller, use either the controllermap program 
+    that comes with SDL2, or try http://www.generalarcade.com/gamepadtool/
+
+    To find out the id of your controller as it is detected by SDL2, search for "joysticks" or 
+    "Mapping" in log.txt after running PICO-8. This id may vary under different operating systems. 
+    See: https://www.lexaloffle.com/bbs/?tid=32130
+
+    To set up which keyboard keys trigger joystick buttons presses, use KEYCONFIG.
+
+----------------------------------------------------------------------------------------------------
+ Screenshots and GIFS
+----------------------------------------------------------------------------------------------------
+
+    While a cartridge is running use:
+
+        CTRL-6 Save a screenshot to desktop
+        CTRL-7 Capture cartridge label image
+        CTRL-8 Start recording a video
+        CTRL-9 Save GIF video to desktop (8 seconds by default)
+
+    You can save a video at any time (it is always recording); CTRL-8 simply resets the video 
+    starting point. To record more than 8 seconds, use the CONFIG command (maximum: 120)
+
+        CONFIG GIF_LEN 60
+
+    If you would like the recording to reset every time (to create a non-overlapping sequence), 
+    use:
+
+        CONFIG GIF_RESET_MODE 1
+
+    The gif format can not match 30fps exactly, so PICO-8 instead uses the closest match: 33.3fps.
+
+    If you have trouble saving to the desktop, try configuring an alternative desktop path in 
+    config.txt
+
+----------------------------------------------------------------------------------------------------
+ Sharing Cartridges
+----------------------------------------------------------------------------------------------------
+
+    There are three ways to share carts made in PICO-8:
+
+        1. Share the .p8 or .p8.png file directly with other PICO-8 users
+
+            Type FOLDER to open the current folder in your host operating system.
+
+        2. Post the cart on the Lexaloffe BBS to get a web-playable version
+
+            http://www.lexaloffle.com/pico-8.php?page=submit
+
+        3. Export the cartridge to a stand-alone html/js or native binary player (see the exporters 
+        section for details)
+
+----------------------------------------------------------------------------------------------------
+ SPLORE
+----------------------------------------------------------------------------------------------------
+
+    SPLORE is a built-in utility for browsing and organising both local and bbs (online) 
+    cartridges. Type SPLORE [enter] to launch it, or launch PICO-8 with -splore. 
+
+    It is possible to control SPLORE entirely with a joystick:
+
+    LEFT and RIGHT to navigate lists of cartridges
+    UP AND DOWN to select items in each list
+    X,O or MENU to launch the cartridge
+
+    While inside a cart, press MENU to favourite a cartridge or exit to splore. If you're using a 
+    keyboard, it's also possible to press F to favourite an item while it is selected in the 
+    cartridge list view.
+
+    When viewing a list of BBS carts, use the top list item to re-download a list of cartridges. If 
+    you are offline, the last downloaded list is displayed, and it is still possible to play any 
+    cartridges you have downloaded.
+
+    If you have installed PICO-8 on a machine with no internet access, you can also use 
+    INSTALL_GAMES to add a small selection of pre-installed BBS carts to /games
+
+====================================================================================================
+    Editing Tools
+====================================================================================================
+
+    Press ESC to toggle between console and editor.<br> Click editing mode tabs at top right to 
+    switch or press ALT+LEFT/RIGHT.	
+
+----------------------------------------------------------------------------------------------------
+    Code Editor
+----------------------------------------------------------------------------------------------------
+
+    Hold shift to select (or click and drag with mouse)
+    CTRL-X, C, V to cut copy or paste selected
+    CTRL-Z, Y to undo, redo
+    CTRL-F to search for text in the current tab
+    CTRL-G to repeat the last search again
+    CTRL-L to jump to a line number
+    CTRL-UP, DOWN to jump to start or end
+    ALT-UP, DOWN to navigate to the previous, next function
+    CTRL-LEFT, RIGHT to jump by word
+    CTRL-W,E to jump to start or end of current line
+    CTRL-D to duplicate current line
+    TAB to indent a selection (shift to un-indent)
+    CTRL-B to comment / uncomment selected block
+
+    To enter special characters that represent buttons (and other glyphs), use SHIFT-L,R,U,D,O,X 
+    There are 3 additional font entry modes that can be toggled:
+
+        CTRL_J Hiragana   // type romaji equivalents (ka, ki, ku..)
+        CTRL-K Katakana   // + shift-0..9 for extra symbols
+        CTRL-P Puny font  // hold shift for the standard font
+
+        By default, puny font characters are encoded as unicode replacements when copying/pasting, 
+        and both upper and lower case ASCII characters are pasted as regular PICO-8 characters. To 
+        copy/paste puny characters as uppercase ASCII, make sure puny mode (CTRL-P) is on.
+
+    :: Code Tabs
+
+        Click the [+] button at the top to add a new tab. Navigate tabs by left-clicking, or with 
+        CTRL-TAB, SHIFT-CTRL-TAB. To remove the last tab, delete any contents and then moving off 
+        it (CTRL-A, DEL, CTRL-TAB)
+
+        When running a cart, a single program is generated by concatenating all tabs in order.
+
+    :: Code Limits
+
+        The number of code tokens is shown at the bottom right. One program can have a maximum of 
+        8192 tokens. Each token is a word (e.g. variable name) or operator. Pairs of brackets, and 
+        strings each count as 1 token. commas, periods, LOCALs, semi-colons, ENDs, and comments are 
+        not counted.
+
+        Right click to toggle through other stats (character count, compressed size). If a limit is 
+        reached, a warning light will flash. This can be disabled by right-clicking.
+
+----------------------------------------------------------------------------------------------------
+    Sprite Editor
+----------------------------------------------------------------------------------------------------
+
+    The sprite editor is designed to be used both for sprite-wise editing and for freeform  
+    pixel-level editing. The sprite navigator at the bottom of the screen provides an 8x8 
+    sprite-wise  view into the sprite sheet, but it is possible to use freeform tools (pan, select) 
+    when dealing with larger or oddly sized areas.
+
+    :: Draw Tool
+
+        Click and drag on the sprite to plot pixels, or use RMB to select the colour under the 
+        cursor.
+
+        All operations apply only to the visible area, or the section if there is one.
+
+        Hold CTRL to search and replace a colour.
+
+    :: Stamp Tool
+
+        Click to stamp whatever is in the copy buffer. Hold CTRL to treat colour 0 (black) as 
+        transparent.
+
+    :: Select Tool (shortcut: SHIFT or S)
+
+        Click and drag to create a rectangular selection. To remove the selection, press ENTER or 
+        click anywhere.
+
+        If a pixel-wise selection is not present, many operations are instead applied to a 
+        sprite-wise selection, or the visible view. To select sprites, shift-drag in the sprite 
+        navigator. To select the sprite sheet press CTRL-A (repeat to toggle off the bottom half 
+        shared with map data)
+
+    :: Pan Tool (shortcut: SPACE)
+
+        Click and drag to move around the sprite sheet.
+
+    :: Fill Tool
+
+        Fill with the current colour. This applies only to the current selection, or the visible 
+        area if there is  no selection.
+
+    :: Shape Tools
+
+        Click the tool button to cycle through: oval, rectangle, line options.
+
+        Hold CTRL to get a filled oval or rectangle.<br> Hold SHIFT to snap to circle, square, or 
+        low-integer-ratio line.
+
+    :: Extra keys
+
+        CTRL-Z:   Undo
+        CTRL-C/X: Copy/Cut selected area or selected sprites
+        CTRL-V:   Paste to current sprite location
+        Q/A,W/Z:  Switch to previous/next sprite
+        1,2:      Switch to previous/next colour
+        TAB:      Toggle fullscreen view
+        Mousewheel or < and > to zoom (centered in fullscreen)
+        CTRL-H to toggle hex view (shows sprite index in hexadecimal)
+        CTRL-G to toggle black grid lines when zoomed in
+
+    :: Operations on selected area or selected sprites
+
+        F: Flip sprite horizontally
+        V: Flip sprite vertically
+        R: Rotate (requires a square selection)
+        Cursor keys to shift (loops if sprite selection)
+        DEL/BACKSPACE to clear selected area
+
+    :: Sprite Flags
+
+        The 8 coloured circles are sprite flags for the current sprite. These  have no particular 
+        meaning, but can be accessed using the @FGET() / @FSET() functions. They are indexed from 0 
+        starting from the left.
+
+        See @FSET() for more information.
+
+    :: Loading .png files into the sprite sheet
+
+        To load a png file of any size into the sprite sheet, first select the sprite that should 
+        be the top-left corner destination, and then either type "IMPORT IMAGE_FILE.PNG" or drag 
+        and drop the image file into the PICO-8 window. In both cases, the image is colour-fitted 
+        to the current display palette.
+
+----------------------------------------------------------------------------------------------------
+    Map Editor
+----------------------------------------------------------------------------------------------------
+
+    The PICO-8 map is a 128x32 (or 128x64 using shared space) block of 8-bit values. Each value is 
+    shown in the editor as a reference to a sprite (0..255), but you can of course use the data to 
+    represent whatever you like.
+
+    WARNING: The second half of the sprite sheet (banks 2 and 3), and the bottom half of the map 
+    share the same cartridge space. It's up to you how you use the data, but be aware that drawing 
+    on the second half of the sprite sheet could clobber data on the map and vice versa.
+
+    The tools are similar to the ones used in sprite editing mode. Select a sprite and click and 
+    drag to paint values into the map.	
+
+    To draw multiple sprites, select from sprite navigator with shift+drag To copy a block of 
+    values, use the selection tool and then stamp tool to paste To pan around the map, use the pan 
+    tool or hold space Q,W to switch to previous/next sprite Mousewheel or < and > to zoom 
+    (centered in fullscreen) CTRL-H to toggle hex view (shows tile values and sprite index in 
+    hexadecimal)
+
+    To move sprites in the sprite sheet without breaking references to them in the map:
+
+        1. Select the area of the map you would like to alter (defaults to the top half of the map)
+            // press ctrl-A twice to select the full map including shared memory
+        2. Select the sprites you would like to move (while still in map view), and press Ctrl-X
+        3. Select the destination sprite (also while still in map view) and press Ctrl-V
+
+        // Note: this operation modifies the undo history for both the map and sprite editors, but 
+        // PICO-8 will try to keep them in sync where possible. Otherwise, changes caused by moving 
+        // map sprites can be reverted by also manually undoing in the sprite editor.
+
+----------------------------------------------------------------------------------------------------
+    SFX Editor
+----------------------------------------------------------------------------------------------------
+
+    There are 64 SFX ("sound effects") in a cartridge, used for both sound and music.
+
+    Each SFX has 32 notes, and each note has:
+        A frequency   (C0..C5)
+        An instrument (0..7)
+        A volume      (0..7)
+        An effect     (0..7)
+
+    Each SFX also has these properties:
+
+            A play speed (SPD) : the number of 'ticks' to play each note for.
+                // This means that 1 is fastest, 3 is 3x as slow, etc.
+         
+            Loop start and end : this is the note index to loop back and to
+                // Looping is turned off when the start index >= end index
+
+        When only the first of the 2 numbers is used (and the second one is 0), it is taken to mean 
+        the number of notes to be played. This is normally not needed for sound effects (you can 
+        just leave the remaining notes empty), but is useful for controlling music playback.
+
+    There are 2 modes for editing/viewing a SFX: Pitch mode (more suitable for sound effects) and 
+    tracker mode (more suitable for music). The mode can be changed using the top-left buttons, or 
+    toggled with TAB.
+
+:: Pitch Mode
+
+        Click and drag on the pitch area to set the frequency for each note, using the currently 
+        selected instrument (indicated by colour).
+
+        Hold shift to apply only the selected instrument.
+        Hold CTRL to snap entered notes to the C minor pentatonic scale.
+        Right click to grab the instrument of that note.
+
+:: Tracker Mode
+
+        Each note shows: frequency octave instrument volume effect
+        To enter a note, use q2w3er5t6y7ui zsxdcvgbhnjm (piano-like layout)
+        Hold shift when entering a note to transpose -1 octave .. +1 octave
+        New notes are given the selected instrument/effect values
+        To delete a note, use backspace or set the volume to 0
+
+        Click and then shift-click to select a range that can be copied (CTRL-C) and pasted 
+        (CTRL-V). Note that only the selected attributes are copied. Double-click to select all 
+        attributes of a single note.
+
+        Navigation:
+            PAGEUP/DOWN or CTRL-UP/DOWN to skip up or down 4 notes
+            HOME/END to jump to the first or last note
+            CTRL-LEFT/RIGHT to jump across columns
+
+:: Controls for both modes
+
+        - + to navigate the current SFX
+        SPACE to play/stop
+        SHIFT-SPACE to play from the current SFX quarter (group of 8 notes)
+        A to release a looping sample
+        Left click or right click to increase / decrease the SPD or LOOP values
+            // Hold shift when clicking to increase / decrease by 4
+            // Alternatively, click and drag left/right or up/down
+        Shift-click an instrument, effect, or volume to apply to all notes.
+
+:: Effects
+
+    0 none
+    1 slide          //  Slide to the next note and volume
+    2 vibrato        //  Rapidly vary the pitch within one quarter-tone
+    3 drop           //  Rapidly drop the frequency to very low values
+    4 fade in        //  Ramp the volume up from 0
+    5 fade out       //  Ramp the volume down to 0
+    6 arpeggio fast  //  Iterate over groups of 4 notes at speed of 4
+    7 arpeggio slow  //  Iterate over groups of 4 notes at speed of 8
+
+    If the SFX speed is <= 8, arpeggio speeds are halved to 2, 4
+
+:: Filters
+
+    Each SFX has 5 filter switches that can be accessed while in tracker mode:
+
+    NOIZ:      Generate pure white noise (applies only to instrument 6)
+    BUZZ:      Various alterations to the waveform to make it sound more buzzy
+    DETUNE-1:  Detunes a second voice to create a flange-like effect
+    DETUNE-2:  Various second voice tunings, mostly up or down an octave
+    REVERB:    Apply an echo with a delay of 2 or 4 ticks
+    DAMPEN:    Low pass filter at 2 different levels
+
+    When BUZZ is used with instrument 6, and NOIZ is off, pure brown noise is generated.
+
+----------------------------------------------------------------------------------------------------
+    Music Editor
+----------------------------------------------------------------------------------------------------
+
+    Music in PICO-8 is controlled by a sequence of 'patterns'. Each pattern is a list of 4 numbers 
+    indicating which SFX will be played on that channel.
+
+:: Flow control
+
+    Playback flow can be controlled using the 3 buttons at the top right.
+
+    When a pattern has finished playing, the next pattern is played unless:
+
+    - there is no data left to play (music stops)
+    - a STOP command is set on that pattern (the third button)
+    - a LOOP BACK command is set (the 2nd button), in which case the music player searches
+        back for a pattern with the LOOP START command set (the first button) or returns to
+        pattern 0 if none is found.
+
+    When a pattern has SFXes with different speeds, the pattern finishes playing when the left-most 
+    non-looping channel has finished playing. This can be used to set up double-time drum beats or 
+    unusual polyrhythms.
+
+    For time signatures like 3/4 where less than 32 rows should be played before jumping to the 
+    next pattern, the length of a SFX can be set by adjusting only the first loop position and 
+    leaving the second one as zero. This will show up in the sfx editor as "LEN" (for "Length") 
+    instead of "LOOP".
+
+:: Copying and Pasting Music
+
+    To select a range of patterns: click once on the first pattern in the pattern  navigator, then 
+    shift-click on the last pattern. Selected patterns can be copied  and pasted with CTRL-C and 
+    CTRL-V. When pasting into another cartridge, the SFX  that each pattern points to will also be 
+    pasted (possibly with a different index)  if it does not already exist.
+
+:: SFX Instruments
+
+    In addition to the 8 built-in instruments, custom instruments can be defined using  the first 8 
+    SFX. Use the toggle button to the right of the instruments to select an  index, which will show 
+    up in the instrument channel as green instead of pink.
+
+    When an SFX instrument note is played, it essentially triggers that SFX, but alters  the note's 
+    attributes:
+
+        Pitch is added relative to C2
+        Volume is multiplied
+        Effects are applied on top of the SFX instrument's effects
+        Any filters that are on in the SFX instrument are enabled for that note
+
+    For example, a simple tremolo effect could be implemented by defining an instrument  in SFX 0 
+    that rapidly alternates between volume 5 and 2. When using this instrument to play a note, the 
+    volume can further be altered as usual (via the volume channel or using the fade in/out 
+    effects). In this way, SFX instruments can be used to control  combinations of detailed changes 
+    in volume, pitch and texture.
+
+    SFX instruments are only retriggered when the pitch changes, or the previous note has zero 
+    volume. This is useful for instruments that change more slowly over time. For example: a bell 
+    that gradually fades out. To invert this behaviour, effect 3 (normally 'drop') can be used when 
+    triggering the note. All other effect values	have  their usual meaning when triggering SFX 
+    instruments.	
+
+====================================================================================================
+ Exporters / Importers
+====================================================================================================
+
+The EXPORT command can be used to generate png, wav files and stand-alone html and native binary 
+cartridge applications. The output format is inferred from the filename extension (e.g. .png).
+
+You are free to distribute and use exported cartridges and data as you please, provided  that you 
+have permission from the cartridge author and contributors.
+
+:: Sprite Sheet / Label (.png)
+
+    > IMPORT BLAH.PNG   -- EXPECTS 128X128 PNG AND COLOUR-FITS TO THE PICO-8 PALETTE
+    > EXPORT BLAH.PNG   -- USE THE "FOLDER" COMMAND TO LOCATE THE EXPORTED PNG
+
+    When importing, -x and -y switches can be used to specify the target location in pixels: -s can 
+    be used to shrink the image (3 means scale from 384x384 -> 128x128)
+
+    > IMPORT BLAH.PNG -X 16 -Y 16 -S 3
+
+    Use the -l switch with IMPORT and EXPORT to instead read and write from the cartridge's label:
+
+    > IMPORT -L BLAH.PNG
+
+    When importing spritesheets or labels, the palette is colour-fitted to the current draw state 
+    palette.
+
+:: SFX and Music (.wav)
+
+    To export music from the current pattern (when editor mode is MUSIC), or the current SFX:
+
+    > EXPORT FOO.WAV  
+
+    To export all SFXs as foo0.wav, foo1.wav .. foo63.wav:
+
+    > EXPORT FOO%D.WAV
+
+:: MAP and CODE
+
+    A cartridges map or source code can be exported as a single image named .map.png or .lua.png:
+
+    > EXPORT FOO.MAP.PNG
+    > EXPORT FOO.LUA.PNG 
+
+    Map images are 1024x512 (128x32 8x8 sprites). Lua images are sized to fit, but each line is 
+    fixed (and cropped) at 192 pixels wide.
+
+:: Cartridges (.p8, .p8.png, .p8.rom)
+
+    Using EXPORT to save a cartridge is the same as using SAVE, but without changing the current 
+    working cartridge. This can be useful for example, to save a copy in .p8.png format for 
+    distribution without accidentally continuing to make changes to that file instead of the 
+    original .p8 file.
+
+    EXPORT can also be used to perform cartridge file format conversions from commandline. For 
+    example, from a Linux shell:
+
+    > pico8 foo.p8 -export foo.p8.png
+
+----------------------------------------------------------------------------------------------------
+    Web Applications (.html)
+----------------------------------------------------------------------------------------------------
+
+    To generate a stand-alone html player (mygame.html, mygame.js):
+
+    > EXPORT MYGAME.HTML
+
+    Or just the .js file:
+
+    > EXPORT MYGAME.JS
+
+    Use -f to write the files to a folder called mygame_html, using index.html instead of 
+    mygame.html
+
+    > EXPORT -F MYGAME.HTML
+
+    Optionally provide a custom html template with the -p switch:
+
+    > EXPORT MYGAME.HTML -P ONE_BUTTON
+
+    This will use the file {application data}/pico-8/plates/one_button.html as the html shell,  
+    replacing a special string "##js_file##" (without quotes), with the .js filename, and 
+    optionally replacing the string "##label_file##" with the cart's label image as a data url.
+
+    Use -w to export as .wasm + .js:
+
+    > EXPORT -W MYGAME.HTML
+
+    When exported as .wasm, the page needs to be served by a webserver, rather than just opening it 
+    directly from the local file system in a browser. For most purposes, the default .js export is 
+    fine, but .wasm is slightly smaller and faster.
+
+----------------------------------------------------------------------------------------------------
+    Binary Applications (.bin)
+----------------------------------------------------------------------------------------------------
+
+    To generate stand-alone executables for Windows, Linux (64-bit), Mac and Raspberry Pi:
+
+    > EXPORT MYGAME.BIN
+
+    By default, the cartridge label is used as an icon with no transparency.  To specify an icon 
+    from the sprite sheet, use -i and optionally -s and/or -c  to control the size and 
+    transparency.
+
+        -I N  Icon index N with a default transparent colour of 0 (black).
+        -S N  Size NxN sprites. Size 3 would be produce a 24x24 icon.
+        -C N  Treat colour N as transparent. Use 16 for no transparency.
+
+    For example, to use a 2x2 sprite starting at index 32 in the sprite sheet,  using colour 12 as 
+    transparent:
+
+        > EXPORT -I 32 -S 2 -C 12 MYGAME.BIN
+
+    To include an extra file in the output folders and archives, use the -E switch:
+
+        > EXPORT -E README.TXT MYGAME.BIN 
+
+    Windows file systems do not support the file metadata needed to create a Linux or Mac 
+    executable. PICO-8 works around this by exporting zip files in a way that preserves the file 
+    attributes. It is therefore recommended that you distribute the outputted zip files as-is to 
+    ensure users on other operating systems can run them. Otherwise, a Linux user who then 
+    downloads the binaries may need to "chmod +x mygame"  the file to run it, and Mac user would 
+    need to "chmod +x mygame.app/Contents/MacOS/mygame"
+
+----------------------------------------------------------------------------------------------------
+    Uploading to itch.io
+----------------------------------------------------------------------------------------------------
+
+    If you would like to upload your exported cartridge to itch.io as playable html:
+
+        1. From inside PICO-8: EXPORT -F MYGAME.HTML
+        2. Create a new project from your itch dashboard.
+        3. Zip up the folder and upload it (set "This file will be played in the browser")
+        4. Embed in page, with a size of 750px x 680px.
+        5. Set "Mobile Friendly" on (default orientation) and "Automatically start on page load" on.
+            // no need for the fullscreen button as the default PICO-8 template has its own.
+        6. Set the background (BG2) to something dark (e.g. #232323) and the text to something light (#cccccc)
+
+----------------------------------------------------------------------------------------------------
+    Exporting Multiple Cartridges
+----------------------------------------------------------------------------------------------------
+
+    Up to 16 cartridges can be bundled together by passing them to EXPORT, when generating 
+    stand-alone html or native binary players.
+
+    > EXPORT MYGAME.HTML DAT1.P8 DAT2.P8 GAME2.P8
+
+    During runtime, the extra carts can be accessed as if they were local files:
+
+    RELOAD(0,0,0X2000, "DAT1.P8") -- LOAD SPRITESHEET FROM DAT1.P8
+    LOAD("GAME2.P8")              -- LOAD AND RUN ANOTHER CART
+
+    Exported cartridges are unable to load and run BBS cartridges e.g. via LOAD("#FOO")
+
+----------------------------------------------------------------------------------------------------
+    Running EXPORT from the host operating system
+----------------------------------------------------------------------------------------------------
+
+    Use the -export switch when launching PICO-8 to run the exporter in headless mode. File paths 
+    are relative to the current directory rather than the PICO-8 file system.
+
+    Parameters to the EXPORT command are passed along as a single (lowercase) string:
+
+    pico8 mygame.p8 -export "-i 32 -s 2 -c 12 mygame.bin dat0.p8 dat1.p8"
+
+====================================================================================================
+    Lua Syntax Primer
+====================================================================================================
+
+PICO-8 programs are written using Lua syntax, but do not use the standard Lua library. The 
+following is a brief summary of essential Lua syntax.
+
+For more details, or to find out about proper Lua, see www.lua.org.
+
+:: Comments
+
+    -- USE TWO DASHES LIKE THIS TO WRITE A COMMENT
+    --[[ MULTI-LINE
+    COMMENTS ]]
+
+:: Types and assignment
+
+    Types in Lua are numbers, strings, booleans and tables:
+
+    NUM = 12/100
+    S = "THIS IS A STRING"
+    B = FALSE
+    T = {1,2,3}
+
+    Numbers in PICO-8 are all 16:16 fixed point. They range from -32768.0 to 32767.99999
+
+    Hexadecimal notation with optional fractional parts can be used:
+
+    ?0x11        -- 17
+    ?0x11.4000   -- 17.25
+
+    Numbers written in decimal are rounded to the closest fixed point value. To see the 32-bit 
+    hexadecimal representation, use PRINT(TOSTR(VAL,TRUE)):
+
+    ?TOSTR(-32768,TRUE)      -- 0x8000.0000 
+    ?TOSTR(32767.99999,TRUE) -- 0X7FFF.FFFF
+
+    Dividing by zero evaluates to 0x7fff.ffff if positive, or -0x7fff.ffff if negative. 
+
+:: Conditionals
+
+    IF NOT B THEN
+        PRINT("B IS FALSE")
+    ELSE
+        PRINT("B IS NOT FALSE")
+    END
+
+    -- with ELSEIF
+
+    IF X == 0 THEN
+        PRINT("X IS 0")
+    ELSEIF X < 0 THEN
+        PRINT("X IS NEGATIVE")
+    ELSE
+        PRINT("X IS POSITIVE")
+    END
+
+    IF (4 == 4) THEN PRINT("EQUAL") END
+    IF (4 ~= 3) THEN PRINT("NOT EQUAL") END
+    IF (4 <= 4) THEN PRINT("LESS THAN OR EQUAL") END
+    IF (4 > 3) THEN PRINT("MORE THAN") END
+
+:: Loops
+
+    Loop ranges are inclusive:
+
+    FOR X=1,5 DO
+        PRINT(X)
+    END
+    -- PRINTS 1,2,3,4,5
+
+    X = 1
+    WHILE(X <= 5) DO
+        PRINT(X)
+        X = X + 1
+    END
+
+    FOR X=1,10,3 DO PRINT(X) END   -- 1,4,7,10
+
+    FOR X=5,1,-2 DO PRINT(X) END  -- 5,3,1
+
+:: Functions and Local Variables
+
+    Variables declared as LOCAL are scoped to their containing block of code (for example, inside a 
+    FUNCTION, a FOR loop, or IF THEN END statement).
+
+    Y=0 
+    FUNCTION PLUSONE(X)
+        LOCAL Y = X+1
+        RETURN Y
+    END
+    PRINT(PLUSONE(2)) -- 3
+    PRINT(Y)          -- 0
+
+:: Tables
+
+    In Lua, tables are a collection of key-value pairs where the key and value types can both  be 
+    mixed. They can be used as arrays by indexing them with integers.
+
+    A={} -- CREATE AN EMPTY TABLE
+    A[1] = "BLAH"
+    A[2] = 42
+    A["FOO"] = {1,2,3}
+
+    Arrays use 1-based indexing by default:
+
+    > A = {11,12,13,14}
+    > PRINT(A[2]) -- 12
+
+    But if you prefer 0-based arrays, just write something the zeroth slot:
+
+    > A = {[0]=10,11,12,13,14}
+
+    Tables with 1-based integer indexes are special though. The length of such an array can be 
+    found with the # operator, and PICO-8 uses such arrays to implement ADD, DEL, DELI, ALL and 
+    FOREACH functions.
+
+    > PRINT(#A)   -- 4
+    > ADD(A, 15)
+    > PRINT(#A)   -- 5
+
+    Indexes that are strings can be written using dot notation
+
+    PLAYER = {}
+    PLAYER.X = 2 -- is equivalent to PLAYER["X"]
+    PLAYER.Y = 3
+
+    See the @{Table_Functions} section for more details.
+
+:: PICO-8 Shorthand
+
+    PICO-8 also allows several non-standard, shorter ways to write common patterns.
+
+    1. IF THEN END statements, and WHILE THEN END can be written on a single line with:
+
+    IF (NOT B) I=1 J=2
+
+    Is equivalent to:
+
+    IF NOT B THEN I=1 J=2 END
+
+    Note that brackets around the short-hand condition are required.
+
+    2. Assignment operators
+
+    Shorthand assignment operators can also be used if the whole statement is on one line. They can 
+    be constructed by appending a '=' to any binary operator, including arithmetic (+=, -= ..), 
+    bitwise (&=, |= ..) or the string concatenation operator (..=)
+
+    A += 2   -- EQUIVALENT TO: A = A + 2
+
+    // note that the LHS appears twice, so for TBL[FN()]+=1, FN() will be called twice.
+
+    3. != operator
+
+    Not shorthand, but pico-8 also accepts != instead of ~= for "not equal to"
+
+    PRINT(1 != 2) -- TRUE
+    PRINT("FOO" == "FOO") -- TRUE (STRING ARE INTERNED)
+
+====================================================================================================
+    PICO-8 Program Structure
+====================================================================================================
+
+    When a PICO-8 programs runs, all of the code from tabs is concatenated (from left to right) and 
+    executed. It is possible to provide your own main loop manually, but typically PICO-8 programs 
+    use 3 special functions that, if defined by the author, are called during program execution:
+
+
+        _UPDATE() -- Called once per update at 30fps.
+
+
+        _DRAW()   -- Called once per visible frame
+
+
+        _INIT()   -- Called once on program startup.
+
+    A simple program that uses all three might look this:
+
+    FUNCTION _INIT()
+        -- ALWAYS START ON WHITE
+        COL = 7
+    END
+     
+    FUNCTION _UPDATE()
+        -- PRESS X FOR A RANDOM COLOUR 
+        IF (BTNP(5)) COL = 8 + RND(8) 
+    END
+     
+    FUNCTION _DRAW()
+        CLS(1)
+        CIRCFILL(64,64,32,COL)
+    END
+
+    _DRAW() is normally called at 30fps, but if it can not complete in time, PICO-8 will attempt to 
+    run at 15fps and call _UPDATE() twice per visible frame to compensate.
+
+:: Running PICO-8 at 60fps
+
+
+    _UPDATE60() 
+
+    When _UPDATE60() Is defined instead of _UPDATE(), PICO-8 will run in 60fps mode:
+
+    - both _UPDATE60() and _DRAW() are called at 60fps<br> - half the PICO-8 CPU is available per 
+    frame before dropping down to 30fps
+
+    Note that not all host machines are capable of running at 60fps. Older machines, and / or web 
+    versions might also request PICO-8 to run at 30 fps (or 15 fps), even when the PICO-8 CPU is 
+    not over capacity. In this case, multiple _UPDATE60 calls are made for every _DRAW call in the 
+    same way.
+
+:: #INCLUDE
+
+    Source code can be injected into a program at cartridge boot (but not during runtime), using 
+    "#INCLUDE FILENAME", where FILENAME is either a plaintext file (containing Lua code), a tab 
+    from another cartridge, or all tabs from another cartridge:
+
+        #INCLUDE SOMECODE.LUA
+        #INCLUDE ONETAB.P8:1
+        #INCLUDE ALLTABS.P8
+
+    When the cartridge is run, the contents of each included file is treated as if it had been 
+    pasted into the editor in place of that line.
+
+        - Filenames are relative to the current cartridge (so, need to save first)<br> - Includes 
+        are not performed recursively.<br> - Normal character count and token limits apply.
+
+    When a cartridge is saved as .P8.PNG, or exported to a binary, any included files are  
+    flattened and saved with the cartridge so that there are no external dependencies.
+
+    #INCLUDE can be used for things like:
+
+        - Sharing code between cartridge (libraries or common multi-cart code)<br> - Using an 
+        external code editor without needing to edit the .p8 file directly.<br> - Treating a 
+        cartridge as a data file that loads a PICO-8 editing tool to modify it.<br> - Loading and 
+        storing data generated by an external (non-PICO-8) tool.
+
+:: Quirks of PICO-8
+
+    Common gotchas to watch out for:
+
+    - The bottom half of the sprite sheet and bottom half of the map occupy the same memory. // 
+    Best use only one or the other if you're unsure how this works.
+
+    - PICO-8 numbers have limited accuracy and range; the minimum step between numbers is 
+    approximately 0.00002 (0x0.0001), with a range of -32768 (-0x8000) to approximately 32767.99999 
+    (0x7fff.ffff)<br> // If you add 1 to a counter each frame, it will overflow after around 18 
+    minutes!
+
+    - Lua arrays are 1-based by default, not 0-based. FOREACH starts at TBL[1], not TBL[0].
+
+    - @COS() and @SIN() take 0..1 instead of 0..PI*2, and @SIN() is inverted.
+
+    - @SGN(0) returns 1.
+
+:: CPU
+
+    Although PICO-8 does not have a clearly defined CPU, there is a virtual CPU speed of 8MHz, 
+    where each lua vm instruction costs around 2 cycles. Built-in operations like drawing sprites 
+    also have a CPU cost. This means that a PICO-8 cartridge made on a host machine with a powerful 
+    CPU can still be guaranteed to run (reasonably) well on much slower machines, and to not drain 
+    too much battery on phones / when running on the web.
+
+    To view the CPU load while a cartridge is running, press CTRL-P to toggle a CPU meter, or print  
+    out @STAT(1) at the end of each frame.
+
+====================================================================================================
+    API Reference
+====================================================================================================
+
+    PICO-8 is built on the Lua programming language, but does not include the Lua standard library. 
+    Instead, a small api is offered in keeping with PICO-8's minimal design and limited screen 
+    space. For an example program that uses most of the api functions, see /DEMOS/API.P8 
+
+    Functions are written here as:
+
+    FUNCTION_NAME(PARAMETER, [OPTIONAL_PARAMETER])
+
+    Note that PICO-8 does not have upper or lower case characters -- if you are editing a .p8 or 
+    .lua file directly, function names should all be in lower case.
+
+----------------------------------------------------------------------------------------------------
+    System
+----------------------------------------------------------------------------------------------------
+
+    System functions called from commandline can omit the usual brackets and string quotes. For 
+    example, instead of LOAD("BLAH.P8"), it is possible to write:
+
+    >LOAD BLAH.P8 
+
+
+    LOAD(FILENAME, [BREADCRUMB], [PARAM_STR])
+
+    SAVE(FILENAME)
+
+        Load or save a cartridge
+
+        When loading from a running cartridge, the loaded cartridge is immediately run with 
+        parameter string PARAM_STR (accessible with STAT(6)), and a menu item is inserted and named 
+        BREADCRUMB, that returns the user to the previous cartridge.
+
+        Filenames that start with '#' are taken to be a BBS cart id, that is immediately downloaded 
+        and run:
+
+        > LOAD("#MYGAME_LEVEL2", "BACK TO MAP", "LIVES="..LIVES)
+
+        If the id is the cart's parent post, or a revision number is not specified, then the latest 
+        version is fetched. BBS carts can be loaded from other BBS carts or local carts, but not 
+        from  exported carts. 
+
+
+    FOLDER
+
+        Open the carts folder in the host operating system.
+
+
+    LS
+
+    DIR
+
+        List files in the current directory. When called from a running program, returns a list  of 
+        all .p8 and .p8.png files in the same directory.
+
+
+    RUN([PARAM_STR])
+
+        Run from the start of the program.
+
+        RUN() Can be called from inside a running program to reset.
+
+        When PARAM_STR is supplied, it can be accessed during runtime with STAT(6)
+
+
+    STOP([MESSAGE])
+
+        Stop the cart and optionally print a message.
+
+
+    RESUME
+
+        Resume the program. Use R for short.
+
+        Use a single "." from the commandline to advance a single frame. This enters frame-by-frame 
+        mode, that can be read with stat(110). While frame-by-frame mode is active, entering an 
+        empty command (by pressing enter) advances one frames.
+
+
+    ASSERT(CONDITION, [MESSAGE])
+
+        If CONDITION is false, stop the program and print MESSAGE if it is given. This can be 
+        useful for debugging cartridges, by ASSERT()'ing that things that you expect to be true are 
+        indeed true.
+
+        ASSERT(ADDR >= 0 AND ADDR <= 0x7FFF, "OUT OF RANGE")
+        POKE(ADDR, 42) -- THE MEMORY ADDRESS IS OK, FOR SURE!
+
+
+    REBOOT
+
+        Reboot the machine Useful for starting a new project
+
+
+    RESET()
+
+        Reset the values in RAM from 0x5f00..0x5f7f to their default values.  This includes the 
+        palette, camera position, clipping and fill pattern. If you get lost at the command prompt 
+        because the draw state makes viewing text  impossible, try typing RESET! It can also be 
+        called from a running program.
+
+
+    INFO()
+
+        Print out some information about the cartridge: Code size, tokens, compressed size
+
+        Also displayed:
+
+            UNSAVED CHANGES   When the cartridge in memory differs to the one on disk
+            EXTERNAL CHANGES  When the cartridge on disk has changed since it was loaded
+                (e.g. by editing the program using a separate text editor)
+
+
+    FLIP()
+
+        Flip the back buffer to screen and wait for next frame. This call is not needed when there 
+        is a @_DRAW() or @_UPDATE() callback defined, as the flip is performed automatically. But 
+        when using a custom main loop, a call to FLIP is normally needed:
+
+        ::_::
+        CLS()
+        FOR I=1,100 DO
+            A=I/50 - T()
+            X=64+COS(A)*I
+            Y=64+SIN(A)*I
+            CIRCFILL(X,Y,1,8+(I/4)%8)
+        END
+        FLIP()GOTO _
+
+        If your program does not call FLIP before a frame is up, and a @_DRAW() callback is not in 
+        progress, the current contents of the back buffer are copied to screen.
+
+
+    PRINTH(STR, [FILENAME], [OVERWRITE], [SAVE_TO_DESKTOP])
+
+        Print a string to the host operating system's console for debugging.
+
+        If filename is set, append the string to a file on the host operating system (in the 
+        current directory by default -- use FOLDER to view).
+
+        Setting OVERWRITE to true causes that file to be overwritten rather than appended.
+
+        Setting SAVE_TO_DESKTOP to true saves to the desktop instead of the current path.
+
+        Use a filename of "@clip" to write to the host's clipboard.
+
+        Use stat(4) to read the clipboard, but the contents of the clipboard are only available 
+        after pressing CTRL-V during runtime (for security).
+
+
+    TIME()
+
+    T()
+
+        Returns the number of seconds elapsed since the cartridge was run.
+
+        This is not the real-world time, but is calculated by counting the number of times
+
+
+        _UPDATE or @_UPDATE60 is called. Multiple calls of TIME() from the same frame return
+
+        the same result.
+
+
+    STAT(X)
+
+        Get system status where X is:
+
+        0  Memory usage (0..2048)
+        1  CPU used since last flip (1.0 == 100% CPU)
+        4  Clipboard contents (after user has pressed CTRL-V)
+        6  Parameter string
+        7  Current framerate
+         
+        46..49  Index of currently playing SFX on channels 0..3
+        50..53  Note number (0..31) on channel 0..3
+        54      Currently playing pattern index
+        55      Total patterns played
+        56      Ticks played on current pattern
+        57      (Boolean) TRUE when music is playing
+         
+        80..85  UTC time: year, month, day, hour, minute, second
+        90..95  Local time
+         
+        100     Current breadcrumb label, or nil
+        110     Returns true when in frame-by-frame mode
+
+    Audio values 16..26 are the legacy version of audio state queries 46..56. They only report on 
+    the current state of the audio mixer, which changes only ~20 times a second (depending on the 
+    host sound driver and other factors). 46..56 instead stores a history of mixer state at each 
+    tick to give a higher resolution estimate of the currently audible state.
+
+
+    EXTCMD(CMD_STR, [P1, P2])
+
+        Special system command, where CMD_STR is a string:
+
+            "pause"         request the pause menu be opened
+            "reset"         request a cart reset
+            "go_back"       return to the previous cart if there is one
+            "label"         set cart label
+            "screen"        save a screenshot
+            "rec"           set video start point
+            "rec_frames"    set video start point in frames mode
+            "video"         save a .gif to desktop
+            "audio_rec"     start recording audio
+            "audio_end"     save recorded audio to desktop (no supported from web)
+            "shutdown"      quit cartridge (from exported binary)
+            "folder"        open current working folder on the host operating system
+            "set_filename"  set the filename for screenshots / gifs / audio recordings
+            "set_title"     set the host window title
+
+        Some commands have optional number parameters:
+
+            "video" and "screen": P1: an integer scaling factor that overrides the system setting. 
+            P2: when > 0, save to the current folder instead of to desktop
+
+            "audio_end" P1: when > 0, save to the current folder instead of to desktop
+
+        :: Recording GIFs
+
+            EXTCMD("REC"), EXTCMD("VIDEO") is the same as using ctrl-8, ctrl-9 and saves a gif to 
+            the desktop using the current GIF_SCALE setting (use CONFIG GIF_SCALE to change).
+
+            The two additional parameters can be used to override these defaults:
+
+                EXTCMD("VIDEO", 4)    -- SCALE *4 (512 X 512)
+                EXTCMD("VIDEO", 0, 1) -- DEFAULT SCALING, SAVE TO USER DATA FOLDER
+
+            The user data folder can be opened with EXTCMD("FOLDER") and defaults to the same path 
+            as the cartridge, or {pico-8 appdata}/appdata/appname for exported binaries.
+
+            Due to the nature of the gif format, all gifs are recorded at 33.3fps, and frames 
+            produced by PICO-8 are skipped or duplicated in the gif to match roughly what the user 
+            is seeing. To record exactly one frame each time @FLIP() is called, regardless of the 
+            runtime framerate or how long it took to generate the frame, use:
+
+                EXTCMD("REC_FRAMES")
+
+            The default filename for gifs (and screenshots, audio) is foo_%d, where foo is the name 
+            of the cartridge, and %d is a number starting at 0 and automatically incremented until 
+            a file of that name does not exist. Use EXTCMD("SET_FILENAME","FOO") to override that 
+            default. If the custom filename includes "%d", then the auto- incrementing number 
+            behaviour is used, but otherwise files are written even if  there is an existing file 
+            with the same name.
+
+----------------------------------------------------------------------------------------------------
+    Graphics
+----------------------------------------------------------------------------------------------------
+
+    PICO-8 has a fixed capacity of 128 8x8 sprites, plus another 128 that overlap with the bottom 
+    half of the map data ("shared data"). These 256 sprites are collectively called the sprite 
+    sheet, and can be thought of as a 128x128 pixel image.
+
+    All of PICO-8's drawing operations are subject to the current draw state. The draw state 
+    includes a camera position (for adding an offset to all coordinates), palette mapping  (for 
+    recolouring sprites), clipping rectangle, a drawing colour, and a fill pattern.
+
+    The draw state is reset each time a program is run, or by calling @RESET().
+
+    Colour indexes:
+     
+         0  black   1  dark_blue   2  dark_purple   3  dark_green  
+         4  brown   5  dark_gray   6  light_gray    7  white
+         8  red     9  orange     10  yellow       11  green       
+        12  blue   13  indigo     14  pink         15  peach
+
+
+    CLIP(X, Y, W, H, [CLIP_PREVIOUS])
+
+        Sets the screen's clipping region in pixels CLIP() to reset When clip_previous is true, 
+        clip the new clipping region by the old one.
+
+
+    PSET(X, Y, [COL])
+
+        Sets the pixel at x, y to colour index COL (0..15).
+
+        When COL is not specified, the current draw colour is used.
+
+        FOR Y=0,127 DO
+            FOR X=0,127 DO
+                PSET(X, Y, X*Y/8)
+            END
+        END
+
+
+    PGET(X, Y)
+
+        Returns the colour of a pixel at (X, Y), or 0 when (X, Y) is outside the clipping region.
+
+        WHILE (TRUE) DO
+            X, Y = RND(128), RND(128)
+            DX, DY = RND(4)-2, RND(4)-2
+            PSET(X, Y, PGET(DX+X, DY+Y))
+        END
+
+
+    SGET(X, Y)
+
+    SSET(X, Y, [COL])
+
+        Get or set the colour (COL) of a sprite sheet pixel.
+
+
+    FGET(N, [F])
+
+    FSET(N, [F], VAL)
+
+        Get or set the value (VAL) of sprite N's flag F.
+
+        F is the flag index 0..7.
+
+        VAL is TRUE or FALSE.
+
+        The initial state of flags 0..7 are settable in the sprite editor, so can be used to create 
+        custom sprite attributes. It is also possible to draw only a subset of map tiles by 
+        providing a mask in @MAP().
+
+        When F is omitted, all flags are retrieved/set as a single bitfield.
+
+        FSET(2, 1 | 2 | 8)   -- SETS BITS 0,1 AND 3
+        FSET(2, 4, TRUE)     -- SETS BIT 4
+        PRINT(FGET(2))       -- 27 (1 | 2 | 8 | 16)
+
+
+    PRINT(STR, X, Y, [COL])
+
+    PRINT(STR, [COL])
+
+        Print a string STR and optionally set the draw colour to COL.
+
+        Shortcut: written on a single line, ? can be used to call print without brackets: 
+
+            ?"HI"
+
+        When X, Y are not specified, a newline is automatically appended. This can be omitted by 
+        ending the string with an explicit termination control character:
+
+            ?"THE QUICK BROWN FOX\0"
+
+        Additionally, when X, Y are not specified, printing text below 122 causes  the console to 
+        scroll. This can be disabled during runtime with POKE(0x5f36,0x40).
+
+        PRINT returns the right-most x position that occurred while printing. This can be used to 
+        find out the width of some text by printing it off-screen:
+
+            W = PRINT("HOGE", 0, -20) -- returns 16
+
+        See @{Appendix A} (P8SCII) for information about control codes and custom fonts.
+
+
+    CURSOR(X, Y, [COL])
+
+        Set the cursor position.
+
+        If COL is specified, also set the current colour.
+
+
+    COLOR([COL])
+
+        Set the current colour to be used by drawing functions.
+
+        If COL is not specified, the current colour is set to 6
+
+
+    CLS([COL])
+
+        Clear the screen and reset the clipping rectangle.
+
+        COL defaults to 0 (black)
+
+
+    CAMERA([X, Y])
+
+        Set a screen offset of -x, -y for all drawing operations
+
+        CAMERA() to reset
+
+
+    CIRC(X, Y, R, [COL])
+
+    CIRCFILL(X, Y, R, [COL])
+
+        Draw a circle or filled circle at x,y with radius r
+
+        If r is negative, the circle is not drawn
+
+
+    OVAL(X0, Y0, X1, Y1, [COL])
+
+    OVALFILL(X0, Y0, X1, Y1, [COL])
+
+        Draw an oval that is symmetrical in x and y (an ellipse), with the given bounding 
+        rectangle.
+
+
+    LINE(X0, Y0, [X1, Y1, [COL]])
+
+        Draw a line from (X0, Y0) to (X1, Y1)
+
+        If (X1, Y1) are not given, the end of the last drawn line is used.
+
+
+    RECT(X0, Y0, X1, Y1, [COL])
+
+    RECTFILL(X0, Y0, X1, Y1, [COL])
+
+        Draw a rectangle or filled rectangle with corners at (X0, Y0), (X1, Y1).
+
+
+    PAL(C0, C1, [P])
+
+        PAL() swaps colour c0 for c1 for one of three palette re-mappings (p defaults to 0):
+
+        0: Draw Palette
+
+            The draw palette re-maps colours when they are drawn. For example, an orange flower 
+            sprite can be drawn as a red flower by setting the 9th palette value to 8:
+
+            PAL(9,8)     -- draw subsequent orange (colour 9) pixels as red (colour 8) SPR(1,70,60) 
+            -- any orange pixels in the sprite will be drawn with red instead
+
+            Changing the draw palette does not affect anything that was already drawn to the 
+            screen.
+
+        1: Display Palette
+
+            The display palette re-maps the whole screen when it is displayed at the end of a 
+            frame. For example, if you boot PICO-8 and then type PAL(6,14,1), you can see all of 
+            the gray (colour 6) text immediate change to pink (colour 14) even though it has 
+            already been drawn. This is useful for screen-wide effects such as fading in/out.
+
+        2: Secondary Palette
+
+            Used by @FILLP() for drawing sprites. This provides a mapping from a single 4-bit 
+            colour index to two 4-bit colour indexes.
+
+        PAL()  resets all palettes to system defaults (including transparency values) PAL(P) resets 
+        a particular palette (0..2) to system defaults
+
+
+    PAL(TBL, [P])
+
+        When the first parameter of pal is a table, colours are assigned for each entry. For 
+        example, to re-map colour 12 and 14 to red:
+
+            PAL({[12]=9, [14]=8})
+
+        Or to re-colour the whole screen shades of gray (including everything that is already 
+        drawn):
+
+            PAL({1,1,5,5,5,6,7,13,6,7,7,6,13,6,7,1}, 1)
+
+        Because table indexes start at 1, colour 0 is given at the end in this case.
+
+
+    PALT(C, [T])
+
+        Set transparency for colour index to T (boolean) Transparency is observed by @SPR(), 
+        @SSPR(), @MAP() AND @TLINE()
+
+        PALT(8, TRUE) -- RED PIXELS NOT DRAWN IN SUBSEQUENT SPRITE/TLINE DRAW CALLS
+
+        PALT() resets to default: all colours opaque except colour 0
+
+        When C is the only parameter, it is treated as a bitfield used to set all 16 values. For 
+        example: to set colours 0 and 1 as transparent:
+
+        PALT(0B1100000000000000)
+
+
+    SPR(N, X, Y, [W, H], [FLIP_X], [FLIP_Y])
+
+        Draw sprite N (0..255) at position X,Y
+
+        W (width) and H (height) are 1, 1 by default and specify how many sprites wide to blit.
+
+        Colour 0 drawn as transparent by default (see @PALT())
+
+        When FLIP_X is TRUE, flip horizontally.
+
+        When FLIP_Y is TRUE, flip vertically.
+
+
+    SSPR(SX, SY, SW, SH, DX, DY, [DW, DH], [FLIP_X], [FLIP_Y]]
+
+        Stretch an rectangle of the sprite sheet (sx, sy, sw, sh) to a destination rectangle on the 
+        screen (sx, sy, dw, dh). In both cases, the x and y values are coordinates (in pixels) of 
+        the rectangle's top left corner, with a width of w, h.
+
+        Colour 0 drawn as transparent by default (see @PALT())
+
+        dw, dh defaults to sw, sh
+
+        When FLIP_X is TRUE, flip horizontally.
+
+        When FLIP_Y is TRUE, flip vertically.
+
+
+    FILLP(P)
+
+        The PICO-8 fill pattern is a 4x4 2-colour tiled pattern observed by: @CIRC() @CIRCFILL() 
+        @RECT() @RECTFILL() @OVAL() @OVALFILL() @PSET() @LINE()
+
+        P is a bitfield in reading order starting from the highest bit. To calculate the value of P 
+        for a desired pattern, add the bit values together:
+
+            .-----------------------.
+            |32768|16384| 8192| 4096|
+            |-----|-----|-----|-----|
+            | 2048| 1024| 512 | 256 |
+            |-----|-----|-----|-----|
+            | 128 |  64 |  32 |  16 |
+            |-----|-----|-----|-----|
+            |  8  |  4  |  2  |  1  |
+            '-----------------------'
+
+        For example, FILLP(4+8+64+128+  256+512+4096+8192) would create a checkerboard pattern.
+
+        This can be more neatly expressed in binary: FILLP(0b0011001111001100).
+
+        The default fill pattern is 0, which means a single solid colour is drawn.
+
+        To specify a second colour for the pattern, use the high bits of any colour parameter:
+
+            FILLP(0b0011010101101000)
+            CIRCFILL(64,64,20, 0x4E) -- brown and pink
+
+        Additional settings are given in bits 0b0.111:
+
+            0b0.100 Transparency
+
+                When this bit is set, the second colour is not drawn
+
+                -- checkboard with transparent squares
+                FILLP(0b0011001111001100.1) 
+
+            0b0.010 Apply to Sprites
+
+                When set, the fill pattern is applied to sprites (spr, sspr, map, tline), using a 
+                colour mapping provided by the secondary palette.
+
+                Each pixel value in the sprite (after applying the draw palette as usual) is taken 
+                to be an index into the secondary palette. Each entry in the secondary palette 
+                contains the two colours used to render the fill pattern. For example, to draw a 
+                white and red (7 and 8) checkerboard pattern for only blue pixels (colour 12) in a 
+                sprite:
+
+                FOR I=0,15 DO PAL(I, I+I*16, 2) END  --  all other colours map to themselves
+                PAL(12, 0x87, 2)                     --  remap colour 12 in the secondary palette
+                 
+                FILLP(0b0011001111001100.01)         --  checkerboard palette, applied to sprites
+                SPR(1, 64,64)                        --  draw the sprite
+
+            0b0.001 Apply Secondary Palette Globally
+
+                When set, the secondary palette mapping is also applied by all draw functions that 
+                respect fill patterns (circfill, line etc). This can be useful when used in  
+                conjunction with sprite drawing functions, so that the colour index of each sprite  
+                pixel means the same thing as the colour index supplied to the drawing functions.
+
+                FILLP(0b0011001111001100.001)
+                PAL(12, 0x87, 2)
+                CIRCFILL(64,64,20,12)                -- red and white checkerboard circle
+
+                The secondary palette mapping is applied after the regular draw palette mapping. So 
+                the following would also draw a red and white checkered circle:
+
+                PAL(3,12)
+                CIRCFILL(64,64,20,3)
+
+        The fill pattern can also be set by setting bits in any colour parameter:
+
+            POKE(0x5F34, 1) -- sets integrated fillpattern + colour mode CIRCFILL(64,64,20, 
+            0x114E.ABCD) -- sets fill pattern to ABCD
+
+            -- bit  0x1000.0000 means the non-colour bits should be observed -- bit  0x0700.0000 
+            0x1 transparency, 0x2 apply to sprites, 0x4 apply secondary palette  -- bits 
+            0x00FF.0000 are the usual colour bits -- bits 0x0000.FFFF are interpreted as the fill 
+            pattern
+
+        The fill pattern can be applied to sprites (spr, sspr, map, tline) using bit 0b0.01
+
+            FILLP(0b0011001111001100.011)
+
+----------------------------------------------------------------------------------------------------
+    Table Functions
+----------------------------------------------------------------------------------------------------
+
+    With the exception of PAIRS(), the following functions and the # operator apply only to tables  
+    that are indexed starting from 1 and do not have NIL entries. All other forms of tables can  be 
+    considered as hash maps or sets, rather than arrays that have a length.
+
+
+    ADD(TBL, VAL, [INDEX])
+
+        Add value VAL to the end of table TBL. Equivalent to:
+
+        TBL[#TBL + 1] = VAL
+
+        If index is given then the element is inserted at that position:
+
+            FOO={}        -- CREATE EMPTY TABLE
+            ADD(FOO, 11)
+            ADD(FOO, 22)
+            PRINT(FOO[2]) -- 22
+
+
+    DEL(TBL, VAL)
+
+        Delete the first instance of value VAL in table TBL. The remaining entries are shifted left 
+        one index to avoid holes.
+
+        Note that VAL is the value of the item to be deleted, not the index into the table. (To 
+        remove an item at a particular index, use DELI instead). DEL returns the deleted item, or 
+        returns no value when nothing was deleted.
+
+            A={1,10,2,11,3,12}
+            FOR ITEM IN ALL(A) DO
+                IF (ITEM < 10) THEN DEL(A, ITEM) END
+            END
+            FOREACH(A, PRINT) -- 10,11,12
+            PRINT(A[3])       -- 12
+
+
+    DELI(TBL, [I])
+
+        Like @DEL(), but remove the item from table TBL at index I When I is not given, the last 
+        element of the table is removed and returned.
+
+
+    COUNT(TBL, [VAL])
+
+        Returns the length of table t (same as #TBL) When VAL is given, returns the number of 
+        instances of VAL in that table.
+
+
+    ALL(TBL)
+
+        Used in FOR loops to iterate over all items in a table (that have a 1-based integer index),  
+        in the order they were added.
+
+            T = {11,12,13}
+            ADD(T,14)
+            ADD(T,"HI")
+            FOR V IN ALL(T) DO PRINT(V) END -- 11 12 13 14 HI
+            PRINT(#T) -- 5
+
+
+    FOREACH(TBL, FUNC)
+
+        For each item in table TBL, call function FUNC with the item as a single parameter.
+
+            > FOREACH({1,2,3}, PRINT)
+
+
+    PAIRS(TBL)
+
+        Used in FOR loops to iterate over table TBL, providing both the key and value for each 
+        item. Unlike @ALL(), PAIRS() iterates over every item regardless of indexing scheme. Order 
+        is not guaranteed.
+
+            T = {["HELLO"]=3, [10]="BLAH"}
+            T.BLUE = 5;
+            FOR K,V IN PAIRS(T) DO
+                PRINT("K: "..K.."  V:"..V)
+            END
+
+        Output:
+
+            K: 10  v:BLAH
+            K: HELLO  v:3
+            K: BLUE  v:5
+
+----------------------------------------------------------------------------------------------------
+    Input
+----------------------------------------------------------------------------------------------------
+
+
+    BTN([B], [PL])
+
+        Get button B state for player PL (default 0) 
+
+        B: 0..5: left right up down button_o button_x<br> PL: player index 0..7
+
+        Instead of using a number for B, it is also possible to use a button glyph. (In the coded 
+        editor, use Shift-L R U D O X)
+
+        If no parameters supplied, returns a bitfield of all 12 button states for player 0 & 1 // 
+        P0: bits 0..5  P1: bits 8..13
+
+        Default keyboard mappings to player buttons:
+         
+            player 0: [DPAD]: cursors, [O]: Z C N   [X]: X V M
+            player 1: [DPAD]: SFED,    [O]: LSHIFT  [X]: TAB W  Q A
+
+        Although PICO-8 accepts all button combinations, note that it is generally impossible to 
+        press both LEFT and RIGHT at the same time on a physical game controller. On some 
+        controllers, UP + LEFT/RIGHT is also awkward if [X] or [O] could be used instead of UP 
+        (e.g. to jump / accelerate).
+
+
+    BTNP(B, [PL])
+
+        BTNP is short for "Button Pressed"; Instead of being true when a button is held down,  BTNP 
+        returns true when a button is down AND it was not down the last frame. It also repeats 
+        after 15 frames, returning true every 4 frames after that (at 30fps -- double that at 
+        60fps). This can be used for things like menu navigation or grid-wise player  movement.
+
+        The state that BTNP reads is reset at the start of each call to @_UPDATE or @_UPDATE60, so 
+        it is preferable to use BTNP from inside one of those functions.
+
+        Custom delays (in frames @ 30fps) can be set by poking the following memory addresses:
+
+        POKE(0X5F5C, DELAY) -- SET THE INITIAL DELAY BEFORE REPEATING. 255 MEANS NEVER REPEAT.
+        POKE(0X5F5D, DELAY) -- SET THE REPEATING DELAY.
+
+        In both cases, 0 can be used for the default behaviour (delays 15 and 4)
+
+----------------------------------------------------------------------------------------------------
+    Audio
+----------------------------------------------------------------------------------------------------
+
+
+    SFX(N, [CHANNEL], [OFFSET], [LENGTH])
+
+        Play sfx N (0..63) on CHANNEL (0..3) from note OFFSET (0..31 in notes) for LENGTH notes.
+
+        Using negative CHANNEL values have special meanings:
+
+        CHANNEL -1: (default) to automatically choose a channel that is not being used
+        CHANNEL -2: to stop the given sound from playing on any channel
+
+        N can be a command for the given CHANNEL (or all channels when CHANNEL < 0):
+
+        N -1: to stop sound on that channel
+        N -2: to release sound on that channel from looping
+
+        SFX(3)    --  PLAY SFX 3
+        SFX(3,2)  --  PLAY SFX 3 ON CHANNEL 2
+        SFX(3,-2) --  STOP SFX 3 FROM PLAYING ON ANY CHANNEL
+        SFX(-1,2) --  STOP WHATEVER IS PLAYING ON CHANNEL 2
+        SFX(-2,2) --  RELEASE LOOPING ON CHANNEL 2
+        SFX(-1)   --  STOP ALL SOUNDS ON ALL CHANNELS
+        SFX(-2)   --  RELEASE LOOPING ON ALL CHANNELS
+
+
+    MUSIC(N, [FADE_LEN], [CHANNEL_MASK])
+
+        Play music starting from pattern N (0..63)
+        N -1 to stop music
+         
+        FADE_LEN is in ms (default: 0). So to fade pattern 0 in over 1 second:
+
+        MUSIC(0, 1000)
+
+        CHANNEL_MASK specifies which channels to reserve for music only. For example, to play only 
+        on channels 0..2:
+
+        MUSIC(0, NIL, 7) -- 1 | 2 | 4
+
+        Reserved channels can still be used to play sound effects on, but only when that channel 
+        index is explicitly requested by @SFX().
+
+----------------------------------------------------------------------------------------------------
+    Map
+----------------------------------------------------------------------------------------------------
+
+    The PICO-8 map is a 128x32 grid of 8-bit cells, or 128x64 when using the shared memory. When  
+    using the map editor, the meaning of each cell is taken to be an index into the sprite sheet  
+    (0..255). However, it can instead be used as a general block of data.
+
+
+    MGET(X, Y)
+
+    MSET(X, Y, VAL)
+
+        Get or set map value (VAL) at X,Y
+
+        When X,Y is outside of the map range, MSET returns 0.
+
+
+    MAP([CELL_X], CELL_Y, [SX, SY], [CELL_W, CELL_H], [LAYERS])
+
+        Draw section of map (starting from CELL_X, CELL_Y) at screen position SX, SY (pixels).
+
+        To draw a 4x2 blocks of cells starting from 0,0 in the map, to the screen at 20,20:
+
+        MAP(0, 0, 20, 20, 4, 2) 
+
+        CELL_W and CELL_H default to 128,32 (the top half of the map). To draw the whole map, 
+        including the bottom half shared with the sprite sheet, use:
+
+        MAP(0, 0, 0, 0, 128, 64)
+
+        MAP() is often used in conjunction with CAMERA(). To draw the map so that a player object 
+        (at PL.X in PL.Y in pixels) is centered:
+
+        CAMERA(PL.X - 64, PL.Y - 64
+        MAP()
+
+        LAYERS is a bitfield. When given, only sprites with matching sprite flags are drawn. For 
+        example, when LAYERS is 0x5, only sprites with flag 0 and 2 are drawn.
+
+        Sprite 0 is taken to mean "empty" and is not drawn. To disable this behaviour, use: 
+        POKE(0x5F36, 0x8)
+
+
+    TLINE(X0, Y0, X1, Y1, MX, MY, [MDX, MDY], [LAYERS])
+
+        Draw a textured line from (X0,Y0) to (X1,Y1), sampling colour values from the map. When 
+        LAYERS is specified, only sprites with matching flags are drawn (similar to MAP()) 
+
+        MX, MY are map coordinates to sample from, given in tiles. Colour values are sampled from 
+        the 8x8 sprite present at each map tile. For example:
+
+            2.0, 1.0  means the top left corner of the sprite at position 2,1 on the map
+            2.5, 1.5  means pixel (4,4) of the same sprite
+
+        MDX, MDY are deltas added to mx, my after each pixel is drawn. (Defaults to 0.125, 0)
+
+        The map coordinates (MX, MY) are masked by values calculated by subtracting 0x0.0001 from 
+        the values at address 0x5F38 and 0x5F39. In simpler terms, this means you can loop a 
+        section of the map by poking the width and height you want to loop within, as  long as they 
+        are powers of 2 (2,4,8,16..)
+
+        For example, to loop every 8 tiles horizontally, and every 4 tiles vertically:
+
+            POKE(0x5F38, 8)
+            POKE(0x5F39, 4)
+            TLINE(...)
+
+        The default values (0,0) gives a masks of 0xff.ffff, which means that the samples will loop 
+        every 256 tiles.
+
+        An offset to sample from (also in tiles) can also be specified at addresses 0x5f3a, 0x5f3b:
+
+            POKE(0x5F3A, OFFSET_X)
+            POKE(0x5F3B, OFFSET_Y)
+
+        Sprite 0 is taken to mean "empty" and not drawn. To disable this behaviour, use: 
+        POKE(0x5F36, 0x8)
+
+----------------------------------------------------------------------------------------------------
+    Memory
+----------------------------------------------------------------------------------------------------
+
+    PICO-8 has 3 types of memory:
+
+        1. Base RAM (64k): see layout below. Access with PEEK() POKE() MEMCPY() MEMSET()
+        2. Cart ROM (32k): same layout as base ram until 0x4300
+        3. Lua RAM (2MB): compiled program + variables
+
+        Technical note: While using the editor, the data being modified is in cart rom, but api 
+        functions such as @SPR()  and @SFX() only operate on base ram. PICO-8 automatically copies 
+        cart rom to base ram (i.e. calls @RELOAD()) in 3 cases:<br> 1. When a cartridge is 
+        loaded<br> 2. When a cartridge is run<br> 3. When exiting any of the editor modes // can 
+        turn off with: poke(0x5f37,1)<br>
+
+    :: Base RAM Memory Layout
+
+        0X0    GFX
+        0X1000 GFX2/MAP2 (SHARED)
+        0X2000 MAP
+        0X3000 GFX FLAGS
+        0X3100 SONG
+        0X3200 SFX
+        0X4300 USER DATA
+        0X5600 CUSTOM FONT (IF ONE IS DEFINED)
+        0X5E00 PERSISTENT CART DATA (256 BYTES)
+        0X5F00 DRAW STATE
+        0X5F40 HARDWARE STATE
+        0X5F80 GPIO PINS (128 BYTES)
+        0X6000 SCREEN (8K)
+        0x8000 USER DATA
+
+        User data has no particular meaning and can be used for anything via @MEMCPY(), @PEEK() & 
+        @POKE(). Persistent cart data is mapped to 0x5e00..0x5eff but only stored if @CARTDATA() 
+        has been called. Colour format (gfx/screen) is 2 pixels per byte: low bits encode the left 
+        pixel of each pair. Map format is one byte per cel, where each byte normally encodes a 
+        sprite index.
+
+    :: Remapping Graphics and Map Data
+
+        The GFX, MAP and SCREEN memory areas can be reassigned by setting values at the following 
+        addresses:
+
+        0X5F54 GFX:    can be 0x00 (default) or 0x60 (use the screen memory as the spritesheet)
+        0X5F55 SCREEN: can be 0x60 (default) or 0x00 (use the spritesheet as screen memory)
+        0X5F56 MAP:    can be 0x20 (default) or 0x10..0x2f, or 0x80 and above.
+        0X5F57 MAP SIZE: map width. 0 means 256. Defaults to 128.
+
+        Addresses can be expressed in 256 byte increments. So 0x20 means 0x2000, 0x21 means 0x2100 
+        etc. Map addresses 0x30..0x3f are taken to mean 0x10..0x1f (shared memory area) Map data 
+        can only be contained inside the memory regions 0x1000..0x2fff, 0x8000..0xffff, and  the 
+        map height is determined to be the largest possible size that fits in the given region.
+
+
+    PEEK(ADDR, [N])
+
+        Read a byte from an address in base ram. If N is specified, PEEK() returns that number of 
+        results (max: 8192). For example, to read the first 2 bytes of video memory:
+
+            A, B = PEEK(0x6000, 2)
+
+
+    POKE(ADDR, VAL1, VAL2, ...)
+
+        Write one or more bytes to an address in base ram. If more than one parameter is provided, 
+        they are written sequentially (max: 8192).
+
+
+    PEEK2(ADDR)
+
+    POKE2(ADDR, VAL)
+
+    PEEK4(ADDR)
+
+    POKE4(ADDR, VAL)
+
+        16-bit and 32-bit versions of PEEK and POKE. Read and write one number (VAL) in 
+        little-endian format:
+
+            16 bit: 0xffff.0000
+            32 bit: 0xffff.ffff
+
+        ADDR does not need to be aligned to 2 or 4-byte boundaries.
+
+    Alternatively, the following operators can be used to peek (but not poke), and are slightly 
+    faster:
+
+        @ADDR  -- PEEK(ADDR)
+        %ADDR  -- PEEK2(ADDR)
+        $ADDR  -- PEEK4(ADDR)
+
+
+    MEMCPY(DEST_ADDR, SOURCE_ADDR, LEN)
+
+        Copy LEN bytes of base ram from source to dest. Sections can be overlapping
+
+
+    RELOAD(DEST_ADDR, SOURCE_ADDR LEN, [FILENAME])
+
+        Same as MEMCPY, but copies from cart rom.
+
+        The code section ( >= 0x4300) is protected and can not be read.
+
+        If filename specified, load data from a separate cartridge. In this case, the cartridge 
+        must be local (BBS carts can not be read in this way).
+
+
+    CSTORE(DEST_ADDR, SOURCE_ADDR, LEN, [FILENAME])
+
+        Same as memcpy, but copies from base ram to cart rom.
+
+        CSTORE() is equivalent to CSTORE(0, 0, 0x4300)
+
+        The code section ( >= 0x4300) is protected and can not be written to.
+
+        If FILENAME is specified, the data is written directly to that cartridge on disk. Up to 64 
+        cartridges can be written in one session. See @{Cartridge Data} for more information.
+
+
+    MEMSET(DEST_ADDR, VAL, LEN)
+
+        Write the 8-bit value VAL into memory starting at DEST_ADDR, for LEN bytes.
+
+        For example, to fill half of video memory with 0xC8:
+
+        > MEMSET(0x6000, 0xC8, 0x1000)
+
+----------------------------------------------------------------------------------------------------
+    Math
+----------------------------------------------------------------------------------------------------
+
+
+    MAX(X, Y)
+
+    MIN(X, Y)
+
+    MID(X, Y, Z)
+
+        Returns the maximum, minimum, or middle value of parameters
+
+        > ?MID(7,5,10) -- 7
+
+
+    FLR(X)
+
+        > ?FLR ( 4.1) -->  4		
+        > ?FLR (-2.3) --> -3
+
+
+    CEIL(X)
+
+        Returns the closest integer that is equal to or below x
+
+        > ?CEIL( 4.1) -->  5
+        > ?CEIL(-2.3) --> -2
+
+
+    COS(X)
+
+    SIN(X)
+
+        Returns the cosine or sine of x, where 1.0 means a full turn. For example, to animate a 
+        dial that turns once every second:
+
+        FUNCTION _DRAW()
+            CLS()
+            CIRC(64, 64, 20, 7)
+            X = 64 + COS(T()) * 20
+            Y = 64 + SIN(T()) * 20
+            LINE(64, 64, X, Y)	
+        END
+
+        PICO-8's SIN() returns an inverted result to suit screenspace (where Y means "DOWN", as 
+        opposed  to mathematical diagrams where Y typically means "UP").
+
+        > SIN(0.25) -- RETURNS -1
+
+        To get conventional radian-based trig functions without the y inversion,  paste the 
+        following snippet near the start of your program:
+
+        P8COS = COS FUNCTION COS(ANGLE) RETURN P8COS(ANGLE/(3.1415*2)) END
+        P8SIN = SIN FUNCTION SIN(ANGLE) RETURN -P8SIN(ANGLE/(3.1415*2)) END
+
+
+    ATAN2(DX, DY)
+
+        Converts DX, DY into an angle from 0..1
+
+        As with cos/sin, angle is taken to run anticlockwise in screenspace. For example:
+
+            > ?ATAN(0, -1) -- RETURNS 0.25
+
+        ATAN2 can be used to find the direction between two points:
+
+            X=20 Y=30
+            FUNCTION _UPDATE()
+                IF (BTN(0)) X-=2
+                IF (BTN(1)) X+=2
+                IF (BTN(2)) Y-=2
+                IF (BTN(3)) Y+=2	
+            END
+             
+            FUNCTION _DRAW()
+                CLS()
+                CIRCFILL(X,Y,2,14)
+                CIRCFILL(64,64,2,7)
+                 
+                A=ATAN2(X-64, Y-64)
+                PRINT("ANGLE: "..A)
+                LINE(64,64,
+                    64+COS(A)*10,
+                    64+SIN(A)*10,7)
+            END
+
+
+    SQRT(X)
+
+        Return the square root of x
+
+
+    ABS(X)
+
+        Returns the absolute (positive) value of x
+
+
+    RND(X)
+
+        Returns a random number n, where 0 <= n < x
+
+        If you want an integer, use flr(rnd(x)). If x is an array-style table, return a random 
+        element between table[1] and table[#table].
+
+
+    SRAND(X)
+
+        Sets the random number seed. The seed is automatically randomized on cart startup.
+
+        FUNCTION _DRAW()
+            CLS()
+            SRAND(33)
+            FOR I=1,100 DO
+                PSET(RND(128),RND(128),7)
+            END
+        END
+
+    :: Bitwise Operations
+
+        Bitwise operations are similar to logical expressions, except that they work at the bit 
+        level.
+
+        Say you have two numbers (written here in binary using the "0b" prefix): 
+
+            X = 0b1010
+            Y = 0b0110
+
+        A bitwise AND will give you bits set when the corresponding bits in X /and/ Y are both set
+
+        > PRINT(BAND(X,Y)) -- RESULT:0B0010 (2 IN DECIMAL)
+
+        There are 9 bitwise functions available in PICO-8:
+
+            BAND(X, Y) -- BOTH BITS ARE SET
+            BOR(X, Y)  -- EITHER BIT IS SET
+            BXOR(X, Y) -- EITHER BIT IS SET, BUT NOT BOTH OF THEM
+            BNOT(X)    -- EACH BIT IS NOT SET
+            SHL(X, N)  -- SHIFT LEFT N BITS (ZEROS COME IN FROM THE RIGHT)
+            SHR(X, N)  -- ARITHMETIC RIGHT SHIFT (THE LEFT-MOST BIT STATE IS DUPLICATED)
+            LSHR(X, N) -- LOGICAL RIGHT SHIFT (ZEROS COMES IN FROM THE LEFT)
+            ROTL(X, N) -- ROTATE ALL BITS IN X LEFT BY N PLACES
+            ROTR(X, N) -- ROTATE ALL BITS IN X RIGHT BY N PLACES
+
+        Operator versions are also available: & | ^^ ~ << >> >>> <<> >><
+
+        For example: PRINT(67 & 63) -- result:3  equivalent to BAND(67,63)
+
+        Operators are slightly faster than their corresponding functions. They behave exactly the 
+        same, except that if any operands are not numbers the result is a runtime error (the 
+        function versions instead default to a value of 0).
+
+    :: Integer Division
+
+        Integer division can be performed with a \
+
+        > PRINT(9\2) -- RESULT:4  EQUIVALENT TO FLR(9/2)
+
+----------------------------------------------------------------------------------------------------
+    Custom Menu Items
+----------------------------------------------------------------------------------------------------
+
+
+    MENUITEM(INDEX, [LABEL], [CALLBACK])
+
+        Add an extra item to the pause menu
+
+        Index should be 1..5 and determines the order each menu item is displayed label should be a 
+        string up to 16 characters long callback is a function called when the item is selected by 
+        the users
+
+        When no label or function is supplied, the menu item is removed
+
+        MENUITEM(1, "RESTART PUZZLE",
+            FUNCTION() RESET_PUZZLE() SFX(10) END
+        )
+
+        If the callback returns true, the pause menu remains open. The callback takes a single 
+        parameter that is a bitfield of L,R,X button presses
+
+        MENUITEM(1, "FOO", 
+            FUNCTION(B) IF (B&1 > 0) THEN PRINTH("LEFT WAS PRESSED") END END
+        )
+
+----------------------------------------------------------------------------------------------------
+    Strings and Type Conversion
+----------------------------------------------------------------------------------------------------
+
+    Strings in Lua are written either in single or double quotes or with matching [[ ]] brackets:
+
+        S = "THE QUICK"
+        S = 'BROWN FOX';
+        S = [[
+            JUMPS OVER
+            MULTIPLE LINES
+        ]]
+
+    The length of a string (number of characters) can be retrieved using the # operator:
+
+        >PRINT(#S)
+
+    Strings can be joined using the .. operator. Joining numbers converts them to strings.
+
+        >PRINT("THREE "..4) --> "THREE 4"
+
+    When used as part of an arithmetic expression, string values are converted to numbers:
+
+        >PRINT(2+"3")   --> 5
+
+
+    TOSTR(VAL, [FORMAT_FLAGS])
+
+        Convert VAL to a string.
+
+        FORMAT_FLAGS is a bitfield:
+
+            0x1: Write the raw hexadecimal value of numbers, functions or tables.
+            0x2: Write VAL as a signed 32-bit integer by shifting it left by 16 bits.
+
+        TOSTR(NIL) returns "[nil]"
+
+        TOSTR() returns ""
+
+        TOSTR(17)       -- "17"
+        TOSTR(17,0x1)   -- "0x0011.0000"
+        TOSTR(17,0x3)   -- "0x00110000"
+        TOSTR(17,0x2)   -- "1114112"
+
+
+    TONUM(VAL, [FORMAT_FLAGS])
+
+        Converts VAL to a number.
+
+        TONUM("17.5")  -- 17.5
+        TONUM(17.5)    -- 17.5
+        TONUM("HOGE")  -- NO RETURN VALUE
+
+        FORMAT_FLAGS is a bitfield:
+
+            0x1: Read the string as written in (unsigned, integer) hexadecimal without the "0x" prefix
+                 Non-hexadecimal characters are taken to be '0'.
+            0x2: Read the string as a signed 32-bit integer, and shift right 16 bits.
+            0x4: When VAL can not be converted to a number, return 0
+
+        TONUM("FF",       0x1)  -- 255
+        TONUM("1114112",  0x2)  -- 17
+        TONUM("1234abcd", 0x3)  -- 0x1234.abcd
+
+
+    CHR(VAL0, VAL1, ...)
+
+        Convert one or more ordinal character codes to a string.
+
+        When 
+
+        CHR(64)                    -- "@"
+        CHR(104,101,108,108,111)   -- "@"
+
+
+    ORD(STR, [INDEX], [NUM_RESULTS])
+
+        Convert one or more characters from string STR to their ordinal (0..255) character codes.
+
+        Use the INDEX parameter to specify which character in the string to use. When INDEX is out 
+        of range or str is not a string, ORD returns nil.
+
+        When NUM_RESULTS is given, ORD returns multiple values starting from INDEX.
+
+        ORD("@")         -- 64
+        ORD("123",2)     -- 50 (THE SECOND CHARACTER: "2")
+        ORD("123",2,3)   -- 50,51,52
+
+
+    SUB(STR, POS0, [POS1])
+
+        Grab a substring from string str, from pos0 up to and including pos1. When POS1 is not 
+        specified, the remainder of the string is returned. When POS1 is specified, but not a 
+        number, a single character at POS0 is returned.
+
+        S = "THE QUICK BROWN FOX"
+        PRINT(SUB(S,5,9))   --> "QUICK"
+        PRINT(SUB(S,5))     --> "QUICK BROWN FOX"
+        PRINT(SUB(S,5,_))   --> "Q"
+
+
+    SPLIT(STR, [SEPARATOR], [CONVERT_NUMBERS])
+
+        Split a string into a table of elements delimited by the given separator (defaults to ","). 
+        When separator is a number n, the string is split into n-character groups. When 
+        convert_numbers is true, numerical tokens are stored as numbers (defaults to true). Empty 
+        elements are stored as empty strings.
+
+        SPLIT("1,2,3")               -- {1,2,3}
+        SPLIT("ONE:TWO:3",":",FALSE) -- {"ONE","TWO","3"}
+        SPLIT("1,,2,")               -- {1,"",2,""}
+
+
+    TYPE(VAL)
+
+        Returns the type of val as a string.
+
+        > PRINT(TYPE(3))
+        NUMBER
+        > PRINT(TYPE("3"))
+        STRING
+
+----------------------------------------------------------------------------------------------------
+    Cartridge Data
+----------------------------------------------------------------------------------------------------
+
+    Using @CARTDATA(), @DSET(), AND @DGET(), 64 numbers (256 bytes) of persistent data  can be 
+    stored on the user's PICO-8 that persists after the cart is unloaded or PICO-8 is shutdown. 
+    This can be used as a lightweight way to store things like  high scores or to save player 
+    progress. It can also be used to share data across  cartridges / cartridge versions.
+
+    If more than 256 bytes is needed, it is also possible to write directly to the cartridge using 
+    @CSTORE(). The disadvantage is that the data is tied to that particular version of the 
+    cartridge. e.g. if a game is updated, players will lose their savegames. Also, some space in 
+    the data sections of the cartridge need to be left available to use as storage.
+
+    Another alternative is to write directly to a second cartridge by specifying a fourth parameter 
+    to @CSTORE(). This requires a cart swap (which in reality only means the user needs to watch a 
+    spinny cart animation for 1 second).
+
+        CSTORE(0,0,0X2000, "SPRITE SHEET.P8")
+        -- LATER, RESTORE THE SAVED DATA:
+        RELOAD(0,0,0X2000, "SPRITE SHEET.P8")
+
+
+    CARTDATA(ID)
+
+        Opens a permanent data storage slot indexed by ID that can be used to store and retrieve up 
+        to 256 bytes (64 numbers) worth of data using @DSET() and @DGET().
+
+            CARTDATA("ZEP_DARK_FOREST")
+            DSET(0, SCORE)
+
+        ID is a string up to 64 characters long, and should be unusual enough that  other 
+        cartridges do not accidentally use the same id. Legal characters are a..z, 0..9 and 
+        underscore (_)
+
+        Returns true if data was loaded, otherwise false.
+
+        CARTDATA can be called once per cartridge execution, and so only a single data slot can be 
+        used.
+
+        Once a cartdata ID has been set, the area of memory 0X5E00..0X5EFF is mapped  to permanent 
+        storage, and can either be accessed directly or via @DGET()/@DSET().
+
+        There is no need to flush written data -- it is automatically saved to permanent storage 
+        even if modified by directly @POKE()'ing 0X5E00..0X5EFF.
+
+
+    DGET(INDEX)
+
+        Get the number stored at INDEX (0..63)
+
+        Use this only after you have called @CARTDATA()
+
+
+    DSET(INDEX, VALUE)
+
+        Set the number stored at index (0..63)
+
+        Use this only after you have called @CARTDATA()
+
+----------------------------------------------------------------------------------------------------
+    GPIO
+----------------------------------------------------------------------------------------------------
+
+    GPIO stands for "General Purpose Input Output", and allows machines to communicate with  each 
+    other. PICO-8 maps bytes in the range 0x5f80..0x5fff to gpio pins that can be
+
+
+    POKE()ed (to output a value -- e.g. to make an LED light up) or @PEEK()ed (e.g. to read
+
+    the state of a switch).
+
+    GPIO means different things for different host platforms:
+
+    CHIP:         0x5f80..0x5f87 mapped to xio-p0..xio-p7
+    Pocket CHIP:  0x5f82..0x5f87 mapped to GPIO1..GPIO6
+        // xio-p0 & p1 are exposed inside the prototyping area inside the case.
+    Raspberry Pi: 0x5f80..0x5f9f mapped to wiringPi pins 0..31
+        // see http://wiringpi.com/pins/ for mappings on different models.
+        // also: watch out for BCM vs. WiringPi GPIO indexing!
+
+    CHIP and Raspberry Pi values are all digital: 0 (LOW) and 255 (HIGH)
+
+    A program to blink any LEDs attached on and off:
+
+        T = 0
+        FUNCTION _DRAW()
+         CLS(5)
+         FOR I=0,7 DO
+          VAL = 0
+          IF (T % 2 < 1) VAL = 255
+          POKE(0X5F80 + I, VAL)
+          CIRCFILL(20+I*12,64,4,VAL/11)
+         END
+         T += 0.1
+        END
+
+    :: Serial
+
+        For more precise timing, the @SERIAL() command can be used. GPIO writes are buffered and  
+        dispatched at the end of each frame, allowing clock cycling at higher and/or more regular  
+        speeds than is possible by manually bit-banging using @POKE() calls.
+
+
+        SERIAL(CHANNEL, ADDRESS, LENGTH)
+
+            CHANNEL:
+                0x000..0x0fe    corresponds to gpio pin numbers; send 0x00 for LOW or 0xFF for HIGH
+                0x0ff           delay; length is taken to mean "duration" in microseconds (excl. overhead)
+                0x400..0x401    ws281x LED string (experimental)
+
+            ADDRESS: The PICO-8 memory location to read from / write to.
+
+            LENGTH:  Number of bytes to send. 1/8ths are allowed to send partial bit strings.
+
+        For example, to send a byte one bit at a time to a typical APA102 LED string:
+
+            VAL = 42          -- VALUE TO SEND
+            DAT = 16 CLK = 15 -- DATA AND CLOCK PINS DEPEND ON DEVICE
+            POKE(0X4300,0)    -- DATA TO SEND (SINGLE BYTES: 0 OR 0XFF)
+            POKE(0X4301,0XFF)
+            FOR B=0,7 DO
+                -- SEND THE BIT (HIGH FIRST)
+                SERIAL(DAT, BAND(VAL, SHL(1,7-B))>0 AND 0X4301 OR 0X4300, 1)
+                -- CYCLE THE CLOCK
+                SERIAL(CLK, 0X4301)
+                SERIAL(0XFF, 5) -- DELAY 5
+                SERIAL(CLK, 0X4300)
+                SERIAL(0XFF, 5) -- DELAY 5
+            END
+
+        Additional channels are available for bytestreams to and from the host operating system. 
+        These are intended to be most useful for UNIX-like environments while developing 
+        toolchains, and are not available while running a BBS or exported cart [1]. Maximum 
+        transfer rate in all  cases is 64k/sec (blocks cpu).
+
+                0x800  dropped file   //  stat(120) returns TRUE when data is available
+                0x802  dropped image  //  stat(121) returns TRUE when data is available
+                0x804  stdin
+                0x805  stdout
+                0x806  file specified with: pico8 -i filename
+                0x807  file specified with: pico8 -o filename
+
+        Image files dropped into PICO-8 show up on channel 0x802 as a bytestream with a special 
+        format: The first 4 bytes are the image's width and height (2 bytes each little-endian, 
+        like PEEK2), followed by the image in reading order, one byte per pixel, colour-fitted to 
+        the display palette at the time the file was dropped.
+
+        [1]	Channels 0x800 and 0x802 are available from exported binaries, but with a maximum file 
+        size of 256k, or 128x128 for images.
+
+    :: HTML
+
+        Cartridges exported as HTML / .js use a global array of integers (pico8_gpio) to  represent 
+        gpio pins. The shell HTML should define the array:
+
+        var pico8_gpio = Array(128);
+
+----------------------------------------------------------------------------------------------------
+    Mouse and Keyboard Input
+----------------------------------------------------------------------------------------------------
+
+    // EXPERIMENTAL -- but mostly working on all platforms
+
+    Mouse and keyboard input can be achieved by enabling devkit input mode:
+
+    POKE(0x5F2D, flags)  -- where flags are:
+
+        0x1 Enable
+        0x2 Mouse buttons trigger btn(4)..btn(6)
+        0x4 Pointer lock (use stat 38..39 to read movements)
+
+    Note that not every PICO-8 will have a keyboard or mouse attached to it, so when posting carts 
+    to the Lexaloffle BBS, it is encouraged to make keyboard and/or mouse control  optional and off 
+    by default, if possible. When devkit input mode is enabled, a message is displayed to BBS users 
+    warning them that the program may be expecting input beyond the  standard 6-button controllers.
+
+    The state of the mouse and keyboard can be found in stat(x):
+
+        STAT(30) -- (Boolean) True when a keypress is available
+        STAT(31) -- (String) character returned by keyboard
+        STAT(32) -- Mouse X
+        STAT(33) -- Mouse Y
+        STAT(34) -- Mouse buttons (bitfield)
+        STAT(36) -- Mouse wheel event
+        STAT(38) -- Relative x movement (in host desktop pixels) -- requires flag 0x4
+        STAT(39) -- Relative y movement (in host desktop pixels) -- requires flag 0x4
+
+----------------------------------------------------------------------------------------------------
+    Additional Lua Features
+----------------------------------------------------------------------------------------------------
+
+PICO-8 also exposes 2 features of Lua for advanced users: Metatables and Coroutines.
+
+For more information, please refer to the Lua 5.2 manual.
+
+:: Metatables
+
+    Metatables can be used to define the behaviour of objects under particular operations. For 
+    example, to use tables to represent 2D vectors that can be added together, the  '+' operator is 
+    redefined by defining an "__add" function for the metatable:
+
+        VEC2D={
+         __ADD=FUNCTION(A,B) 
+         	RETURN {X=(A.X+B.X), Y=(A.Y+B.Y)} 
+         END
+        }
+         
+        V1={X=2,Y=9} SETMETATABLE(V1, VEC2D)
+        V2={X=1,Y=5} SETMETATABLE(V2, VEC2D)
+        V3 = V1+V2
+        PRINT(V3.X..","..V3.Y) -- 3,14
+
+
+    SETMETATABLE(TBL, M)
+
+        Set table TBL metatable to M
+
+
+    GETMETATABLE(TBL)
+
+        return the current metatable for table t, or nil if none is set
+
+
+    RAWSET(TBL, KEY, VALUE)
+
+    RAWGET(TBL, KEY)
+
+    RAWEQUAL(TBL1,TBL2
+
+    RAWLEN(TBL)
+
+        Raw access to the table, as if no metamethods were defined.
+
+:: Function Arguments
+
+    The list of function arguments can be specifed with ... 
+
+        FUNCTION PREPRINT(PRE, S, ...)
+            LOCAL S2 = PRE..TOSTR(S)
+            PRINT(S2, ...) -- PASS THE REMAINING ARGUMENTS ON TO PRINT()
+        END
+
+    To accept a variable number of arguments, use them to define a table and/or use Lua's select() 
+    function. select(index, ...) returns all of the arguments after index.
+
+        FUNCTION FOO(...)
+            LOCAL ARGS={...} -- BECOMES A TABLE OF ARGUMENTS
+            FOREACH(ARGS, PRINT)
+            ?SELECT("#",...)    -- ALTERNATIVE WAY TO COUNT THE NUMBER OF ARGUMENTS
+            FOO2(SELECT(3,...)) -- PASS ARGUMENTS FROM 3 ONWARDS TO FOO2()
+        END
+
+:: Coroutines
+
+    Coroutines offer a way to run different parts of a program in a somewhat concurrent  way, 
+    similar to threads. A function can be called as a coroutine, suspended with 
+
+
+    YIELD() any number of times, and then resumed again at the same points.
+
+        FUNCTION HEY()
+            PRINT("DOING SOMETHING")
+            YIELD()
+            PRINT("DOING THE NEXT THING")
+            YIELD()
+            PRINT("FINISHED")
+        END
+         
+        C = COCREATE(HEY)
+        FOR I=1,3 DO CORESUME(C) END
+
+
+    COCREATE(F)
+
+        Create a coroutine for function f.
+
+
+    CORESUME(C, [P0, P1 ..])
+
+        Run or continue the coroutine c. Parameters p0, p1.. are passed to the coroutine's 
+        function.
+
+        Returns true if the coroutine completes without any errors Returns false, error_message if 
+        there is an error.
+
+        ** Runtime errors that occur inside coroutines do not cause the program to stop running. It 
+        is a good idea to wrap CORESUME() inside an @ASSERT(). If the assert fails, it will print 
+        the error message generated by  coresume.
+
+
+        ASSERT(CORESUME(C))
+
+
+    COSTATUS(C)
+
+        Return the status of coroutine C as a string:
+            "running"
+            "suspended"
+            "dead"
+
+
+    YIELD
+
+        Suspend execution and return to the caller.
+
+====================================================================================================
+    Appendix
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+    Appendix A: P8SCII Control Codes
+----------------------------------------------------------------------------------------------------
+
+    When printed with @PRINT(), some characters have a special meaning that can be used to alter 
+    things like the cursor position and text rendering style. Control characters in PICO-8 are 
+    CHR(0)..CHR(15) and can be written as an escaped sequence ("\n" for newline etc.)
+
+    Some of the control codes below take parameters which are written using a scheme that is a 
+    superset of hexadecimal format. That is, '0'..'f' also mean 0..15. But characters after 'f' are 
+    also accepted: 'g' means 16 and so on. Such parameters are written below as P0, P1.
+
+    For example, to print with a blue background ("\#c") and dark gray foreground ("\f5"):
+
+        PRINT("\#C\F5 BLUE ")
+
+    The only side-effects on the draw state are changes in cursor position and foreground color; 
+    all other attributes are reset each time @PRINT() is called.
+
+    :: Control Codes
+
+        0 "\0"   terminate printing
+        1 "\*"   repeat next character P0 times. ?"\*3a" --> aaa
+        2 "\#"   draw solid background with colour P0 
+        3 "\-"   shift cursor horizontally by P0-16 pixels
+        4 "\|"   shift cursor vertically by P0-16 pixels
+        5 "\+"   shift cursor by P0-16, P1-16 pixels
+        6 "\^"   special command (see below)
+        7 "\a"   audio (see below)
+        8 "\b"   backspace
+        9 "\t"   tab
+        a "\n"   newline
+        b "\v"   decorate previous character (see below)
+        c "\f"   set foreground colour
+        d "\r"   carriage return
+        e "\014" switch to font defined at 0x5600
+        f "\015" switch to default font
+
+    :: Special Commands
+
+        These commands all start with "\^" and take up to 2 parameters (P0, P1) For example, to 
+        clear screen to dark blue: print("\^c1")
+
+            1..9 skip 1,2,4,8,16,32..256 frames		
+            c cls to colour P0, set cursor to 0,0
+            d set delay to P0 frames for every character printed
+            g set cursor position to home
+            h set home to cursor position
+            j jump to absolute P0*4, P1*4 (in screen pixels)
+            r set rhs character wrap boundary to P0*4
+            s set tab stop width to P0 pixels (used by "\t")
+            x set character width  (default: 4)
+            y set character height (default: 6)
+
+        :: Rendering mode options  
+
+            // prefix these with "-" to disable: e.g. ?"\^i on \^-i off "
+
+            w wide mode: scales by 2x1 
+            t tall mode: scales by 1x2
+            = stripey mode: when wide or tall, draw only even pixels
+            p pinball mode: equivalent to setting wide, tall and stripey
+            i invert
+            b border: toggle 1px padding on left and top // on by default
+            # solid background  // off by default, but enabled automatically by \#
+
+        :: Raw memory writes
+
+            The following two commands take 4-character hex parameters:
+
+            @addrnnnn[binstr] poke nnnn bytes to address addr
+            !addr[binstr]     poke all remaining characters to address addr
+
+            For example, to write 4 bytes to video memory halfway down the screen:
+
+            >?"\^@70000004xxxxhello"
+
+        :: One-off characters
+
+            Character data can be specified and printed in-line using \^. followed by 8 bytes of 
+            raw binary data, or \^: followed by 8 2-digit hexadecimal values. The data format is 
+            the same as custom fonts; each byte specifies a row of 1-bit pixel values, with the  
+            low bit on the left.
+
+            \^.[8 chars of raw binary data]
+            \^:[16 chars of hexadecimal]
+
+            To print a cat:
+
+            > ?"\^:447cb67c3e7f0106"
+
+    :: Audio 
+
+        ? ?"\A"   -- SINGLE BEEP ?"\A12" -- PLAY EXISTING DATA AT SFX 12
+
+        If an sfx index is not specified, a non-active sfx between 60..63 is selected 
+        automatically. To fill the SFX with data before playback, the following commands can then 
+        be appended.
+
+        1. (optional) SFX attributes must appear once at the start as they apply to the whole 
+        sound:
+
+            s P0     set the sfx speed
+            l P0 P1  set the sfx loop start and end points
+
+        2. Note data:
+
+            Note are written as a..g, optionally followed by a sharp # or flat -, and octave 
+            number.
+
+                PRINT "\ACE-G" -- MINOR TRIAD
+
+            Empty notes Can be written with a dot:
+
+                PRINT "\AC..E-..G" -- STACCATO MINOR TRIAD 
+
+            Note attribute commands apply to following notes:
+
+            i P0    set the instrument (default: 5)
+            v P0    set the volume     (default: 5)
+            x P0    set the effect     (default: 0)
+
+            For example, to play a fast (speed 4), staccato (effect 5) arpeggio starting at C1:
+
+                PRINT "\AS4X5C1EGC2EGC3EGC4"
+
+    :: Decoration Characters
+
+        The control character \v can be used to decorate the last printed character with another 
+        character at a given offset, without needing to otherwise manage the cursor position. After 
+        the decorating character is printed, the previous cursor position is restored.
+
+        The format is \v P0 char, where P0 is a number giving the desired offset, and char is any 
+        character to print at that offset (relative to the previous printed character).
+
+        The offset has x packed into the lowest 2 bits, and starts (-2,-8) in reading order. So 3 
+        means (+1, -8), 4 means (-2, -7) and so on.
+
+        For example, to write "café!", using a comma to draw the acute accent:
+
+            PRINT"\NCAFE\VB,!"
+
+        In this case P0 is 'b', which is read as the number 11. So the comma is drawn at:
+
+            x = (11%4)-2 = 1
+            y = (11\4)-8 = -6
+
+    :: Custom Font
+
+        A custom font can be defined at 0x5600, consisting of 8 bytes per character * 256 
+        characters = 2048 bytes. Each character is an 8x8 bitfield (1 bit/pixel), where starting 
+        from the top, each row is a single byte starting with 0x1 on the left.
+
+        The first five bytes (character 0 is never drawn) describes attributes of the font:
+
+            0x5600 character width in pixels (can be more than 8, but only 8 pixels are drawn)
+            0x5601 character width for character 128 and above
+            0x5602 character height in pixels
+            0x5603 draw offset x
+            0x5604 draw offset y
+
+    :: Default Attributes
+
+        Although attributes are reset every time @PRINT() is called, it is possible to set their 
+        default values by writing to memory addresses 0x5f58..0x5f5b.
+
+        0x5f58 // bitfield
+            0x1  when set to 0x1, bits 1..7 are observed:
+            0x2  padding
+            0x4  wide
+            0x8  tall
+            0x10 solid background
+            0x20 invert
+            0x40 stripey (when wide or tall)
+            0x80 use custom font
+         
+            // e.g. poke(0x5f58, 0x1 | 0x2 | 0x4 | 0x8 | 0x20 | 0x40)  -- pinball everywhere
+        0x5f59 char_w   (low nibble), char_h   (high)
+        0x5f5a char_w2  (low nibble), tab_w    (high)
+        0x5f5b offset_x (low nibble), offset_y (high)
+
+        // any nibbles equal to 0 are ignored // tab_w values are mapped to 4..64
+
+
+
+--------------------------------------------------------------------------------------------
+	PICO-8 VERSION HISTORY
+--------------------------------------------------------------------------------------------
+
+	v0.2.4c
+
+		Added: save @url -- stores code + gfx as a URL if it can be encoded in 2040 characters
+		Added: html exports store volume/mute and other settings
+		Added: ctrl-g in sprite editor to toggle grid lines when zoomed in
+		Added: IMPORT -L FOO.PNG to import a 128x128 png to the cartridge label
+		Added: EXPORT -L FOO.PNG to export a 128x128 png of the cartridge label
+		Added: EXPORT -T FOO.P8.ROM to export only code section (t for tiny)
+		Added: ctrl-click on character count (bottom right) to see the twitter count (glyphs count as 2)
+		Added: __meta:*__ section to .p8 format -- can be used by external tools to store custom data
+		Added: extcmd("audio_rec") works from exported binaries, and with custom exported filenames
+		Added: read_controllers_in_background in config.txt (0 by default)
+		Changed: .p8.rom files that are 0x3d00 bytes or less are loaded into code section
+		Changed: saved filenames can not include gylphs, or any of !"#$%&'()*+,-:;<=>?[\]^`{|}~
+		Fixed: can't drag and drop png into sprite editor
+		Fixed: binary exports: ctrl-r causes crash when there is no whitespace at end of source code
+		Fixed: Using -run switch to launch a cart that fails to run -> get stuck in boot screen.
+		Fixed: selection after ctrl-a reports length chars+1
+		Fixed: draw palette is not observed after changing colours using p8scii control characters
+		Fixed: music playback does not follow cursor after first pattern change (regression in 0.2.4b)
+		Fixed: transform_screen (config.txt) not observed by pause menus and other overlayed elements
+		Fixed: Double-clicking sfx thumbnail (in sfx overview screen) only works after playing music
+		Fixed: Pressing [a] to release looping sfx in sfx editor is broken
+		Fixed: sfx(46)..sfx(56) return -1 immediately after playing music but before host OS has called audio mixer
+		Fixed: Tokens counted as 2 instead of 1: ..= ^= >><= <<>=
+		Fixed: Negative number counted as 2 tokens instead of one when preceeded by: \ & | ^^ << >> >>> >>< <<>
+		Fixed: tostr(tbl) / print(tbl) acts like tostr(tbl, 1) when tbl has a metatable
+		Fixed: ?"\tx" does not advance to next tab stop
+		Fixed: ?"a\*5\nb" does not repeat newline 5 times
+		Fixed: exported label alpha is 0 for colour 0
+
+
+
+	v0.2.4b
+
+		Added: l in sprite sheet navigator to set loop start / end points (then q,w or a,z to navigate)
+		Added: ctrl-b in gfx editor to paste 2x2 original size ("paste big")
+		Added: DEL / backspace to clear selected region in gfx / map editors, and ctrl-x to cut
+		Added: aggressive_backups option in config.txt (off by default)
+		Added: transform_screen in config.txt to globally rotate / flip the video output
+		Added: stat(57) (boolean) true when music triggered by music() is playing or about to start
+		Changed: memset() faster than using peek4/poke4; now 2 cycles per byte at 8MHz (was 4)
+		Changed: "running at < 30fps" warning on boot now only for raspi builds, and w/ higher tolerance
+		Changed: Controller inputs are accepted even when PICO-8 is not the foreground application
+		Changed: Map can be located at 0x1000 .. 0x2f00 using poke(0x5f56, 0x11) .. poke(0x5f56,0x2f)
+		Changed: Dotty text mode is now "\^=" ("Stripey") instead of "\^." // #gunayawuho #klax #impossible
+		Fixed: (not confirmed) crash causing 0-byte .p8 when audio mixer is called during save / run
+		Fixed: preprocessor not counting comments as white space; should allow: ".. end--[[]]if .."
+		Fixed: pal(nil) behaving the same way as pal(0); should be same as pal() // broke #rtype-2
+		Fixed: note entry in sfx tracker is silent after running cartridge until pressing space to playback
+		Fixed: sub("abc", 4, 4) returns "c" (regression in 0.2.4)
+		Fixed: SPLORE cart update prompt does not appear when server replies too quickly (race condition)
+		Fixed: SPLORE cart update prompt only checks version once per session (can't refresh until it shows up)
+		Fixed: EXPORT command does not flatten includes when exporting to .p8.png / .p8.rom format
+		Fixed: EXPORT command discards source code changes since last run or load
+		Fixed: printing a one-off glyph using "\^." terminates the whole string when last byte is a zero
+		Fixed: Crash when loading a cart with fewer tabs, then creating a new tab and pasting.
+		Fixed: . command runs at 30fps even for a 60fps cart (-> _update60 is called twice, _draw once)
+		Fixed: Custom menu items become broken after suspending a cart, entering a lua command, and then resuming
+		Fixed: memset() with a non-zero value in shared memory region (0x1000..0x1fff) causes garbage corresponding mget() values
+		Fixed: web player/exports: ctrl-r causes erroneous "external changes reloaded" message and code corruption
+
+
+	v0.2.4
+
+		Added: Video and spritesheet memory addresses can be mapped to each other
+		Added: Map memory address can be mapped to 0x8000 // POKE(0x5f56, 0x80)
+		Added: stat(46)..stat(56): higher resolution and more accurate reporting of audio state
+		Added: Print one-off characters with ?"\^:447cb67c3e7f0106 hey" (or "\^." for binary data)
+		Added: chr() can take multiple arguments to construct an arbitrarily long string
+		Added: sub(str, pos, _) to get a single character at position pos
+		Added: Warning on boot when PICO-8 is running below 30fps
+		Added: Automatic scrolling caused by print() (with no x,y given) can be disabled with POKE(0x5f36,0x40)
+		Added: .p8.rom format can be used by cstore(), reload() and in multicarts
+		Added: EXPORT accepts .p8 .p8.png .p8.rom formats (can be used to save a copy, or convert from commandline)
+		Added: 64-bit RaspberryPi OS Builds and Exporters
+		Added: ASCII .txt version of manual included in archives & on website (synced with new html version)
+		Added: Auto-hide mouse cursor when typing (adjustable in config.txt)
+		Changed: .p8.rom file format can be less than 32k -- is padded with zeros to 32k on load
+		Changed: sub() costs some cpu based on the length of the string
+		Changed: Shorthand if/while no longer needs to be preceeded by a whitespace character or number
+		Changed: load("#") throws a runtime error when cartridge id contains illegal characters
+		Changed: 64k of Base RAM is standard (no need to set the hardware extension bit)
+		Changed: By default, draw colour resets to 6 when program is suspended
+		Changed: map() can take nil parameters for source_w, source_h to indicate default values
+		Changed: pal(n) (a single integer) to reset a single palette 1..3 (draw, display, secondary)
+		Changed: Can turn P8SCII wrap on/off with "\^$", "\^-$"
+		Changed: config.txt is not saved on exit when changes are made to it while PICO-8 is open
+		Changed: added code editor undo points when changing between identifier and non-identifier characters
+		Changed: sfx(-1, -2) now behaves the same as sfx(-1). sfx(-2) stops looping on all channels.
+		Changed: chip build no longer requires libcurl (calls out to wget)
+		Fixed: (Mac, Linux) load("#`echo ohno`") is executed // + server-side mitigation for splore
+		Fixed: stat(31) returns 2 parameters (bug introduced in 0.2.3)
+		Fixed: split() and sub() fail on strings containing "\0"
+		Fixed: ctrl-x on song pattern appears to work, but music() plays sfx 1..4
+		Fixed: Text getting cut off after console scrolling when using print with draw_y_offset (0x5f5b)
+		Fixed: camera(0,128) cursor(0,128) print("\n") causes unnecessary console scrolling
+		Fixed: last music pattern not saved when only channel 3 is used and other channels are defaults
+		Fixed: ?"\a12 sup yall" overwrites sfx 12 with a default beep (should just play and continue printing)
+		Fixed: cursed console cpu refund exploit // https://carlc27843.itch.io/cursed-console
+		Fixed: ctrl-r from commandline resets parameter string (stat(6)) -- should be same as the last run
+		Fixed: ord() corrupting Lua stack and crashing when returning more than ~80 results
+		Fixed: large camera() parameters can cause line() clipping to fail and crash
+		Fixed: Crash when saving long gifs (> 90 seconds)
+		Fixed: Unmapped joysticks not responding
+		Fixed: Plugging in > 2 controllers causes other controller to disconnect
+
+
+	v0.2.3
+
+		Added: Lucky draw list in splore -- gives a random selection of carts
+		Added: load/save carts in .p8.rom format (raw binary 32k block)
+		Added: tostr(), tonum() take format_flags parameter to convert to and from 32-bit signed ints
+		Added: ord(str, pos, num) returns num results starting from character at pos (similar to peek)
+		Added: FOLDER takes an optional parameter to open other host directories: BACKUPS | DESKTOP | CONFIG | BBS
+		Added: Live character / token count of selected text shown at bottom right of code editor
+		Changed: Removed collaboration list from splore (can still search for sub:collab)
+		Changed: 0x808 audio has a slight lpf filter on it by default // turn off by setting bit 0x20 at 0x5f36
+		Changed: tonum(boolean_value) returns 1 or 0 instead of nil
+		Changed: cursor CR x position set only by print(str,x,y) or cursor(), but not by print(str) (0x5f24)
+		Changed: character wrap is on by default when using print(str)
+		Changed: force-pause-menu hold duration is 500ms instead of 300ms to prevent accidentally triggering it
+		Changed: default gif length for new install is 16 seconds
+		Changed: ? shorthand can be used anywhere on a line e.g.  if (true) ?"yes"
+		Changed: allow while/if shorthand with no statement, using colon separator: WHILE(BTN()==0);
+		Changed: added warning to fullscreen_method 2 in config.txt (gives erratic behaviour under some drivers)
+		Changed: cheaper OP_MOVE, OP_UNM lua vm instructions so that e.g. "local a=0-b" is not faster than "local a=-b"
+		Fixed: peek*() / poke*() do not charge extra cpu when reading or writing multiple values
+		Fixed: fget(n) returns junk when n is out of range (0..255); should return 0 in that case
+		Fixed: dropped .PNG files not detected as images when filename uses uppercase extension
+		Fixed: line()/tline() illegal writes caused by faulty clipping when (x1-x0) or (y1-y0) >= 0x8000
+		Fixed: -accept_future 1 only worked with .p8.png files; now also applies to .p8
+		Fixed: ?"\a7f" does not play f (happens only when f is the first note)
+		Fixed: abs(0x8000) return 0x0.0001 (should be 0x7fff.ffff)
+		Fixed: parameter string (stat(6)) is dropped when passed via RUN command
+		Fixed: preprocessing of form: "x += x<0 and -1 or 1" broken for operators <, >
+		Fixed: tab not accepted as whitespace for some preprocessor operations
+		Fixed: stat(1) wraps around when cpu is >= 2.0 (regression in 0.2.2)
+		Fixed: pressing SHIFT+ENTER on "local function foo()" or after "if (..) else" doesn't insert "end"
+		Fixed: pal() does not reset secondary palette to system default
+		Fixed: 0x808 audio does not respect pausing / volume / is not recorded with extcmd("audio_rec")
+		Fixed: 'h' pressed in sprite editor toggles hex mode in map editor
+		Fixed: After pressing shift-tab to toggle 128x128 map view, active draw area is still only 128x112
+		Fixed: Attempt to navigate to non-existant tab after running: function _update60() _update60=nil end
+		Fixed: stat(101) not returning cart id when running from BBS web player
+		Fixed: print() wrapping + scrolling; e.g. from commandline: while(true) print(chr(254+rnd(2)).."\0")
+		Fixed: integer divide assignment operator (\=) costs 2 tokens instead of 1 
+
+
+	v0.2.2c
+
+		Fixed: ?"\ac0" starts from d#0 instead of c0 (again -- 0.2.2b was still broken)
+		Fixed: splore local directory navigation fails when using a relative home path set with -home 
+		Fixed: export .lua.png only shows the first 2730 lines
+
+
+	v0.2.2b
+
+		Added: export foo.lua.png to get an image of the cartridge's source code
+		Added: Pause menu can be forced to appear by holding down pause for 300ms (even if program blocks it)
+		Added: extcmd("set_filename","foo") -- set the filename of the next screenshot or gif (can include %d)
+		Added: extcmd("set_title","foo") -- set window title (useful for exported binaries)
+		Added: Can toggle punyfont mode at command prompt w/ ctrl+p (useful for inspecting puny variable names!)
+		Changed: Default filename is /untitled.p8 instead of no filename (auto-increments to untitled_1.p8 etc.)
+		Changed: circ/oval that are not visible cost almost nothing, including circles that contain clipping region
+		Changed: filled circles/ovals that contain clipping region cost the same as the equivalent rectfill
+		Changed: shift+enter in code editor only auto-completes block for DO, THEN, REPEAT or FUNCTION 
+		Fixed: ?"\ac0" starts from d#0 instead of c0
+		Fixed: preprocessor regression when using string at end of ..= statement: if (true) then a..="b" end
+		Fixed: pressing L / R in paused menu is registered by running program after closing menu
+		Fixed: printing text in tall mode (?"\^ttall") via commandline can chop off bottom line before scrolling
+		Fixed: drag-select text with cursor at bottom or top of screen scrolls too fast
+		Fixed: spurious stat(0) results when using yield() to exit frame instead of flip()
+		Fixed: line()/tline() sometimes draws pixels on opposite side of screen (0.2.2 regression)
+		Fixed: line()/tline() fails to draw lines that have x or y coordinates > 32767 pixels apart 
+		Fixed: can peek() more than 8192 values in single call
+		Fixed: large fill circles (> radius 900) render incorrectly close to vertical center (32-bit builds, web)
+		Fixed: even-widthed filled ovals with midpoint < 0 is drawn off by 1
+		Fixed: black pixels in gif / map export not completely black
+		Fixed: map and spritesheet exporters do not respect current display palette and 0x5F36:0x8 (draw spr 0)
+		Fixed: code editor: cursor position off by one when selecting character after glyph (0.2.2 regression)
+		Fixed: code editor: tab names don't show up when 100% punyfont
+		Fixed: import spritesheet.png failing under MacOS (0.2.2 regression)
+		Fixed: export single sfx to .wav crashes when contains sfx instrument references
+
+
+	v0.2.2
+
+		Added: SFX filters: noiz (white noise for inst 6), buzz, detune (flange/overtone), reverb, dampen (lpf)
+		Added: SFX length (leave the second loop value at 0 to use). Can be >= 32.
+		Added: P8SCII control characters when using print() -- can adjust colour and cursor position etc.
+		Added: User-defined font at 0x5600, accessible via control character \014
+		Added: poke(addr, val0, val1, val2 .. valn) -- same for poke2, poke4
+		Added: can peek multiple values:  a,b,c = peek(addr, 3)  -- same for peek2, peek4
+		Added: Locked mouse pointer // poke(0x5f2d, 0x5) and then stat(38),stat(39) to read
+		Added: right click in sfx pitch mode to grab the instrument of that note
+		Added: IMPORT command can specify target location in pixels: IMPORT FOO.PNG -X 16 -Y 32 
+		Added: IMPORT -S to shrink the imported image (e.g. -S 3 means shrink from 384x384 -> 128x128) 
+		Added: ctrl-c at empty command prompt to copy the most recent error message
+		Added: extcmd("screen",0,1) / extcmd("video",0,1) saves files in same path as cart / exported executable or app.
+		Added: set bit POKE(0x5F36, 0x8) to treat sprite 0 as opaque when drawn by map(), tline()
+		Added: shift-tab in gfx/map editor for full-fullscreen mode (with no red menu bars)
+		Added: extcmd("rec_frames") to record each gif frame only when flip() is called regardless of rendering speed
+		Added: extcmd("folder") to open the folder on the host operating system (where printf, extcmd saves files to)
+		Added: custom menu callbacks can optionally leave the pause menu open, and can read LEFT and RIGHT button presses
+		Added: ctrl-h hex mode in map / gfx views (displays current sprite in hex, and shows map tile values)
+		Added: export map as a single image with export foo.map.png
+		Added: @weeble's gamepad improvements to the default html shell (dpad layout detection, better mapping / hotplugging)
+		Added: stack trace on bad memory access e.g. poke(-1,0)
+		Added: fillp can now be applied to sprite drawing (spr / sspr / map / tline), using colours from the secondary palette
+		Improved: General optimisation pass; heavy carts use 20~30% less host cpu
+		Changed: Most api functions are local by default for performance. use "pico8 -global_api 1" if needed for debugging.
+		Changed: unpack() now has a non-zero cost but still fairly fast
+		Changed: .. operator has a small cost based on number of characters concatenated
+		Changed: LOADK vm instruction costs 1 cycles (was 2) // otherwise "c=0" costs more than "c=a+b"!
+		Changed: removed function cpu refunds; speed-critical calls to bitwise function should use operator counterparts instead.
+		Changed: Incremental garbage collection each frame for improved performance.
+		Changed: stat(0) performs garbage collection in order to obtain a meaningful result; use stat(99) for raw value
+		Changed: options menu always available from pause menu (used to only be available in web exports)
+		Changed: tostr() returns "" instead of nil
+		Changed: exporting gif/png from web version now creates a pop-up div that can be dismissed
+		Changed: print() from commandline automatically wraps long strings
+		Changed: print() returns the x position of the next character to be printed (can be used to calculate text width)
+		Changed: glyph constants set only when running cartridge, not when running a command from prompt
+		Changed: Using printh from exported carts outputs files in the same folder as the .exe / .app
+		Changed: type() returns nothing instead of causing a runtime error
+		Changed: fill pattern is cleared when program is suspended by default. Use poke(0x5f2e,0x20) to preserve.
+		Changed: reset() resets everything from 0x5f00..0x5f7f, same as when program is initialised (including new random seed)
+		Changed: font tweaks for hiragana, katagana, ampersand characters 
+		Changed: (raspi) separate binaries that support gpio to remove wiringPi dependency and gpio poking-related crashes
+		Fixed: Diagonal lines in editor contain an incorrect step when snapping to -1:1, 1:-1
+		Fixed: rnd(tbl) is not random enough when table has 2 elements   /bbs/?pid=81092#p
+		Fixed: add(tbl) causes runtime error. should have no effect and return nothing
+		Fixed: cursor position in code editor incorrect when changing lines contaning glyphs/tabs
+		Fixed: CONFIG TAB_WIDTH does not take effect until restarting PICO-8
+		Fixed: Selecting sprites from bottom right -> top left and then pasting only pastes a single sprite
+		Fixed: Moving map selection around with cursor keys beyond original selection leaves streaks
+		Fixed: stdout/stdin serial() streams should be binary, not text mode (causes \r chars under Windows)
+		Fixed: printh("hello.txt",fn,true,true) fails to save to desktop when fn has an extention
+		Fixed: IMPORT FOO.PNG using the current sprite location as target instead of 0,0
+		Fixed: tonum behaving differently to parser for string numbers out of range.  e.g. tonum("-0x9000") should be 0x7000
+		Fixed: Exporting the same zip file multiple times creates duplicate file entries
+		Fixed: tline / line clipping // sometimes off by 1px, sometimes incorrectly discarded altogether
+		Fixed: poking values with bit 0x80 to 0x5f28,0x5f30,0x5f3c,0x5f3e clobbers following address
+		Fixed: deli(tbl,nil) behaves the same as deli(tbl) -- should have no effect
+		Fixed: stat(13),stat(15) reporting y coordinates of menu with 0 items
+		Fixed: memory leak when saving gifs (causes web export to crash after a few records)
+		Fixed: print() linefeeds clobber multi-line text printed at bottom of screen
+		Fixed: preprocessor can not handle form: "::_::a+=1" (regression in 0.2.1)
+		Fixed: When split() by group size (e.g. split("ab12",2,false)), last parameter ignored
+		Fixed: partial cstore (len < 0x4300) from splore/export clobbering data outside that range on subsequent reload
+		Fixed: joystick stops responding after unplug and plug back in twice (also happens when some devices sleep / wake up)
+		Fixed: mkdir(nil) crashes
+		Fixed: possible to edit an SFX without the cursor visible (confusing)
+		Fixed: menuitem() callbacks broken when there is no _draw() or _update() defined
+		Fixed: should only be able to call from commandline: cd mkdir install_games keyconfig info
+		Fixed: controller menu (pause->options->controls) does not show custom key settings
+		Fixed: -export failing to find files relative from current path
+		Fixed: -export failing to locate html template path
+		Fixed: binary export storing multicart cart names with path (should be named "dat1.p8", not "dat/dat1.p8")
+		Fixed: pause menu broken when cartridge is launched from splore and run() is called inside first frame 
+		Fixed: text printing does not respect draw palette (was broken in 0.2) // ref: /bbs/?tid=41428
+		Fixed: for backwards compatibility, non-numbery colour parameters should be taken to mean zero
+		Fixed: preprocessor: self assignment with quoted function calls on RHS a+=1+cos"0"
+		Fixed: ctrl-r during pause menu only takes effect after closing menu
+		Fixed: (bug in RC1) pack(...).n is zero
+		Fixed: (bug in RC1) using filters noiz:1, dampen:2, lpf is not applied to melodic instruments (but should be)
+
+
+	v0.2.1b
+
+		Added: split(str,"") splits by single characters
+		Updated: Tower of Archeos 1.1 via INSTALL GAMES
+		Fixed: print(num,x,y) always prints numbers num in hexidecimal
+		Fixed: .p8.png decoder can enter an infinite loop (caused exports to freeze on boot)
+		Fixed: Can't save screenshot/gif when running a BBS cart with illegal characters in title.
+		Fixed: INSTALL_GAMES is broken
+		Fixed: Mouse is broken in HTML exports
+
+
+	v0.2.1
+
+		Added: oval() ovalfill() split()
+		Added: circle drawing tool is now an oval tool (hold shift for circle)
+		Added: hold shift with line tool to snap to 22.5 degree angles from origin (0:1, 1:1, 2:1 gradients)
+		Added: serial() channels for stdin,stdout
+		Added: raw binary and image files dropped in to PICO-8 also become byte streams readable w/ serial()
+		Added: add(tbl, val, index) -- insert val into table at index
+		Added: deli(tbl, index) -- delete element from table by index (index defaults to last element)
+		Added: show progress while exporting binaries (can be slow now that generating zip files)
+		Added: -e to add an extra file to exported binaries zip files // export -e manual.txt foo.bin
+		Added: RESET command to reset the runtime / draw state
+		Added: drag and drop cartridges into PICO-8 window to load them
+		Added: hash stored in .p8.png so that cartridges corrupted by image quantization can show a specific error
+		Added: raw data blocks in compressed code format (useful for storing long binary strings efficiently)
+		Added: clip(x,y,w,h,true): 5th parameter indicates that the clipping region should be clipped by the old one
+		Added: -export switch can be used to convert .p8 files to .p8.png from commandline. // pico8 foo.p8 -export foo.p8.png
+		Added: extcmd("screen",scale) and extcmd("video",scale) to override the default scale (e.g. scale 2 means 256x256)
+		Added: printh(str, filename, overwrite, save_to_desktop) -- 4th parameter to save output file to desktop
+		Changed: add(), del() no longer implemented with Lua snippet; lower cpu cost.
+		Changed: line(),rect() cost the same as rectfill() when drawing equivalent shapes
+		Changed: all drawing operations in sprite editor now observe fill pattern state
+		Changed: numbers can be immediately followed by identifiers (a=1b=2) // lexaloffle.com/bbs/?tid=38038		
+		Changed: Sprite editor shows only active area after shift-selecting sprites
+		Changed: copy/paste in the code editor treats uppercase ascii characters as puny font only when puny mode (ctrl+p) enabled
+		Changed: C0 Controls characters (except for 0x0,0x9,0xa,0xd) encoded in .p8 / clipboard with unicode replacements
+		Changed: stat(4) converts characters to PICO-8 format (P -> puny p,  hiragana unicode -> single character etc.)
+		Changed: serial() returns number of bytes processed (1/8ths included for partial bytes)
+		Changed: IMPORT SPRITESHEET.PNG now uses the current sprite as the destination coordinate instead of 0,0.
+		Changed: Standardized name of the display palette to "display palette" (was sometimes referred to as "screen palette").
+		Changed: tostr() returns nil (used to return "[nil]")
+		Changed: don't need to set bit 0x40 at address 0x5f2c to use secondary palette.
+		Improved: exported binary's data.pod file 90% smaller (~870k -> ~85k)
+		Fixed: pack(...).n is shifted right 16 bits
+		Fixed: ctrl-r doesn't reload external changes for carts which are over compressed code capacity
+		Fixed: false positives when detecting external changes for some older cart versions
+		Fixed: .p8.png carts saved with dense code (compressed size > raw size, including very small carts) stores junk
+		Fixed: error message duplication when loading future version of .p8.png carts
+		Fixed: Illegal colours can enter spritesheet via serach-replace after setting with color()
+		Fixed: Preprocessor: "foo():a().x+=1" "a=b[1]c+=1"
+		Fixed: hex numbers written with punyfont characters breaks syntax high-lighting
+		Fixed: shift+- in sprite editor jumps too far vertically when zoomed in
+		Fixed: clicking a note in sfx editor creates a selection (-> backspace clears without moving rows)
+		Fixed: print()/printh()/stop() doesn't respect __tostring metatable method (regression)
+		Fixed: time() and btnp() speed changes after stopping program, typing a command and then resuming.
+		Fixed: phantom drag & drop events sent to unused music channels causing them to occasionally unmute themselves
+		Fixed: undo after moving sprites in map mode only undoes the changes to the map and not the spritesheet.
+		Fixed: inconsistent token counting for negative or bnot'ed numbers https://www.lexaloffle.com/bbs/?tid=38344
+		Fixed: Crash when INSTALL_GAMES / INSTALL_DEMOS without a writeable disk
+		Fixed: stat(4) (clipboard contents) does not convert unicode to corresponding glyphs
+		Fixed: (MacOS) Using discrete GPU ~ drains battery. Now using integrated GPU when available.
+		Fixed: screensaver is blocked while PICO-8 is running (needed to set SDL_HINT_VIDEO_ALLOW_SCREENSAVER: "1")
+		Fixed: screen glitches after running for 25 days
+		Fixed: (HTML Exports) touch controls not registering when running under iOS from an iframe (e.g. on an itch.io page) 
+		Fixed: (HTML Exports) tap and hold brings up the select menu under iOS
+		Fixed: (HTML Exports) button blocked by canvas when overlapping on small screens
+
+
+
+	v0.2.0i
+
+		Added: pack(), unpack()
+		Changed: bitplane read/write mask only reset after finished running program
+		Fixed: tline() doesn't draw anything when the layers argument is not given
+
+
+	v0.2.0h
+
+		Added: tline() takes an optional layers parameter, similar to map()
+		Added: high bits of 0x5f5e taken as colour read mask, low taken to be colour write mask
+		Added: Double-click in the sfx tracker to select all attributes of a single note.
+		Fixed: assignment shorthand RHS scope wrong when contains certain operators. e.g. a+=1&127
+		Fixed: while/if shorthands fail when "do" or "then" appears on the same line as part of an identifier
+		Fixed: ctrl-c copies the wrong sfx after clicking pencil button (next to pattern #) in organiser view
+		Fixed: spinning cart icon present in video memory when cart boots from splore
+
+
+	v0.2.0g
+
+		Added: Window title shows current cartridge filename while editing
+		Changed: ~ preceeding a numerical constant (e.g. ~1) counts as a single token
+		Fixed: >>> operator behaviour does not match lshr(a,b) when b >= 32 (again)
+		Fixed: PICO-8 freezes when shift by -0x8000 
+		Fixed: .p8 format does not store extpal label colours
+		Fixed: Can not save screenshot when filename contains ":"
+
+
+	v0.2.0f
+
+		Changed: @@ operator (peek2) to %
+		Fixed: Exported wasm crashes on boot when code contains a numerical constant out of range.
+		Fixed: HTML Shell treats controller shoulder buttons as MENU; easy to accidentally bump.
+		Fixed: shift operators behaviour undefined for negative values of n (now: x << n means x >> -(n\1))
+		Fixed: >>> operator behaviour does not match lshr(a,b) when b >= 32
+		Fixed: INFO crashes when code is close to 64k of random characters
+		Fixed: Code editor undo step not stored when starting to edit a new line (hard to see what happened)
+
+
+	v0.2.0e
+
+		Added: zip file creation (with preserved file attributes) when exporting binaries
+		Added: cpu working animation when cpu usage > 120 skipped frames
+		Improved: stop() / resume now works at the instruction level
+		Fixed: tline clipping broken (from 0.2.0d)
+		Fixed: cpu counting is wrong inside coroutines
+		Fixed: coroutines interrupted by garbage collection
+		Fixed: code compression suddenly much worse for carts > 32k chars
+		Fixed: code compression ratio can be less than 1 in extreme cases		
+		Fixed: pasting a string ending in '1' into the command prompt opens the editor
+		Fixed: html export can run out of pre-allocated heap when doing heavy string operations
+		Fixed: hex memory addresses displayed in puny font on windows
+		Fixed: devkit mouse message shown once per cart -- should be once per chain of carts
+		Fixed: can't paste sfx notes after moving to another sfx via keyboard
+		Fixed: copying note select vs. sfx vs. pattern range is ambiguous
+		Fixed: crash after redefining type()
+
+
+	v0.2.0d
+
+		Added: rnd(x) when x is an array-style table, returns a random item from that table
+		Added: gif_reset_mode (in config.txt / CONFIG command). Defaults to 0.1.12c behaviour
+		Added: print(str, col) form behaves the same as: color(col) print(str)
+		Added: Operators: <<> >>< <<>= >><=
+		Changed: tline now also observes an offset (0x5f3a, 0x5f3b)
+		Changed: tline rounds down to integer screen coordinates (same as line)
+		Changed: Final cpu adjustments (see release post)
+		Changed: Removed experimental "!"->"this" shorthand
+		Changed: clip() returns previous state as 4 return values
+		Fixed: Included files remain locked (and can not be edited by external editors)
+		Fixed: Carts loaded as plaintext .lua fail to handle BOM / DOS characters
+		Fixed: palt() returns previous state of bitfield as a boolean instead of a number
+		Fixed: CPU speed on widget doesn't exactly match stat(1)
+		Fixed: stat(1) occasionally reports garbage values when above 1.0
+		Fixed: Custom btnp repeat rates (0x5f5c, 0x5f5d) speed up when skipping frames
+		Fixed: gif_scale setting not read from config.txt
+		Fixed: tline: texture references are incorrect when sy1 < sy0
+		Fixed: tline: single pixel spans are drawn as two pixels
+		Fixed: binary exports' controls menu always shows 0 joyticks connected
+		Fixed: Pressing DEL on first row of tracker doesn't do anything
+		Fixed: host framerate regulation is slow (~1/sec) when PICO-8 frame takes < 1ms to execute
+		Fixed: fillp() return value (previous state) does not include transparency bit
+		Fixed: clip"" setting all clip values to 0 (should be ignored)
+		Fixed: Raspberry Pi static build / static export requires GLIBC 2.0.29 (now .16)
+		Fixed: stop(nil) crashes 
+		Fixed: print(), printh(), stop() prints "nil" with no arguments (should have no output)
+		Fixed: trace() can not be used with coroutines
+
+
+	v0.2.0c
+
+		Changed: Compressed size limit now 0x3d00 bytes (reclaimed an unused 0x100 byte block)
+		Fixed: >>>= operator (was doing a >>= replacement instead) 
+		Fixed: #including large .lua files causes crashes, weird behaviour
+		Fixed: Sandboxed CSTORE: writing partial data to another embedded cart clobbers the remaining data.
+		Fixed: Multicart code storing regression introduced in 0.2.0 (code from head cart stored in other carts)
+		Fixed: Can not edit spritesheet after panning
+		Fixed: Junk error messages when syntax error contains one of the new operators
+		Fixed: Crash with: 0x8000 / 1 
+
+
+	v0.2.0b
+
+		Changed: #include directive can be preceeded by whitespace 
+		Changed: Activity logger records nothing after idle for 30 seconds
+		Fixed: Mouse cursor movement in editor is not smooth
+		Fixed: Display palette doesn't reset after exiting splore
+		Fixed: PALT() returns 0 instead of previous state as bitfield
+		Fixed: Rectangle and line tools broken when used in map editor
+		Fixed: INSTALL_GAMES under Windows produces broken cart files
+		Fixed: Stored multicart sometimes has code section truncated (fails to load())
+
+
+	v0.2.0
+
+		Added: 8-bit character set with kana, alt font
+		Added: ord(), chr()
+		Added: SFX / Pattern organiser view
+		Added: SFX edit buttons on pattern channels
+		Added: tline // textured line drawing
+		Added: SPLORE automatically updates BBS carts when online
+		Added: Search for similar (shared tags) cartridges, or by thread
+		Added: predefined fillp() pattern values assigned to glyphs
+		Added: btnp() custom delays (poke 0x5f5c, 0x5f5d)
+		Added: "." shorthand command for advancing a single frame (calls _update, _draw if they exist)
+		Added: Current editor/cart view is recorded every 3 seconds to [app_data]/activity_log.txt
+		Added: Cutting (ctrl-x) and pasting selected sprites while in map view to also adjust map references to those sprites
+		Added: Clipboard is supported in the html exports (with some limitations) // load #wobblepaint for an example.
+		Added: Can load .lua files as cartridges
+		Added: Operators: ..= ^= \ \= & | ^^ << >> >>> ~ &= |= ^^= <<= >>= >>>= @ @@(update: @@ replaced with %) $
+		Added: New demo carts: waves.p8 dots3d.p8 automata.p8 wander.p8 cast.p8 jelpi.p8 (use INSTALL_DEMOS)
+		Added: Extra pre-installed games: Embrace, 8 Legs to Love (use INSTALL_GAMES)
+		Added: Splore cart labels for .p8 files
+		Added: Now 16 code tabs (click on the rightmost ones to scroll)
+		Added: ipairs()
+		Added: SAVE from commandline to quick-save current cartridge (same as ctrl-s) 
+		Added: BACKUP from commandline to save a backup of current cartridge
+		Added: CPU usage widget (ctrl-p while running cartridge)
+		Added: Button / dpad states exposed in memory at 0x5f4c (8 bytes)
+		Added: Random number generator state exposed at 0x5f44 (8 bytes)
+		Added: pico8_dyn version is included when exporting to Raspberry Pi
+		Added: allow_function_keys option in config.txt (CTRL 6..9 are now preferred -- will phase out F6..F9 if practical)
+		Added: Visible tab characters (draw_tabs in config.txt)
+		Added: pal({1,2,3..}) means: use the value for each key 0..15 in a table
+		Added: palt(bitfield) means: set the colour transparency for all 16 colours, starting with the highest bit
+		Added: Options menu for binary exports (sound / fullscreen / controls)
+		Added: Shape drawing tools in sprite and map editor
+		Improved: Miscellaneous HTML shell / player optimisations and adjustments
+		Improved: Lower cpu usage for small foreground_sleep_ms values (changed host event loop & fps switching strategy)
+		Changed: This update is called 0.2.0, not 0.1.12d! (grew into plans for 0.2.0, and bumped cart version number)
+		ChangeD: Reverted cheaper 0.1.12* costs on bitwise operators & peek (recommend replacing with operators if need)
+		Changed: negative numbers expressed with a '-' count as a single token
+		Changed: glitchy reset effect does not leave residue in base RAM (but maybe on screen when using sprites / tiles)
+		Changed: sset() with 2 parameters uses the draw state colour as default
+		Changed: line() or line(col) can be used to skip drawing and set the (line_x1, line_y1) state on the next call to line(x1,y1)
+		Changed: vital system functions (load, reboot etc.) can only be overwritten during cartridge execution  
+		Changed: sqrt(x) is now more accurate, and a little faster than x^.5
+		Changed: sqrt(x) returns 0 for negative values of x
+		Changed: btnp() delay and repeats now work independently per-button
+		Changed: pairs(nil) returns an empty function
+		Changed: Default screenshot scale (now 4x), gif scale (now 3x)
+		Changed: gif_len now means the length when no start point is specified (used to be the maximum recordable length)
+		Changed: (Multicarts) When loading data from many different carts, the swap delay maxes out at ~2 seconds
+		Changed: (Raspberry Pi) removed support for (and dependency on) libsndio
+		Changed: camera(), cursor(), color(), pal(), palt(), fillp(), clip() return their previous state
+		Changed: Can not call folder() from a BBS cart running under splore
+		Changed: F9 resets the video, so that multiple presses results in a sequence of clips that can be joined to together
+		Changed: color() defaults to 6 (was 0)
+		Changed: Backed up filenames are prefixed with a timestamp.
+		Changed: Automatically start on the (host's) current path if it is inside PICO-8's root path
+		Changed: tostr(x,true) can also be used to view the hex value of functions and tables (uses Lua's tostring)
+		Changed: Can hold control when clicking number fields (spd, pattern index etc.) to increment/decrement by 4 (was shift)
+		Fixed: HTML exports running at 60fps sometimes appear to repeatedly speed up and slow down
+		Fixed: HTML export layout: sometimes broken -- option buttons overlapping in the same place 
+		Fixed: __tostring metatable methods not observed by tostr() / print() / printh()
+		Fixed: Mac OSX keyboard permissions (fixed in SDL2 0.2.12)
+		Fixed: Audio mixer: SFX with loop_end > 32 would sometimes fail to loop back
+		Fixed: btn() firing a frame late, and not on the same frame as stat(30)
+		Fixed: #include can not handle files saved by some Windows text editors in default format (w/ BOM / CRLF)
+		Fixed: Exports do not flatten #include'd files
+		Fixed: Default window size has too much black border (now reverted to previous default)
+		Fixed: Functions yielded inbetween frames occasionally push an extra return value (type:function) to the stack
+		Fixed: can't load png-encoded carts with code that starts with a :
+		Fixed: .gif output unnecessarily large
+		Fixed: .gif recording skipping frames when running at 15fps	
+		Fixed: printh does not convert to unicode when writing to console or to a file
+		Fixed: cart data sometimes not flushed when loading another cart during runtime
+		Fixed: Can not navigate patterns with -,+ during music playback
+		Fixed: Mouse cursor not a hand over some buttons
+		Fixed: Laggy mouseover messages (e.g. showing current colour index, or map coordinates)
+		Fixed: Can't paste glyphs into search field
+		Fixed: Tab spacing always jumps config.tab_spaces instead of snapping to next column
+		Fixed: -p switch name is wrong (was only accepting "-param" in 0.12.*
+		Fixed: Code editor highlighting goes out of sync after some operations
+		Fixed: Multicart communication problem (affecting PICOWARE)
+		Fixed: time() speeds up after using the RESUME command
+		Fixed: Audio state is clobbered when using the RESUME command
+		Fixed: Audio glitch when fading out music containing slide effect (1)
+		Fixed: Toggling sound from splore cart->options menu has no effect
+		Fixed: Devkit keyboard works when paused
+		Fixed: "-32768 % y" gives wrong results
+		Fixed: Replacing all text in code editor breaks undo history
+		Fixed: Double click to select last word in code does not include the last character
+		Fixed: Weird block comment behavior in code editor
+		Fixed: HTML export: cart names can not contain quotes
+		Fixed: HTML export: menu button layout under chromium
+		Fixed: HTML export: Adding content above cartridge breaks mobile layout
+		Fixed: HTML export: Can touch-drag PICO-8 screen around (breaks simulated mouse input)
+		Fixed: LOAD("#ABC") does not always immediately yield
+		Fixed: Infinite RUN() loop crashes PICO-8
+		Fixed: Mouse cursor is not a finger on top of most "pressable" button-style elements
+		Fixed: CD command fails when root_path is relative (e.g. "pico8 -root_path .")
+		Fixed: poke in fill pattern addresses (0x5f31..0x5f33) discards some bits
+		Fixed: After using ctrl-click in map editor, can not modify map outside that region
+		Fixed: Shift-selecting sprites from bottom right to top left selects wrong region
+		Fixed: Changing GIF_LEN from PICO-8 commandline sometimes breaks gif saving
+		Fixed: pget() sometimes returns values with high bits set
+		Fixed: Preprocessor: unary operator lhs is not separated in some cases (e.g. x=1y+=1)
+		Fixed: Preprocessor: ? shorthand prevents other preprocess replacements on same line
+		Fixed: Preprocessor: fails when multiple shorthand expressions + strings containing brackets appear on the same line
+		Fixed: Loading a .p8 file with too many tabs discards the excess code.
+		Fixed: Map editor's stamp tool wraps around when stamping overlapping the right edge.
+		Fixed: Very quick/light tap events sometimes do not register
+		Fixed: SFX tracker mode: can't copy notes with shift-cursors before clicking (whole sfx is copied instead)
+		Fixed: "..." breaks syntax highlighting
+		Fixed: Click on text, press up/down -> cursor reverts to previous horizontal position
+		Fixed: CTRL-[a..z] combinations processed twice under some linux window managers
+		Fixed: ctrl-up/down to jump to functions in the code editor breaks when "function" is followed by a tab
+		Fixed: map & gfx drawing selection is not applied consistently between tools
+		Fixed: Using right mouse button to pick up a colour / tile value sometimes also applies current tool
+
+
+	v0.1.12c
+
+		Fixed: CPU usage reported by stat(1) is higher than actual value
+		Fixed: Fail to load .p8 cartridges w/ BOM marker / CRLF endlines
+		Fixed: Syntax errors / crash caused by #including files containing BOM / CRLFs
+		Fixed: Can not save .p8 when contains unresolved #includes
+		Fixed: Can't open pico-8.txt in Notepad.exe (added CRLFs)
+		Fixed: Can delete null terminator at end of code (revealing previously deleted code)
+
+
+	v0.1.12b
+
+		Added: config command (e.g. CONFIG THEME CLASSIC)
+		Fixed: Windows sound resampling artifacts (moved to SDL2 2.0.9 audio:directsound)
+		Fixed: Glyphs stored as unicode can not load when #include'd		
+		Fixed: Code highlighting is wrong after select and delete a line
+		Fixed: Last line endpoint not present in draw state memory
+		Fixed: Ubuntu 16.04 can not run because requires glibc 2.27 (reduced dependency to 2.14)
+		Fixed: stat(102) returns nil when run from binary instead of 0 (now 0)
+		Fixed: Loading cartridge from commandline fails when path contains "../"
+		Fixed: (OSX) Crash when reloading external changes with CTRL-R
+		Fixed: (Windows) Crash when running cart with included code		
+		Fixed: Can not export or include extra cartridges outside of current directory
+		Fixed: Off by 1 when search for line 1 (affected ctrl-b, ctrl-l)
+		Fixed: html template -- mouse cursor showing over canvas (now hidden by default)
+
+
+	v0.1.12
+
+		Added: #include a text file, or a tab from another cartridge
+		Added: Unlimited undo for gfx,map,sfx
+		Added: [sfx] snippets: copy and paste sound & music between PICO-8 instances and BBS posts
+		Added: (BBS) sfx snippet player
+		Added: CTRL-G in code editor to repeat search across all tabs
+		Added: Splore search text entry with cursor key button presses
+		Added: Custom tab widths (tab_width in config.txt)
+		Added: Web exporter template: joystick & touch support, preview image, menu buttons, adaptive size, controls screen
+		Added: .wasm exporter (use -w)
+		Added: Raspberry Pi binary exporter
+		Added: -export // run the EXPORT command from host commandline
+		Added: Toggle flags on multiple sprites at once by selecting them first
+		Added: Confirmations when loading/saving with unsaved changes
+		Added: Windowed mode support for Raspberry Pi
+		Added: serial() interface for Raspberry Pi // serial() -- spi, ws281x, direct bit banging // 0.2.1 update: dropped spi
+		Added: api: peek2 poke2 rawset rawget rawlen rawequal next
+		Added: Comment/uncomment selected block with CTRL-B
+		Added: Can save screenshots and gifs from exported binaries via EXTCMD
+		Added: Can exit exported binaries after runtime error / stop(), and also via EXTCMD("SHUTDOWN")
+		Added: SHUTDOWN menu item added to pause menu when running via "-run cartfile"
+		Added: -kiosk to run in kiosk mode: boot into splore, favourites menu only, no cart menu
+		Added: -root_path to set root cartridges folder from commandline
+		Added: shift+space in song view to play from the current quarter of the selected channel
+		Added: CTRL-W, CTRL-E in code editor to jump to start / end of line
+		Added: -accept_future to load cartides made with future versions of PICO-8
+		Added: -preblit_scale (default: auto) for less blurry scaling with -pixel_perfect 0
+		Added: -pixel_perfect -1 (auto) only uses pixel perfect scaling when < 10% of the containing screen axis is wasted
+		Added: highlight all occurances when searching for text in code editor 
+		Added: tab completion across directories
+		Added: In map editor, non-zero cels that are drawn all black are marked with a single blue dot
+		Changed: all(), foreach() cpu cost is now much cheaper (but still a little more than using a for loop)
+		Changed: cursor() can also set the current color with a third parameter
+		Changed: stat 24..26 return -1 when no music is playing
+		Changed: 3x4 font characters (uppercase in ascii) allowed in code editor (but not pasteable/editable)
+		Changed: time() / t() always means seconds since run (but still updated once per _update() / _update60)
+		Changed: line(x1,y1) can be used to draw from the end of the last line
+		Changed: del() returns the item deleted on success
+		Changed: single setting for audio volume (-volume switch, "volume" in config.txt)
+		Changed: allow '-' in cartdat() names
+		Changed: 8 and - only map to buttons 4 and 5 by default for CHIP build
+		Changed: Raspberry Pi pico8_dyn build does not support gpio/serial (and so does not require wiringPi)
+		Changed: Default theme is 1 (blue background in code editor)
+		Changed: When loading a cart from commandline, automatically set the current path if inside PICO-8's filesystem 
+		Fixed: Code editor uses too much cpu / battery power
+		Fixed: cstore() with an external cart name broken when run from exported cart or as bbs cart
+		Fixed: Undoing changes to SFX after using pitch drawing tool clears SFX data
+		Fixed: Running headless scripts under Windows / Mac OSX crashes
+		Fixed: Running headless scripts with no video driver fails
+		Fixed: Can not load BBS carts in headless script mode (without auto-running)
+		Fixed: (Web exporter) mouse cursor doesn't work in fullscreen
+		Fixed: (Web exporter) mouse button 2 brings up context menu
+		Fixed: (Web exporter) Clusters of FS.syncfs calls causing error messages (and inefficient?)
+		Fixed: (Windows) PICO-8 behaves as if it is not the foreground application
+		Fixed: divide and abs sign flipping for 0x8000.0000
+		Fixed: sqrt(0x0000.0001) freezes
+		Fixed: "-1"+0 evaluates to 0xffff.0001
+		Fixed: shift-tabbing to unindent alters selection range
+		Fixed: background_sleep_ms reverts to default value
+		Fixed: "open in thread" option appears for local carts
+		Fixed: (code editor) undo markers in unexpected places
+		Fixed: root_path, desktop_path in config.txt doesn't work without trailing slash
+		Fixed: Audio sampling rate is wrong when device/driver doesn't support 22050MHz
+		Fixed: Loading cart with less than 5 pixel rows of gfx does not clear default white cross sprite
+		Fixed: cpu cycle exploit using peek4 with no parameters
+		Fixed: SFX keyboard editing operations (e.g. SPD +/-) sometimes applied to the wrong SFX
+		Fixed: Cursor behaviour when moving between song and sfx view, and when playing music
+		Fixed: Selecting SFX notes with shift + home/end/pgup/pgdown
+		Fixed: Vibrato (2) and drop (3) effects in SFX instruments not observed
+		Fixed: Can not place note at C-0 in pitch mode
+		Fixed: CTRL-F search in code skips matches that are close together
+		Fixed: (Mac) warning about unoptimized program (built with SDL 2.0.9, + now 64-bit)
+		Fixed: (Raspberry Pi) Keypresses leaking to desktop
+		Fixed: (Raspberry Pi) Keyboard layout fixed to US
+		Fixed: printh(nil) prints [false] instead of [nil]
+		Fixed: toggling audio mute twice returns to maximum volume
+		Fixed: alt+cursors moves cursor in code editor
+		Fixed: del does not work on first character of code or commandline
+		Fixed: preprocessor breaks on double slash in string s="\\"
+		Fixed: sometimes code executing a little after point of runtime error
+		Fixed: Token count reported in editor is more than 0 after rebooting
+		Fixed: "Removed empty tabs" message displayed when loading cart with fewer tabs
+		Fixed: Member variables highlighted when same as API function names (e.g. actor.spr)
+		Fixed: Hot-plugged joysticks not recognized
+
+
+	v0.1.11g
+		
+		Added: CTRL-C to copy contents of commandline
+		Added: stat(100..102) for current breadcrumb label, bbs cart id, and hostname (web)
+		Added: content_filter in config.txt
+		Added: Cartverse cart id support (not live server-side yet though)
+		Fixed: Tab preview does not show on mouseover
+		Fixed: Can't paste uppercase characters into commandline
+		Fixed: Preprocessor can't handle glyphs in form: "♥.x += 1"
+		Fixed: Unsaved changes sometimes reported when filename is not set
+		Fixed: Pause menu doesn't open inside infinite loop inside _draw
+		Fixed: load() crashes when "parameter string" parameter is not a string
+		Fixed: cstore(),reload() crash when external cart filename is not a string
+		Fixed: printh(str, "@clip") fails for glyph characters in str
+
+
+	v0.1.11f
+
+		Fixed: Pause menu doesn't open inside an infinite loop
+		Fixed: Binary and hex string digits outside of 0xffff.ffff alter result
+
+
+	v0.1.11e
+
+		Added: stat(30..31) for devkit keyboard input
+		Added: extcmd("pause") extcmd("reset") extcmd("breadcrumb")
+		Added: lshr(), ceil(), rotl(), rotr(), peek4(), poke4()
+		Added: stat(12..15) to grab the position of the pause menu (x0,y0,y1,y1)
+		Added: DPAD game controller buttons mapped to LRUD
+		Added: CTRL-click on song navigator to scroll by 4 patterns
+		Added: Can type and paste glyphs in commandline
+		Added: Notification when CTRL-R fails to reload because of unsaved changes
+		Added: Notification when code automatically converted to lower-case
+		Added: INFO() checks for "external changes" (e.g. when using a separate text editor)
+		Added: .p8.png format can be used with cstore() and carts bundled in multicarts
+		Added: Can optionally set fill pattern using colour parameter 
+		Changed: Glyphs can be used as variable names
+		Changed: Glyphs stored in clipboard and .p8 format as roughly corresponding unicode
+		Changed: .p8 format skips storing tailing rows of data that match default state
+		Changed/Fixed: shr(x,n) is now equivalent to calling shr(x,1) n times when n >= 32
+		Fixed: Error message and stack trace line numbers 0 or slightly out
+		Fixed: Unclosed block error navigates cursor to <eof> rather than start of block
+		Fixed: Exported binaries can load carts outside of bundle
+		Fixed: BBS cart loaded from a local cart loses data cstore()ed during previous run
+		Fixed: btn() returns same as btnp()
+		Fixed: btnp(6) always returns false
+		Fixed: Missing mask pixels in cart download animation frame
+		Fixed: Crash when try to load a directory as a cart
+		Fixed: Sometimes cursor position set by keyboard mouse emulation in code editor
+		
+		
+	v0.1.11d
+
+		Added: t() aliased to time()
+		Fixed: time() always returns 0 when there is no _update function
+		Fixed: (raspi) Keyboard stops responding after pressing CTRL-F, CTRL-Z
+		Fixed: (raspi) Double keypresses in sound editor when entering notes
+		Fixed: stat(6) pads parameter string with spaces
+
+	
+	v0.1.11c
+		
+		Added: Local and UT time queries using stat()
+		Added: host_framerate_control (config.txt) to improve performance on slower machines and web 
+		Added: Control over cpu usage when running in background (-background_sleep_ms / config.txt)
+		Added: Windows icon in exported exe
+		Added: F11 to toggle fullscreen
+		Added: export -c switch to indicate transparent icon colour 
+		Added: show_backup_messages (config.txt) to turn off backup notifications
+		Added: SFX instruments documentation in pico8.txt
+		Added: Error message when trying to export carts with code size over the compressed limit
+		Changed: If config.txt is not found, the same directory as the executable is searched
+		Changed: If sdl_controllers.txt exists in the same directory as the executeable, it is processed first
+		Changed: Shorthand if () statements must be written on a single line
+		Fixed: reload() from bundled, non-primary cart in exported html multicart reads only original data
+		Fixed: Exported binaries wrongly observe F7 (capture label)
+		Fixed: Loading carts from earlier versions alters SFX data not intended for audio
+		Fixed: Old version of fill patterns documentation near end of pico8.txt
+		Fixed: 'backed up unsaved changes' message displayed during runtime for cstored() carts
+		Fixed: PICO-8 runs too slowly when in background (new default background_sleep_ms: 20)
+		Fixed: Saving screenshots and videos from exported binaries are named 0_*
+		Fixed: Compressed size limit warning on save doesn't mention exported carts
+		Fixed: btn(), btnp() don't work in infinite loops
+		Fixed: btnp() timing inconsistent between 30fps / 60fps / during frame-skipping / with no _update
+		Fixed: Can't move between channels while music is playing in song mode
+
+
+	v0.1.11b
+	
+		Fixed: Preprocessor bug regressions: "if (..) or", "a.b -= c - d"
+		Fixed: Crash when pressing menu button on an empty favourites list
+
+
+	v0.1.11
+		
+		Added: Binary exporters (Windows, Linux, Mac OSX)
+		Added: Code tabs
+		Added: Splore cart menu
+		Added: Fill patterns
+		Added: Custom sfx instruments
+		Added: load("#1234") to load [and run] a BBS cart
+		Added: -x switch // execute a cart headless, for making commandline toolchains
+		Added: Compressed size display and limit warning lights in code editor
+		Added: CTRL-L to jump to a line number in code editor
+		Added: numbers can be written in binary: 0b10100010 
+		Added: tostr(), tonum()
+		Added: extcmd(): audio_rec, audio_end to record all audio output.
+		Added: ls() returns a list of local files if called while running
+		Added: getmetatable()
+		Added: coroutine error reporting // wrap coresume() in assert()
+		Added: sfx() can take a 4th parameter: number of notes to play
+		Added: Live sfx and music editing + better navigation controls
+		Added: Transpose selected sfx notes relative to C by entering a note w/ SHIFT held
+		Added: Insert and delete sfx rows with enter and backspace
+		Added: Hidden note data is shown in sfx editor when relevant (slide, arps)
+		Added: Warning displayed when unsaved changes backed up
+		Added: Separate animation for downloading vs. loading a cart
+		Added: export -p switch to supply a customized html template 
+		Added: Mousewheel when devkit mouse enabled: stat(36) // not supported in web
+		Added: < > to change zoom level in gfx and map editors
+		Changed: Rebalanced / fixed api cpu costs
+		Changed: Screenshot and gif filenames based on current cart if available
+		Changed: add() returns the added object
+		Changed: removed global hpf on audio
+		Changed: (sfx) can slide to volume 0
+		Changed: removed master low pass filter
+		Changed: assert() can take an optional error_message parameter
+		Changed: ? (shorthand for print()) can be prefixed by whitespace 
+		Changed: shl(), shr() return 0 if second parameter >= 32
+		Changed: Automatically drop down to software blitting mode if opengl fails
+		Changed: Lua memory limit set to 2MB (was 1MB)
+		Changed: Some options (-width, -show_fps) apply only to the session; not saved to config.txt
+		Updated: Internal game controller mappings from SDL_GameControllerDB
+		Fixed: Pops & clicks in audio when switching between playing SFX
+		Fixed: Crash in audio mixer because of bad locking
+		Fixed: Crash when loading .p8 files with more than 64k of code
+		Fixed: Indexing of sparse tables fails after removing n/2 elements
+		Fixed: Calling stat() inside an infinite loop crashes
+		Fixed: Resetting cartridge corrupts cartridge data in range 0x5e00..0x5eff
+		Fixed: Can not recover from a cart error caused by glitchy data on resetting 
+		Fixed: String->negative number conversion off by 0x0.0001 (-1 --> 0xffff0001)
+		Fixed: Crash when running cart closed to 64k char limit
+		Fixed: Cursor can't move to the right of last character in code editor
+		Fixed: Missing highlighted keywords: in, add, del, menuitem
+		Fixed: Preprocessor bugs: "a+=1+2\n*3", "a+=(1)ba=42", "a[(1)]+=1"
+		Fixed: Preprocessor performs replacements inside a string printed with ?
+		Fixed: Display freezes when terminating a program running at >100% cpu
+		Fixed: Quick-running (CTRL-R) clobbers some editor state (e.g. current sprite page)
+		Fixed: Loading a .p8 file with a future version reports a generic failure
+		Fixed: alt-enter to toggle fullscreen also triggers pause menu
+		Fixed: Splore scrolling jumps around when list gets too long
+
+
+	v0.1.10c
+	
+		Fixed: atan flips sign for very negative values of x close to zero
+
+
+	v0.1.10b
+		Fixed: HTML exporter carts don't run
+		Fixed: HTML export 60fps support broken
+		Fixed: HTML export when path has a space in it (common for OSX)
+		Fixed: atan2 ignores sign of y
+		Fixed: (Raspberry Pi) Crash when access gpio not as root
+		
+
+	v0.1.10
+	
+		Added: Multi-cart export in html
+		Added: Cart reset glitch
+		Added: Demo carts: bounce, sort
+		Added: .p8 format can now store cart labels
+		Added: Splore navigation keys: pageup/down, home, end
+		Added: Splore usage hint shown on empty favourites list
+		Added: Warning on boot when data folder is read-only or can't be created
+		Added: Pressing tab with code selected indents those lines (shift-tab to un-indent)
+		Added: Double click word to select it
+		Added: Trigger screenshot/video/label capture from inside program: extcmd()
+		Changed: CTRL+left/right in code editor skips to end of word or span of non-whitespace
+		Changed: When a cart terminates from splore, button press is required to continue
+		Changed: load("@clip") can only be called from commandline (security)
+		Fixed: Can over-allocate host memory if exceed it within one frame
+		Fixed: atan2(-1, -32768) crash, and error for small values of dy
+		Fixed: (Web) using cstore() on self causes unloadable cart (bug introduced in 0.1.8?)
+		Fixed: (web) Pressing ctrl-v crashes the player (should do nothing)
+		Fixed: (Raspberry Pi) WiringPi library required in static build
+		Fixed: (Raspberry Pi) Crash on exit when launching via desktop icon
+		Fixed: (Raspberry Pi) keyboard input broken (observed on raspi2s)
+
+
+	v0.1.9b
+
+		Added: Alternative function key mapping: ctrl-6..9 for F6..F9
+		Added: Alternative glyph entry method: (ctrl-k) to toggle glyph mode
+		Changed: Enter glyphs with shift a..z, but can be disabled in config.txt 
+		Changed: Increased emscripten ram to 128MB (some carts at risk of running out)
+		Fixed: Crash when window size is tiny or minified
+		Fixed: Crash on toggling fullscreen mode
+		Fixed: printh can write files outside filetree (security issue)
+		Fixed: show_fps (can also now be toggled with ctrl-1)
+		Fixed: Shorthand if/then syntax error when using the form: (functionname)(param)
+		Fixed: log.txt not saved in path specified by -home switch
+		Fixed: Default application data folder created even when -home specified
+		Fixed: Missing dynamic builds (pico8_dyn) from linux archives
+		Fixed: Removed unneeded RPATH from linux binaries
+		Fixed: export foo%d.wav fails to write multiple files 
+
+	v0.1.9
+	
+		Added: Copy and paste sprites and whole cartridges directly to BBS posts 
+		Added: JAM category in splore
+		Added: GPIO support for Raspberry Pi
+		Added: Read clipboard using stat(4) after user presses CTRL-V
+		Added: printh() can optionally write to a file or the host clipboard
+		Added: Editor tool information and tips shown on mouseover
+		Added: Set desktop path with -desktop (screenshots and gifs are saved here)
+		Added: Warning on saving .p8 when compressed code size exceeds .p8.png limit
+		Added: Alternative editor colours // config.txt: gui_theme 1
+		Added: Dotted line every 8 rows in song view
+		Added: -screenshot_scale (default: 3) and -gif_scale (default: 2)
+		Added: Can use ctrl-up, ctrl-down to jump to start and end of code
+		Added: CTRL-M to mute/unmute sound
+		Added: HTML5-exported carts support 60fps
+		Added: Timeout switch for splore downloads: -timeout
+		Changed: Glyph characters typed with alt + a..z 
+		Changed: stat(0) does not include allocations waiting to be garbage collected
+		Changed: Unfiltered screen stretching at integer scales by default
+		Changed: Removed -aspect and -scale settings (use draw_rect instead)
+		Fixed: -home has no effect under Windows
+		Fixed: Sometimes frame skipping starts before CPU usage has reached 100%
+		Fixed: Double-speed BTNP() timing in 60fps mode
+		Fixed: Exported HTML fails when _update60 is used instead of _update
+		Fixed: Can't copy and paste button glyphs
+		Fixed: Lines containing glyphs do not scroll far enough horizontally 
+		Fixed: Loading .p8 renamed as .p8.png from splore freezes
+		Fixed: Bucketfill in map doesn't sync to shared memory
+		Fixed: fset fails when de-setting flags
+		Fixed: Syntax error when beginning with the form: IF (..) [OR|AND]\n  
+		Fixed: cls() costs twice as much cpu as it should
+		Fixed: wav file exporter missing some data / writing truncated buffers
+		Fixed: Entering new notes in song view doesn't observe current volume, instrument
+		Fixed: alt-tab sometimes generates alt character text entry event
+		Fixed: Resuming a cancelled download in splore causes crash
+		Fixed: Controller attributes in log.txt always shown as -1	
+		
+		
+	v0.1.8
+	
+		Added: 60fps support
+		Added: Music exporter
+		Added: Custom GIF length (maximum 120 seconds)
+		Added: -,+ to navigate sprite tabs, sfx, music patterns
+		Added: sfx editor: navigate with home, end, pageup/down, mousewheel
+		Added: <, > to modify sfx speed, or click and drag
+		Added: Middle mouse button to pan around spritesheet / map
+		Added: Shortcut command for splore: S
+		Added: Pre-installed selection of BBS cart (use INSTALL_GAMES)
+		Added: Warning when saving .p8.png with no label 
+		Added: (OSX) logging to ~/Library/Logs (viewable with Console.app)
+		Added: -pixel_perfect switch (on by default)
+		Added: -draw_rect switch
+		Changed: Can not CTRL-S save over a loaded bbs cart
+		Changed: Only .p8 files listed by dir() and by splore
+		Changed: Command history increased to 256
+		Changed: exit() / shutdown() have no effect while running cart
+		Fixed: Memory usage (stat(0)) inconsistent across host platforms
+		Fixed: Spinny disks shows when reloading current cart with load()
+		Fixed: GIF saver does not respect 64x64 / mirrored modes
+		Fixed: Miscellaneous multi-line comments / strings issues
+		Fixed: Empty map cels cost cpu in mapdraw()
+		Fixed: mapdraw() slowdown when drawing bottom half of map
+		Fixed: preprocess changes semantics when += and : operators on same line
+		Fixed: Identifiers starting with underscore counted as extra token
+		Fixed: Saving .png exceeding compressed code limit fails silently
+		Fixed: Right-clicking a sprite does not set the currently edited sprite
+		Fixed: (Windows) extra space added to pasted lines
+		Fixed: spr() expensive when drawn with low negative coordinates
+		Fixed: pipe character identical to colon character
+		Fixed: (Raspberry Pi) shift key appends a character when entering text
+		Fixed: Editor mode buttons are still clickable during cart runtime
+		Fixed: When loading a .p8.png file, label is reset and needs to be re-captured
+		Fixed: export() does not report failure
+		Fixed: mset()'d changes in shared memory not readable via peek() / sget()
+		Fixed: cstore() saving edited code
+		Fixed: audio pop between patterns during music playback
+
+	v0.1.7
+	
+		Added: menuitem()
+		Added: button glyphs in code (shift-L, R, U, D, X, O)
+		Added: Customisable data directory (e.g. pico8 -home mydata)
+		Added: Web gpio pins: read and write pico8_gpio[] in javscript 
+		Fixed: SPLORE search doesn't reset
+		Fixed: Splore skipping 33rd cart listing after loading more items
+		Fixed: Crash when selecting a local binary file in splore
+		Fixed: Semicolon can't be used as a list or statement separator 
+		Fixed: Exported html can not cstore self
+
+
+	v0.1.6
+
+		Added: SPLORE local & bbs cartridge explorer
+		Added: setmetatable(), cocreate(), coresume(), costatus(), yield()
+		Added: Spinning cart icon to show when a cart is swapped / written to
+		Added: Permanent storage when carts played in a browser
+		Added: Adjustable aspect ratio (-aspect 420 for 1:1)
+		Changed: Lua memory limit: 1024k (was 512k)
+		Changed: Music channel now resumes after being clobbered by an sfx 
+		Changed: Arpeggios double speed when SFX speed <= 8
+		Changed: Exceeding compressed code limit does not block saving in .p8 format 
+		Changed: spr() half as expensive, to be consistent with map()
+		Changed: Fractional hex number notation: 0x0.3 == 0x0.3000, (was 0x0.0003)
+		Changed: : operator doesn't count as an extra token (same as .)
+		Changed: cstore() writes directly to disk
+		Changed: cstore(), reload() return number of bytes read / written
+		Changed: save() while running does nothing. (use cstore() instead)
+		Changed: load() while running loads and runs the specified cartridge 
+		Fixed: Small pops in audio mixer caused by sound wave discontinuities
+		Fixed: HTML5-exported sound clicks badly under Chrome
+		Fixed: Display palette is not oberserved when exporting GIFs
+		Fixed: Rapid keypresses causes duplicate readings in tracker & text editor
+		Fixed: += inside comments breaks preprocessor
+		Fixed: sspr() cpu cost the same when clipped
+		Fixed: cartdata() with bad parameters crashes
+		Fixed: EXPORT from commandline can not be used without brackets and quotes
+		
+
+	v0.1.5
+	
+		Added: Raspberry Pi Build
+		Added: Keyboard configuration for player buttons (KEYCONFIG) 
+		Added: Music tracker select / copy / paste
+		Added: Single-level undo in audio tools
+		Added: Live preview of frequencies in sound editor
+		Fixed: Command history extends past last reboot
+		Fixed: Sfx exporter broken
+		Fixed: Slashes at end of path resolve to double slashes
+		Fixed: Load cart from commandline under Windows
+		
+
+	v0.1.4d
+	v0.1.4c
+	
+		Fixed: International character entry inserting extra characters
+		Fixed: Lines with tabs have broken cursor placement and display boundary
+
+	v0.1.4b
+	
+		Fixed: OSX command-key combinations broken
+		
+	v0.1.4
+		
+		Added: spritesheet importing and exporting with import("blah.png"), export("blah.png")
+		Added: sfx exporting with export("blah%d.wav")
+		Added: External cartridge parameter for reload() and cstore()
+		Added: Persistent cartridge data mapped to 0x5e00
+		Added: Click token limit to toggle token & char limit display
+		Added: assert(), type()
+		Added: P to pause
+		Changed: code char limit: 64k (was 32k)
+		Changed: local declarations and semicolons not counted as tokens
+		Changed: Pairs of brackets and block delimitations count as one token
+		Changed: Only _update() or _draw() need to exist to enter main loop
+		Changed: Allow forward-slash in code editor
+		Changed: info() reports current (last loaded or saved) filename
+		Changed: html5 version compiled with NO_DYNAMIC_EXECUTION 
+		Changed: can only cstore up to 64 different files in one session
+		Changed: load() automatically copies data section of cart to base ram
+		Fixed: Shift-drag-copy sprites -> paste only pastes 1x1
+		Fixed: ".." should count as one token
+		Fixed: Tracker displaying D instead of .
+		Fixed: Multi-line comments
+		Fixed: Crash on run when code close to char limit
+		Fixed: When over token limit, can not run any command
+		Fixed: Unused high bits in SFX section not saved in .p8 format
+		Fixed: Camera position memory mapping out of sync
+		Fixed: pico8.txt link broken in windows installer
+		Fixed: print() crashes when parameter is not a string or numbers
+		Fixed: Multi-line strings & escape chars mess up tokenizer and print()
+		Fixed: Joystick not responding when left stick is up to the left
+		Fixed: Alt-F4 saves screenshot before quitting
+		Fixed: Sprite editor mode button doesn't show fullscreen mode
+		Fixed: -sound parameter not working in html5 version 
+		
+		
+	v0.1.3
+	
+		Added: paste into commandline
+		Fixed: lua standard libraries accessible
+		Fixed: command-line loading doesn't work
+		Fixed: music pattern finished too early when all tracks set to looping 
+		Fixed: peek()ing odd bytes in sfx address space masks bit 7
+		Fixed: cstore and reload from code space should have no effect
+	
+	v0.1.2
+	
+		Added: html5 cartridge exporter
+		Added: Cartridge save data (64 fixed point numbers)
+		Added: 8-player input
+		Added: Demo carts: COLLIDE and BUTTERFLY
+		Added: Command-line parameters // load cart, -run, settings
+		Added: Alternative function keys (F6..F9 aliased as F1..F4)
+		Added: pairs()
+		Added: printh() for debugging
+		Added: Tab completion for filenames in console
+		Added: stack trace on runtime error
+		Changed: music pattern length taken to be first non-looping channel's length
+		Changed: noise instrument (6) has low frequency white noise scaled by volume
+		Changed: screenshot captures whole window contents at display resolution
+		Changed: del() moves remaining items up one index to maintain a packed table
+		Changed: add(),del(),count(),all() no longer store extra fields
+		Changed: removed count() from docs -- now just a legacy function. Use # operator instead.
+		Changed: cursor only blinks while window is active
+		Changed: peek(), poke() and bitwise operations (band()..) have no function call overhead
+		Changed: yellow slightly warmer
+		Changed: No camera snapping after pan in map mode
+		Fixed: sqrt() crashing for 0 or >= 32761
+		Fixed: Semi-colon characters in text editor
+		Fixed: Long lines split when saving in .p8 format 
+		Fixed: pget() does not respect camera position
+		Fixed: Error message when peeking or poking outside of legal address space
+		Fixed: Search replace colour fills one pixel outside of selected region
+		Fixed: Playing an empty music pattern breaks subsequent music playback
+		Fixed: Invalid sfx editing state on startup
+		Fixed: Painting instruments values in frequency view also sets volumes
+		Fixed: Inconsistent gif recording speeds
+		Fixed: Unmapped joystick support
+		Fixed: Compressed code size sometimes larger than uncompressed
+		Fixed: mid() fails when first argument is not smallest
+		Fixed: Scroll wheel changes sprite/map zoom while in code editor
+		Fixed: CTRL-R (quick-run) drawing over current line in command mode
+		Fixed: Label capture (F7) does not respect display palette state
+		Fixed: Syntax highlighting of api functions and hex numbers
+		Fixed: Looping to 0 with negative step finishes at 1
+		Fixed: nil values printed as false instead of nil
+		Fixed: Hexadecimal fractional parts
+		Fixed: btnp() unresponsive when skipping frames
+		Fixed: Editing mode is lost when using ctrl-r to run
+		Fixed: Tracker note entry keys mapped, messing up piano-like layout
+		Fixed: Shared gfx/map memory out of sync after some editor operations
+		Fixed: Alt-gr character entry
+		Fixed: Can map display palette to entries >= 16 using poke()
+		Fixed: Using shift to select in code editor has wrong selection range
+		Fixed: Dragging above top of text causes selection to flip to end
+		Fixed: Duplicate at end of file listing
+		
+		
+	v0.1.1
+
+		Added: Token-based code limiting (8192 tokens, 32k ascii text)
+		Added: Freeform move, pan and selection in sprite and map editors
+		Added: Flood-fill tool (sprite and map)
+		Added: .GIF saver
+		Added: CTRL-Stamp to stamp with transparency
+		Added: Single-step undo for map and sprites
+		Added: 2x2 brush
+		Added: sqrt(), atan2()
+		Added: CTRL-S to quick-save
+		Added: CTRL-R reloads .p8 file and runs (useful for external text editing)
+		Added: Automatic backups on overwriting or quitting without saving
+		Added: Scroll wheel zooms in sprite editor
+		Added: Customisable resolution //  e.g. pico8 -width 580
+		Added: Strings highlighted as green
+		Added: ALT-click can optionally simulate right click (see config.txt)
+		Added: palt() to control transparency for spr(), sspr()
+		Added: info()
+		Changed: load() tries adding .p8.png, .png if file doesn't exist
+		Changed: Draw operations apply only to selection when active
+		Changed: Move operations (cursors) apply to selection if present
+		Changed: Removed time()
+		Changed: Random seed is random on cart startup
+		Changed: api functions never read directly from cart rom
+		Changed: sspr() can take negative values for dw, dh
+		Fixed: Sparse table indexing with integers fails
+		Fixed: Assignment operators and shortform if-then-else failing
+		Fixed: sspr() failed when w0 == 128
+		Fixed: Circle drawing broken when camera not (0,0)
+		Fixed: CPU hogging
+		Fixed: Noise instrument clobbers rnd() sequence
+		Fixed: Audio system not resetting on program reset
+		Fixed: % operator sometimes wrong for negative values
+		Fixed: Length operator (#)
+		Fixed: Power operator (^)
+		Fixed: Line clipping bug on right and bottom edges
+		Fixed: print() precision for whole numbers
+		Fixed: print() broken for negative y values
+		Fixed: tokenization and keyword highlighting
+		Fixed: sprite properties not copied/pasted
+		Fixed: Only sfx 0..32 could be used as music patterns
+		Fixed: Saving and loading a .p8 file adds newline to end of code
+		Fixed: Drag selection to left margin in code editor -> selects all
+		
+		
+	v0.1.0
+
+		Added: demo cart: hello.p8 (use install_demos)
+		Added: CTRL-R from anywhere to run cart or restart cart
+		Added: use a,s to select colour in gfx editor
+		Added: consistent operation cpu costs
+		Added: btn(), btnp() with no arguments returns bitfield
+		Added: fget(id) returns bitfield of that sprite's flags
+		Changed: renamed mapdraw() to map() for consistency
+		Changed: default sleep time is 5ms (better cpu consumption for laptops)
+		Fixed: memory limiter
+		Fixed: wonky line and circle drawing
+		Fixed: shift-click volume in sfx editor to set all
+		Fixed: number formatting is now never in scientific notation
+		Fixed: clipped error messages in console
+		Fixed: text undo stores rollback points when chaning line number
+		Fixed: print(str) carriage returns to previous x
+
+
+	v0.0.5
+
+		Added: help()
+		Added: Ctrl+F / Ctrl+G to search for text, repeat search
+		Added: del key in code editor
+		Added: Short-hand single-line IF statements
+		Added: Unary operators += -= /= *= %=
+		Added: srand(), time(), added rnd() to docs
+		Added: Ctrl+D to duplicate line
+		Added: interactive ls() for multi-page file listings
+		Added: band() bor() bxor() bnot() shl() shr()
+		Added: runtime error line number
+		Added: dir() (aliased to ls())
+		Changed: print() only autoscrolls when called with no parameters
+		Changed: alt+up/down to skip between function definitions (was ctrl)
+		Changed: sspr() dw, dh defaults to sw, sh
+		Fixed: Load crashes on files that are not .p8 format or directories
+		Fixed: Misc editor cursor position glitches
+		Fixed: Crash when syntax error occurs before viewing code
+		Fixed: Broken newlines after rebooting
+		Fixed: mkdir() called with no parameters creating "(null)" directory
+		Fixed: scrolling past top of code with scrollwheel
+		Fixed: alt-f4 to fastquit
+
+
+	v0.0.4
+
+		Added: Jelpi demo cart
+		Added: Internal carts // use install_demos()
+		Added: Joystick support
+		Added: Undo/redo in code editor
+		Added: Scroll wheel in code editor
+		Added: LCTRL + UP/DOWN to navigate functions in code editor
+		Added: LALT + LEFT/RIGHT to switch editing modes
+		Added: btnp()
+		Added: Release looping sample (a in editor , sfx(-2, channel) in code)
+		Changed: Music stops when pausing program execution
+		Changed: Allow 8 settable sprite flags
+		Changed: Made noise instrument more bassy
+		Fixed: Home, end keys
+		Fixed: Sprite flags 4,5 not saved
+		Fixed: mset() discarding 4 high bits
+		Fixed: Crash when highlighting long strings
+
+
+	v0.0.3
+
+		Added: Palette mapping type 1 (on display)
+		Added: Collections can be initialized with c={1,2,..}
+		Added: holdframe() // used automatically by _draw(), update()
+		Added: Sprite selections and operations across selections
+		Added: Map selection and stamp tool
+		Added: Immediate mode screen buffer preserved while switching views
+		Added: Channel mask for music playback
+		Added: Memory mapping for live sound data
+		Added: .png cart format
+		Added: Sprite navigation by keyboard (-, +)
+		Fixed: Strict 4-channel sound
+		Fixed: Automatic sfx channel selection (channel index: -1)
+
+
+	v0.0.2
+
+		Added: Command history
+		Added: P2 keys
+		Added: Boot sequence
+		Added: Windows, 64-bit linux builds
+		Added: CPU cost of internal api functions
+		Added: Separate song channel index and mute status
+		Added: Memory mapping
+		Added: Search/replace colour in sprite editor
+		Added: Copy/paste sprites and map regions
+		Improved: Immediate mode command editing
+		Improved: Editor cursor behaviour
+		Fixed: Automatic audio channel selection
+
+
+	v0.0.1 
+
+		First Alpha
+
+
+

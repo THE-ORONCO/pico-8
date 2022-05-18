@@ -1,0 +1,19 @@
+# pico8 software
+pico8.exe
+SDL2.dll
+license.txt
+lexaloffle-pico8.png
+
+# pico8 data
+pico8.dat
+backup
+bbs
+cdat
+cstore
+sdl_controllers.txt
+
+# userspecific log data
+log.txt
+
+# IDE stuff
+.vscode
