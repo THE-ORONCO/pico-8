@@ -407,190 +407,169 @@ The sprite editor is designed to be used both for sprite-wise editing and for fr
 
 #### Draw Tool
 
-Click and drag on the sprite to plot pixels, or use RMB to select the colour under the cursor. All operations apply only to the visible area, or the section if there is one. Hold CTRL to search and replace a colour.
+Click and drag on the sprite to plot pixels, or use RMB to select the colour under the cursor. All perations apply only to the visible area, or the section if there is one. Hold CTRL to search and replace  colour.
 
-:: Stamp Tool
+#### Stamp Tool
 
-    Click to stamp whatever is in the copy buffer. Hold CTRL to treat colour 0 (black) as 
-    transparent.
+Click to stamp whatever is in the copy buffer. Hold CTRL to treat colour 0 (black) as transparent.
 
-:: Select Tool (shortcut: SHIFT or S)
+#### Select Tool (shortcut: SHIFT or S)
 
-    Click and drag to create a rectangular selection. To remove the selection, press ENTER or 
-    click anywhere.
+Click and drag to create a rectangular selection. To remove the selection, press ENTER or click anywhere.
 
-    If a pixel-wise selection is not present, many operations are instead applied to a 
-    sprite-wise selection, or the visible view. To select sprites, shift-drag in the sprite 
-    navigator. To select the sprite sheet press CTRL-A (repeat to toggle off the bottom half 
-    shared with map data)
+If a pixel-wise selection is not present, many operations are instead applied to a sprite-wise selection, or the visible view. To select sprites, shift-drag in the sprite navigator. To select the sprite sheet press CTRL-A (repeat to toggle off the bottom half shared with map data)
 
-:: Pan Tool (shortcut: SPACE)
+#### Pan Tool (shortcut: SPACE)
 
-    Click and drag to move around the sprite sheet.
+Click and drag to move around the sprite sheet.
 
-:: Fill Tool
+#### Fill Tool
 
-    Fill with the current colour. This applies only to the current selection, or the visible 
-    area if there is  no selection.
+Fill with the current colour. This applies only to the current selection, or the visible area if there is  no selection.
 
-:: Shape Tools
+#### Shape Tools
 
-    Click the tool button to cycle through: oval, rectangle, line options.
+Click the tool button to cycle through: oval, rectangle, line options.\
+Hold CTRL to get a filled oval or rectangle.\
+Hold SHIFT to snap to circle, square, or low-integer-ratio line.
 
-    Hold CTRL to get a filled oval or rectangle.<br> Hold SHIFT to snap to circle, square, or 
-    low-integer-ratio line.
+#### Extra keys
 
-:: Extra keys
+| keys      | description   |
+| ---       | ---           |
+| CTRL-Z    | Undo|
+| CTRL-C/X  | Copy/Cut selected area or selected sprites|
+| CTRL-V    | Paste to current sprite location|
+| Q/A,W/Z   | Switch to previous/next sprite|
+| 1,2       | Switch to previous/next colour|
+| TAB       | Toggle fullscreen view|
+| Mousewheel|  or < and > to zoom (centered in fullscreen)|
+| CTRL-H    | to toggle hex view (shows sprite index in hexadecimal)|
+| CTRL-G    | totoggle black grid lines when zoomed in|
 
-    CTRL-Z:   Undo
-    CTRL-C/X: Copy/Cut selected area or selected sprites
-    CTRL-V:   Paste to current sprite location
-    Q/A,W/Z:  Switch to previous/next sprite
-    1,2:      Switch to previous/next colour
-    TAB:      Toggle fullscreen view
-    Mousewheel or < and > to zoom (centered in fullscreen)
-    CTRL-H to toggle hex view (shows sprite index in hexadecimal)
-    CTRL-G to toggle black grid lines when zoomed in
+#### Operations on selected area or selected sprites
 
-:: Operations on selected area or selected sprites
+| keys      | description   |
+| ---       | ---           |
+|F| Flip sprite horizontally|
+|V| Flip sprite vertically|
+|R| Rotate (requires a square selection)|
+|Cursor keys | to shift (loops if sprite selection)|
+|DEL/BACKSPACE | to clear selected area|
 
-    F: Flip sprite horizontally
-    V: Flip sprite vertically
-    R: Rotate (requires a square selection)
-    Cursor keys to shift (loops if sprite selection)
-    DEL/BACKSPACE to clear selected area
+#### Sprite Flags
 
-:: Sprite Flags
+The 8 coloured circles are sprite flags for the current sprite. These  have no particular meaning, but can be accessed using the @FGET() / @FSET() functions. They are indexed from 0 starting from the left.
 
-    The 8 coloured circles are sprite flags for the current sprite. These  have no particular 
-    meaning, but can be accessed using the @FGET() / @FSET() functions. They are indexed from 0 
-    starting from the left.
+See @FSET() for more information.
 
-    See @FSET() for more information.
+#### Loading .png files into the sprite sheet
 
-:: Loading .png files into the sprite sheet
-
-    To load a png file of any size into the sprite sheet, first select the sprite that should 
-    be the top-left corner destination, and then either type "IMPORT IMAGE_FILE.PNG" or drag 
-    and drop the image file into the PICO-8 window. In both cases, the image is colour-fitted 
-    to the current display palette.
+To load a png file of any size into the sprite sheet, first select the sprite that should be the top-left corner destination, and then either type "IMPORT IMAGE_FILE.PNG" or drag and drop the image file into the PICO-8 window. In both cases, the image is colour-fitted to the current display palette.
 
 ### Map Editor
 
-The PICO-8 map is a 128x32 (or 128x64 using shared space) block of 8-bit values. Each value is
-shown in the editor as a reference to a sprite (0..255), but you can of course use the data to
-represent whatever you like.
+The PICO-8 map is a 128x32 (or 128x64 using shared space) block of 8-bit values. Each value isshown in the editor as a reference to a sprite (0..255), but you can of course use the data torepresent whatever you like.
 
-WARNING: The second half of the sprite sheet (banks 2 and 3), and the bottom half of the map
-share the same cartridge space. It's up to you how you use the data, but be aware that drawing
-on the second half of the sprite sheet could clobber data on the map and vice versa.
+WARNING: The second half of the sprite sheet (banks 2 and 3), and the bottom half of the mapshare the same cartridge space. It's up to you how you use the data, but be aware that drawing on the second half of the sprite sheet could clobber data on the map and vice versa.
 
-The tools are similar to the ones used in sprite editing mode. Select a sprite and click and
-drag to paint values into the map.
+The tools are similar to the ones used in sprite editing mode. Select a sprite and click and drag to paint values into the map.
 
-To draw multiple sprites, select from sprite navigator with shift+drag To copy a block of
-values, use the selection tool and then stamp tool to paste To pan around the map, use the pan
-tool or hold space Q,W to switch to previous/next sprite Mousewheel or < and > to zoom
-(centered in fullscreen) CTRL-H to toggle hex view (shows tile values and sprite index in
-hexadecimal)
+To draw multiple sprites, select from sprite navigator with shift+drag To copy a block of values, use the selection tool and then stamp tool to paste To pan around the map, use the pan tool or hold space Q,W to switch to previous/next sprite Mousewheel or < and > to zoom (centered in fullscreen) CTRL-H to toggle hex view (shows tile values and sprite index in hexadecimal)
 
 To move sprites in the sprite sheet without breaking references to them in the map:
 
-    1. Select the area of the map you would like to alter (defaults to the top half of the map)
-        // press ctrl-A twice to select the full map including shared memory
-    2. Select the sprites you would like to move (while still in map view), and press Ctrl-X
-    3. Select the destination sprite (also while still in map view) and press Ctrl-V
+1. Select the area of the map you would like to alter (defaults to the top half of the map) press ctrl-A twice to select the full map including shared memory
+2. Select the sprites you would like to move (while still in map view), and press Ctrl-X
+3. Select the destination sprite (also while still in map view) and press Ctrl-V
 
-    // Note: this operation modifies the undo history for both the map and sprite editors, but 
-    // PICO-8 will try to keep them in sync where possible. Otherwise, changes caused by moving 
-    // map sprites can be reverted by also manually undoing in the sprite editor.
+Note: this operation modifies the undo history for both the map and sprite editors, but PICO-8 will try to keep them in sync where possible. Otherwise, changes caused by moving map sprites can be reverted by also manually undoing in the sprite editor.
 
 ### SFX Editor
 
 There are 64 SFX ("sound effects") in a cartridge, used for both sound and music.
 
 Each SFX has 32 notes, and each note has:
-    A frequency   (C0..C5)
-    An instrument (0..7)
-    A volume      (0..7)
-    An effect     (0..7)
+| thing | value|
+| --- | --- |
+| A frequency   | (C0..C5)|
+| An instrument | (0..7)|
+| A volume      | (0..7)|
+| An effect     | (0..7)|
 
 Each SFX also has these properties:
 
-        A play speed (SPD) : the number of 'ticks' to play each note for.
-            // This means that 1 is fastest, 3 is 3x as slow, etc.
-        
-        Loop start and end : this is the note index to loop back and to
-            // Looping is turned off when the start index >= end index
+| property | description |
+| ---   | --- |
+| A play speed (SPD) | the number of 'ticks' to play each note for. This means that 1 is fastest, 3 is 3x as slow, etc.|
+| Loop start and end | this is the note index to loop back and to Looping is turned off when the start index >= end index |
 
-    When only the first of the 2 numbers is used (and the second one is 0), it is taken to mean 
-    the number of notes to be played. This is normally not needed for sound effects (you can 
-    just leave the remaining notes empty), but is useful for controlling music playback.
+When only the first of the 2 numbers is used (and the second one is 0), it is taken to mean the number of notes to be played. This is normally not needed for sound effects (you can just leave the remaining notes empty), but is useful for controlling music playback.
 
-There are 2 modes for editing/viewing a SFX: Pitch mode (more suitable for sound effects) and
-tracker mode (more suitable for music). The mode can be changed using the top-left buttons, or
-toggled with TAB.
+There are 2 modes for editing/viewing a SFX: Pitch mode (more suitable for sound effects) and tracker mode (more suitable for music). The mode can be changed using the top-left buttons, or toggled with TAB.
 
-:: Pitch Mode
+#### Pitch Mode
 
-    Click and drag on the pitch area to set the frequency for each note, using the currently 
-    selected instrument (indicated by colour).
+Click and drag on the pitch area to set the frequency for each note, using the currently selected instrument (indicated by colour).
 
-    Hold shift to apply only the selected instrument.
-    Hold CTRL to snap entered notes to the C minor pentatonic scale.
-    Right click to grab the instrument of that note.
+Hold shift to apply only the selected instrument.\
+Hold CTRL to snap entered notes to the C minor pentatonic scale.\
+Right click to grab the instrument of that note.
 
-:: Tracker Mode
+#### Tracker Mode
 
-    Each note shows: frequency octave instrument volume effect
-    To enter a note, use q2w3er5t6y7ui zsxdcvgbhnjm (piano-like layout)
-    Hold shift when entering a note to transpose -1 octave .. +1 octave
-    New notes are given the selected instrument/effect values
-    To delete a note, use backspace or set the volume to 0
+- Each note shows: frequency octave instrument volume effect
+- To enter a note, use q2w3er5t6y7ui zsxdcvgbhnjm (piano-like layout)
+- Hold shift when entering a note to transpose -1 octave .. +1 octave
+- New notes are given the selected instrument/effect values
+- To delete a note, use backspace or set the volume to 0
 
-    Click and then shift-click to select a range that can be copied (CTRL-C) and pasted 
-    (CTRL-V). Note that only the selected attributes are copied. Double-click to select all 
-    attributes of a single note.
+Click and then shift-click to select a range that can be copied (CTRL-C) and pasted (CTRL-V). Note that only the selected attributes are copied. Double-click to select all attributes of a single note.
 
-    Navigation:
-        PAGEUP/DOWN or CTRL-UP/DOWN to skip up or down 4 notes
-        HOME/END to jump to the first or last note
-        CTRL-LEFT/RIGHT to jump across columns
+Navigation:
+| keys | description |
+| ---  | --- |
+| PAGEUP/DOWN or CTRL-UP/DOWN   | to skip up or down 4 notes|
+| HOME/END                      |to jump to the first or last note|
+| CTRL-LEFT/RIGHT               |to jump across columns|
 
-:: Controls for both modes
+#### Controls for both modes
 
-    - + to navigate the current SFX
-    SPACE to play/stop
-    SHIFT-SPACE to play from the current SFX quarter (group of 8 notes)
-    A to release a looping sample
-    Left click or right click to increase / decrease the SPD or LOOP values
-        // Hold shift when clicking to increase / decrease by 4
-        // Alternatively, click and drag left/right or up/down
-    Shift-click an instrument, effect, or volume to apply to all notes.
+| keys | description |
+| ---  | --- |
+|- +            | to navigate the current SFX
+|SPACE          | to play/stop
+|SHIFT-SPACE    | to play from the current SFX quarter (group of 8 notes)
+|A              | to release a looping sample
+|Left click or right click | - to increase / decrease the SPD or LOOP values. Hold shift when clicking to increase / decrease by 4. Alternatively, click and drag left/right or up/down|
+|Shift-click    | an instrument, effect, or volume to apply to all notes.
 
-:: Effects
+#### Effects
 
-    0 none
-    1 slide          //  Slide to the next note and volume
-    2 vibrato        //  Rapidly vary the pitch within one quarter-tone
-    3 drop           //  Rapidly drop the frequency to very low values
-    4 fade in        //  Ramp the volume up from 0
-    5 fade out       //  Ramp the volume down to 0
-    6 arpeggio fast  //  Iterate over groups of 4 notes at speed of 4
-    7 arpeggio slow  //  Iterate over groups of 4 notes at speed of 8
+| value | effect    | description   |
+| ---   | ---       | ---           |
+|0      none
+|1      slide          |  Slide to the next note and volume             |
+|2      vibrato        |  Rapidly vary the pitch within one quarter-tone|
+|3      drop           |  Rapidly drop the frequency to very low values |
+|4      fade in        |  Ramp the volume up from 0                     |
+|5      fade out       |  Ramp the volume down to 0                     |
+|6      arpeggio fast  |  Iterate over groups of 4 notes at speed of 4  |
+|7      arpeggio slow  |  Iterate over groups of 4 notes at speed of 8  |
 
-    If the SFX speed is <= 8, arpeggio speeds are halved to 2, 4
+If the SFX speed is <= 8, arpeggio speeds are halved to 2, 4
 
-:: Filters
+#### Filters
 
 Each SFX has 5 filter switches that can be accessed while in tracker mode:
-
-    NOIZ:      Generate pure white noise (applies only to instrument 6)
-    BUZZ:      Various alterations to the waveform to make it sound more buzzy
-    DETUNE-1:  Detunes a second voice to create a flange-like effect
-    DETUNE-2:  Various second voice tunings, mostly up or down an octave
-    REVERB:    Apply an echo with a delay of 2 or 4 ticks
-    DAMPEN:    Low pass filter at 2 different levels
+| filter    | description   |
+|---        | ---           |
+| NOIZ      | Generate pure white noise (applies only to instrument 6)|
+| BUZZ      | Various alterations to the waveform to make it sound more buzzy|
+| DETUNE-1  | Detunes a second voice to create a flange-like effect|
+| DETUNE-2  | Various second voice tunings, mostly up or down an octave|
+| REVERB    | Apply an echo with a delay of 2 or 4 ticks|
+| DAMPEN    | Low pass filter at 2 different levels|
 
 When BUZZ is used with instrument 6, and NOIZ is off, pure brown noise is generated.
 
@@ -598,147 +577,136 @@ When BUZZ is used with instrument 6, and NOIZ is off, pure brown noise is genera
 
 Music in PICO-8 is controlled by a sequence of 'patterns'. Each pattern is a list of 4 numbers indicating which SFX will be played on that channel.
 
-:: Flow control
+#### Flow control
 
-    Playback flow can be controlled using the 3 buttons at the top right.
+Playback flow can be controlled using the 3 buttons at the top right.
 
-    When a pattern has finished playing, the next pattern is played unless:
+When a pattern has finished playing, the next pattern is played unless:
 
-    - there is no data left to play (music stops)
-    - a STOP command is set on that pattern (the third button)
-    - a LOOP BACK command is set (the 2nd button), in which case the music player searches
-        back for a pattern with the LOOP START command set (the first button) or returns to
-        pattern 0 if none is found.
+- there is no data left to play (music stops)
+- a STOP command is set on that pattern (the third button)
+- a LOOP BACK command is set (the 2nd button), in which case the music player searches back for a pattern with the LOOP START command set (the first button) or returns to pattern 0 if none is found.
 
-    When a pattern has SFXes with different speeds, the pattern finishes playing when the left-most 
-    non-looping channel has finished playing. This can be used to set up double-time drum beats or 
-    unusual polyrhythms.
+When a pattern has SFXes with different speeds, the pattern finishes playing when the left-most non-looping channel has finished playing. This can be used to set up double-time drum beats or unusual polyrhythms.
 
-    For time signatures like 3/4 where less than 32 rows should be played before jumping to the 
-    next pattern, the length of a SFX can be set by adjusting only the first loop position and 
-    leaving the second one as zero. This will show up in the sfx editor as "LEN" (for "Length") 
-    instead of "LOOP".
+For time signatures like 3/4 where less than 32 rows should be played before jumping to the next pattern, the length of a SFX can be set by adjusting only the first loop position and leaving the second one as ero. This will show up in the sfx editor as "LEN" (for "Length") instead of "LOOP".
 
-:: Copying and Pasting Music
+#### Copying and Pasting Music
 
-    To select a range of patterns: click once on the first pattern in the pattern  navigator, then 
-    shift-click on the last pattern. Selected patterns can be copied  and pasted with CTRL-C and 
-    CTRL-V. When pasting into another cartridge, the SFX  that each pattern points to will also be 
-    pasted (possibly with a different index)  if it does not already exist.
+To select a range of patterns: click once on the first pattern in the pattern  navigator, then shift-click on the last pattern. Selected patterns can be copied  and pasted with CTRL-C and CTRL-V. When pasting into another cartridge, the SFX  that each pattern points to will also be pasted (possibly with a different index)  if it does not already exist.
 
-:: SFX Instruments
+#### SFX Instruments
 
-    In addition to the 8 built-in instruments, custom instruments can be defined using  the first 8 
-    SFX. Use the toggle button to the right of the instruments to select an  index, which will show 
-    up in the instrument channel as green instead of pink.
+In addition to the 8 built-in instruments, custom instruments can be defined using  the first 8 SFX. Use the toggle button to the right of the instruments to select an  index, which will show up in the instrument channel as green instead of pink.
 
-    When an SFX instrument note is played, it essentially triggers that SFX, but alters  the note's 
-    attributes:
+When an SFX instrument note is played, it essentially triggers that SFX, but alters  the note's attributes:
 
-        Pitch is added relative to C2
-        Volume is multiplied
-        Effects are applied on top of the SFX instrument's effects
-        Any filters that are on in the SFX instrument are enabled for that note
+- Pitch is added relative to C2
+- Volume is multiplied
+- Effects are applied on top of the SFX instrument's effects
+- Any filters that are on in the SFX instrument are enabled for that note
 
-    For example, a simple tremolo effect could be implemented by defining an instrument  in SFX 0 
-    that rapidly alternates between volume 5 and 2. When using this instrument to play a note, the 
-    volume can further be altered as usual (via the volume channel or using the fade in/out 
-    effects). In this way, SFX instruments can be used to control  combinations of detailed changes 
-    in volume, pitch and texture.
+For example, a simple tremolo effect could be implemented by defining an instrument  in SFX 0 that rapidly alternates between volume 5 and 2. When using this instrument to play a note, the volume can further be altered as usual (via the volume channel or using the fade in/out effects). In this way, SFX instruments can be used to control  combinations of detailed changes in volume, pitch and texture.
 
-    SFX instruments are only retriggered when the pitch changes, or the previous note has zero 
-    volume. This is useful for instruments that change more slowly over time. For example: a bell 
-    that gradually fades out. To invert this behaviour, effect 3 (normally 'drop') can be used when 
-    triggering the note. All other effect values have  their usual meaning when triggering SFX 
-    instruments. 
+SFX instruments are only retriggered when the pitch changes, or the previous note has zero volume. This is useful for instruments that change more slowly over time. For example: a bell that gradually fades out. To invert this behaviour, effect 3 (normally 'drop') can be used when triggering the note. All other effect values have  their usual meaning when triggering SFX instruments.
 
 ## Exporters / Importers
 
-The EXPORT command can be used to generate png, wav files and stand-alone html and native binary
-cartridge applications. The output format is inferred from the filename extension (e.g. .png).
+The EXPORT command can be used to generate png, wav files and stand-alone html and native binary cartridge applications. The output format is inferred from the filename extension (e.g. .png).
 
-You are free to distribute and use exported cartridges and data as you please, provided  that you
-have permission from the cartridge author and contributors.
+You are free to distribute and use exported cartridges and data as you please, provided  that you have permission from the cartridge author and contributors.
 
-:: Sprite Sheet / Label (.png)
+### Sprite Sheet / Label (.png)
 
-    > IMPORT BLAH.PNG   -- EXPECTS 128X128 PNG AND COLOUR-FITS TO THE PICO-8 PALETTE
-    > EXPORT BLAH.PNG   -- USE THE "FOLDER" COMMAND TO LOCATE THE EXPORTED PNG
+```bash
+> IMPORT BLAH.PNG   -- EXPECTS 128X128 PNG AND COLOUR-FITS TO THE PICO-8 PALETTE
+> EXPORT BLAH.PNG   -- USE THE "FOLDER" COMMAND TO LOCATE THE EXPORTED PNG
+```
 
-    When importing, -x and -y switches can be used to specify the target location in pixels: -s can 
-    be used to shrink the image (3 means scale from 384x384 -> 128x128)
+When importing, -x and -y switches can be used to specify the target location in pixels: -s can be used to shrink the image (3 means scale from 384x384 -> 128x128)
 
-    > IMPORT BLAH.PNG -X 16 -Y 16 -S 3
+```bash
+> IMPORT BLAH.PNG -X 16 -Y 16 -S 3
+```
 
-    Use the -l switch with IMPORT and EXPORT to instead read and write from the cartridge's label:
+Use the -l switch with IMPORT and EXPORT to instead read and write from the cartridge's label:
 
-    > IMPORT -L BLAH.PNG
+```bash
+> IMPORT -L BLAH.PNG
+```
 
-    When importing spritesheets or labels, the palette is colour-fitted to the current draw state 
-    palette.
+When importing spritesheets or labels, the palette is colour-fitted to the current draw state palette.
 
-:: SFX and Music (.wav)
+### SFX and Music (.wav)
 
-    To export music from the current pattern (when editor mode is MUSIC), or the current SFX:
+To export music from the current pattern (when editor mode is MUSIC), or the current SFX:
 
-    > EXPORT FOO.WAV  
+```bash
+> EXPORT FOO.WAV  
+```
 
-    To export all SFXs as foo0.wav, foo1.wav .. foo63.wav:
+To export all SFXs as foo0.wav, foo1.wav .. foo63.wav:
 
-    > EXPORT FOO%D.WAV
+```bash
+> EXPORT FOO%D.WAV
+```
 
-:: MAP and CODE
+### MAP and CODE
 
-    A cartridges map or source code can be exported as a single image named .map.png or .lua.png:
+A cartridges map or source code can be exported as a single image named .map.png or .lua.png:
 
-    > EXPORT FOO.MAP.PNG
-    > EXPORT FOO.LUA.PNG 
+```bash
+> EXPORT FOO.MAP.PNG
+> EXPORT FOO.LUA.PNG 
+```
 
-    Map images are 1024x512 (128x32 8x8 sprites). Lua images are sized to fit, but each line is 
-    fixed (and cropped) at 192 pixels wide.
+Map images are 1024x512 (128x32 8x8 sprites). Lua images are sized to fit, but each line is fixed (and cropped) at 192 pixels wide.
 
-:: Cartridges (.p8, .p8.png, .p8.rom)
+#### Cartridges (.p8, .p8.png, .p8.rom)
 
-    Using EXPORT to save a cartridge is the same as using SAVE, but without changing the current 
-    working cartridge. This can be useful for example, to save a copy in .p8.png format for 
-    distribution without accidentally continuing to make changes to that file instead of the 
-    original .p8 file.
+Using `EXPORT` to save a cartridge is the same as using SAVE, but without changing the current working cartridge. This can be useful for example, to save a copy in .p8.png format for distribution without accidentally continuing to make changes to that file instead of the original .p8 file.
 
-    EXPORT can also be used to perform cartridge file format conversions from commandline. For 
-    example, from a Linux shell:
+`EXPORT` can also be used to perform cartridge file format conversions from commandline. For example, from a Linux shell:
 
-    > pico8 foo.p8 -export foo.p8.png
+```bash
+> pico8 foo.p8 -export foo.p8.png
+```
 
 ### Web Applications (.html)
 
-    To generate a stand-alone html player (mygame.html, mygame.js):
+To generate a stand-alone html player (mygame.html, mygame.js):
 
-    > EXPORT MYGAME.HTML
+```bash
+> EXPORT MYGAME.HTML
+```
 
-    Or just the .js file:
+Or just the .js file:
 
-    > EXPORT MYGAME.JS
+```bash
+> EXPORT MYGAME.JS
+```
 
-    Use -f to write the files to a folder called mygame_html, using index.html instead of 
-    mygame.html
+Use -f to write the files to a folder called mygame_html, using index.html instead of mygame.html
 
-    > EXPORT -F MYGAME.HTML
+```bash
+> EXPORT -F MYGAME.HTML
+```
 
-    Optionally provide a custom html template with the -p switch:
+Optionally provide a custom html template with the -p switch:
 
-    > EXPORT MYGAME.HTML -P ONE_BUTTON
+```bash
+> EXPORT MYGAME.HTML -P ONE_BUTTON
+```
 
-    This will use the file {application data}/pico-8/plates/one_button.html as the html shell,  
-    replacing a special string "##js_file##" (without quotes), with the .js filename, and 
-    optionally replacing the string "##label_file##" with the cart's label image as a data url.
+This will use the file {application data}/pico-8/plates/one_button.html as the html shell,replacing a special string "##js_file##" (without quotes), with the .js filename, and optionally replacing the string "##label_file##" with the cart's label image as a data url.
 
-    Use -w to export as .wasm + .js:
+Use -w to export as .wasm + .js:
 
-    > EXPORT -W MYGAME.HTML
+```bash
+> EXPORT -W MYGAME.HTML
+```
 
-    When exported as .wasm, the page needs to be served by a webserver, rather than just opening it 
-    directly from the local file system in a browser. For most purposes, the default .js export is 
-    fine, but .wasm is slightly smaller and faster.
+When exported as .wasm, the page needs to be served by a webserver, rather than just opening it directly from the local file system in a browser. For most purposes, the default .js export is fine, but .wasm is slightly smaller and faster.
 
 ### Binary Applications (.bin)
 
@@ -749,12 +717,13 @@ To generate stand-alone executables for Windows, Linux (64-bit), Mac and Raspber
 ```
 
 By default, the cartridge label is used as an icon with no transparency.  To specify an icon from the sprite sheet, use -i and optionally -s and/or -c  to control the size and transparency.
+| flag  | description   |
+| ---   | ---           |
+|-I N   | Icon index N with a default transparent colour of 0 (black).  |
+|-S N   | Size NxN sprites. Size 3 would be produce a 24x24 icon.       |
+|-C N   | Treat colour N as transparent. Use 16 for no transparency.    |
 
-    -I N  Icon index N with a default transparent colour of 0 (black).
-    -S N  Size NxN sprites. Size 3 would be produce a 24x24 icon.
-    -C N  Treat colour N as transparent. Use 16 for no transparency.
-
-For example, to use a 2x2 sprite starting at index 32 in the sprite sheet,  using colour 12 as transparent:
+For example, to use a 2x2 sprite starting at index 32 in the sprite sheet, using colour 12 as transparent:
 
 ```bash
 > EXPORT -I 32 -S 2 -C 12 MYGAME.BIN
@@ -766,7 +735,7 @@ To include an extra file in the output folders and archives, use the -E switch:
 > EXPORT -E README.TXT MYGAME.BIN 
 ```
 
-Windows file systems do not support the file metadata needed to create a Linux or Mac executable. PICO-8 works around this by exporting zip files in a way that preserves the file attributes. It is therefore recommended that you distribute the outputted zip files as-is to ensure users on other operating systems can run them. Otherwise, a Linux user who then downloads the binaries may need to "chmod +x mygame" the file to run it, and Mac user would need to "chmod +x mygame.app/Contents/MacOS/mygame"
+Windows file systems do not support the file metadata needed to create a Linux or Mac executable. PICO-8 orks around this by exporting zip files in a way that preserves the file attributes. It is therefore ecommended that you distribute the outputted zip files as-is to ensure users on other operating systems an run them. Otherwise, a Linux user who then downloads the binaries may need to "chmod +x mygame" the file o run it, and Mac user would need to "chmod +x mygame.app/Contents/MacOS/mygame"
 
 ### Uploading to itch.io
 
@@ -790,19 +759,22 @@ stand-alone html or native binary players.
 
 During runtime, the extra carts can be accessed as if they were local files:
 
+```lua
 RELOAD(0,0,0X2000, "DAT1.P8") -- LOAD SPRITESHEET FROM DAT1.P8
 LOAD("GAME2.P8")              -- LOAD AND RUN ANOTHER CART
+```
 
 Exported cartridges are unable to load and run BBS cartridges e.g. via LOAD("#FOO")
 
 ### Running EXPORT from the host operating system
 
-Use the -export switch when launching PICO-8 to run the exporter in headless mode. File paths
-are relative to the current directory rather than the PICO-8 file system.
+Use the -export switch when launching PICO-8 to run the exporter in headless mode. File paths are relative to the current directory rather than the PICO-8 file system.
 
 Parameters to the EXPORT command are passed along as a single (lowercase) string:
 
+```bash
 pico8 mygame.p8 -export "-i 32 -s 2 -c 12 mygame.bin dat0.p8 dat1.p8"
+```
 
 ## Lua Syntax Primer
 
@@ -811,156 +783,182 @@ following is a brief summary of essential Lua syntax.
 
 For more details, or to find out about proper Lua, see www.lua.org.
 
-:: Comments
+### Comments
 
-    -- USE TWO DASHES LIKE THIS TO WRITE A COMMENT
-    --[[ MULTI-LINE
-    COMMENTS ]]
+```lua
+-- USE TWO DASHES LIKE THIS TO WRITE A COMMENT
+--[[ MULTI-LINE
+COMMENTS ]]
+```
 
-:: Types and assignment
+### Types and assignment
 
-    Types in Lua are numbers, strings, booleans and tables:
+Types in Lua are numbers, strings, booleans and tables:
 
-    NUM = 12/100
-    S = "THIS IS A STRING"
-    B = FALSE
-    T = {1,2,3}
+```lua
+NUM = 12/100
+S = "THIS IS A STRING"
+B = FALSE
+T = {1,2,3}
+```
 
-    Numbers in PICO-8 are all 16:16 fixed point. They range from -32768.0 to 32767.99999
+Numbers in PICO-8 are all 16:16 fixed point. They range from -32768.0 to 32767.99999
 
-    Hexadecimal notation with optional fractional parts can be used:
+Hexadecimal notation with optional fractional parts can be used:
 
-    ?0x11        -- 17
-    ?0x11.4000   -- 17.25
+```lua
+?0x11        -- 17
+?0x11.4000   -- 17.25
+```
 
-    Numbers written in decimal are rounded to the closest fixed point value. To see the 32-bit 
-    hexadecimal representation, use PRINT(TOSTR(VAL,TRUE)):
+Numbers written in decimal are rounded to the closest fixed point value. To see the 32-bit
+hexadecimal representation, use PRINT(TOSTR(VAL,TRUE)):
 
-    ?TOSTR(-32768,TRUE)      -- 0x8000.0000 
-    ?TOSTR(32767.99999,TRUE) -- 0X7FFF.FFFF
+```lua
+?TOSTR(-32768,TRUE)      -- 0x8000.0000 
+?TOSTR(32767.99999,TRUE) -- 0X7FFF.FFFF
+```
 
-    Dividing by zero evaluates to 0x7fff.ffff if positive, or -0x7fff.ffff if negative. 
+Dividing by zero evaluates to 0x7fff.ffff if positive, or -0x7fff.ffff if negative.
 
-:: Conditionals
+### Conditionals
 
-    IF NOT B THEN
-        PRINT("B IS FALSE")
-    ELSE
-        PRINT("B IS NOT FALSE")
-    END
+```lua
+IF NOT B THEN
+    PRINT("B IS FALSE")
+ELSE
+    PRINT("B IS NOT FALSE")
+END
 
-    -- with ELSEIF
+-- with ELSEIF
 
-    IF X == 0 THEN
-        PRINT("X IS 0")
-    ELSEIF X < 0 THEN
-        PRINT("X IS NEGATIVE")
-    ELSE
-        PRINT("X IS POSITIVE")
-    END
+IF X == 0 THEN
+    PRINT("X IS 0")
+ELSEIF X < 0 THEN
+    PRINT("X IS NEGATIVE")
+ELSE
+    PRINT("X IS POSITIVE")
+END
 
-    IF (4 == 4) THEN PRINT("EQUAL") END
-    IF (4 ~= 3) THEN PRINT("NOT EQUAL") END
-    IF (4 <= 4) THEN PRINT("LESS THAN OR EQUAL") END
-    IF (4 > 3) THEN PRINT("MORE THAN") END
+IF (4 == 4) THEN PRINT("EQUAL") END
+IF (4 ~= 3) THEN PRINT("NOT EQUAL") END
+IF (4 <= 4) THEN PRINT("LESS THAN OR EQUAL") END
+IF (4 > 3) THEN PRINT("MORE THAN") END
+```
 
-:: Loops
+### Loops
 
-    Loop ranges are inclusive:
+Loop ranges are inclusive:
 
-    FOR X=1,5 DO
-        PRINT(X)
-    END
-    -- PRINTS 1,2,3,4,5
+```lua
+FOR X=1,5 DO
+    PRINT(X)
+END
+-- PRINTS 1,2,3,4,5
 
-    X = 1
-    WHILE(X <= 5) DO
-        PRINT(X)
-        X = X + 1
-    END
+X = 1
+WHILE(X <= 5) DO
+    PRINT(X)
+    X = X + 1
+END
 
-    FOR X=1,10,3 DO PRINT(X) END   -- 1,4,7,10
+FOR X=1,10,3 DO PRINT(X) END   -- 1,4,7,10
 
-    FOR X=5,1,-2 DO PRINT(X) END  -- 5,3,1
+FOR X=5,1,-2 DO PRINT(X) END  -- 5,3,1
+```
 
-:: Functions and Local Variables
+### Functions and Local Variables
 
-    Variables declared as LOCAL are scoped to their containing block of code (for example, inside a 
-    FUNCTION, a FOR loop, or IF THEN END statement).
+Variables declared as LOCAL are scoped to their containing block of code (for example, inside a FUNCTION, a FOR loop, or IF THEN END statement).
 
-    Y=0 
-    FUNCTION PLUSONE(X)
-        LOCAL Y = X+1
-        RETURN Y
-    END
-    PRINT(PLUSONE(2)) -- 3
-    PRINT(Y)          -- 0
+```lua
+Y=0 
+FUNCTION PLUSONE(X)
+    LOCAL Y = X+1
+    RETURN Y
+END
+PRINT(PLUSONE(2)) -- 3
+PRINT(Y)          -- 0
+```
 
-:: Tables
+### Tables
 
-    In Lua, tables are a collection of key-value pairs where the key and value types can both  be 
-    mixed. They can be used as arrays by indexing them with integers.
+In Lua, tables are a collection of key-value pairs where the key and value types can both  be mixed. They can be used as arrays by indexing them with integers.
 
-    A={} -- CREATE AN EMPTY TABLE
-    A[1] = "BLAH"
-    A[2] = 42
-    A["FOO"] = {1,2,3}
+```lua
+A={} -- CREATE AN EMPTY TABLE
+A[1] = "BLAH"
+A[2] = 42
+A["FOO"] = {1,2,3}
+```
 
-    Arrays use 1-based indexing by default:
+Arrays use 1-based indexing by default:
 
-    > A = {11,12,13,14}
-    > PRINT(A[2]) -- 12
+```lua
+A = {11,12,13,14}
+PRINT(A[2]) -- 12
+```
 
-    But if you prefer 0-based arrays, just write something the zeroth slot:
+But if you prefer 0-based arrays, just write something the zeroth slot:
 
-    > A = {[0]=10,11,12,13,14}
+```lua
+A = {[0]=10,11,12,13,14}
+```
 
-    Tables with 1-based integer indexes are special though. The length of such an array can be 
-    found with the # operator, and PICO-8 uses such arrays to implement ADD, DEL, DELI, ALL and 
-    FOREACH functions.
+Tables with 1-based integer indexes are special though. The length of such an array can be found with the # operator, and PICO-8 uses such arrays to implement ADD, DEL, DELI, ALL and FOREACH functions.
 
-    > PRINT(#A)   -- 4
-    > ADD(A, 15)
-    > PRINT(#A)   -- 5
+```lua
+PRINT(#A)   -- 4
+ADD(A, 15)
+PRINT(#A)   -- 5
+```
 
-    Indexes that are strings can be written using dot notation
+Indexes that are strings can be written using dot notation
 
-    PLAYER = {}
-    PLAYER.X = 2 -- is equivalent to PLAYER["X"]
-    PLAYER.Y = 3
+```lua
+PLAYER = {}
+PLAYER.X = 2 -- is equivalent to PLAYER["X"]
+PLAYER.Y = 3
+```
 
-    See the @{Table_Functions} section for more details.
+See the @{Table_Functions} section for more details.
 
-:: PICO-8 Shorthand
+### PICO-8 Shorthand
 
-    PICO-8 also allows several non-standard, shorter ways to write common patterns.
+PICO-8 also allows several non-standard, shorter ways to write common patterns.
 
-    1. IF THEN END statements, and WHILE THEN END can be written on a single line with:
+#### IF THEN END statements, and WHILE THEN END can be written on a single line with
 
-    IF (NOT B) I=1 J=2
+```lua
+IF (NOT B) I=1 J=2
+```
 
-    Is equivalent to:
+Is equivalent to:
 
-    IF NOT B THEN I=1 J=2 END
+```lua
+IF NOT B THEN I=1 J=2 END
+```
 
-    Note that brackets around the short-hand condition are required.
+Note that brackets around the short-hand condition are required.
 
-    1. Assignment operators
+#### Assignment operators
 
-    Shorthand assignment operators can also be used if the whole statement is on one line. They can 
-    be constructed by appending a '=' to any binary operator, including arithmetic (+=, -= ..), 
-    bitwise (&=, |= ..) or the string concatenation operator (..=)
+Shorthand assignment operators can also be used if the whole statement is on one line. They can be constructed by appending a '=' to any binary operator, including arithmetic (+=, -= ..), bitwise (&=, |= ..) or the string concatenation operator (..=)
 
-    A += 2   -- EQUIVALENT TO: A = A + 2
+```lua
+A += 2   -- EQUIVALENT TO: A = A + 2
+```
 
-    // note that the LHS appears twice, so for TBL[FN()]+=1, FN() will be called twice.
+note that the LHS appears twice, so for TBL[FN()]+=1, FN() will be called twice.
 
-    1. != operator
+#### != operator
 
-    Not shorthand, but pico-8 also accepts != instead of ~= for "not equal to"
+Not shorthand, but pico-8 also accepts != instead of ~= for "not equal to"
 
-    PRINT(1 != 2) -- TRUE
-    PRINT("FOO" == "FOO") -- TRUE (STRING ARE INTERNED)
+```lua
+PRINT(1 != 2) -- TRUE
+PRINT("FOO" == "FOO") -- TRUE (STRING ARE INTERNED)
+```
 
 ## PICO-8 Program Structure
 
@@ -992,1150 +990,1123 @@ FUNCTION _DRAW()
 END
 ```
 
-_DRAW() is normally called at 30fps, but if it can not complete in time, PICO-8 will attempt to
+\_DRAW() is normally called at 30fps, but if it can not complete in time, PICO-8 will attempt to
 run at 15fps and call_UPDATE() twice per visible frame to compensate.
 
-:: Running PICO-8 at 60fps
+### Running PICO-8 at 60fps
 
-    _UPDATE60() 
+#### \_UPDATE60()
 
-    When _UPDATE60() Is defined instead of _UPDATE(), PICO-8 will run in 60fps mode:
+When \_UPDATE60() Is defined instead of _UPDATE(), PICO-8 will run in 60fps mode:
 
-    - both _UPDATE60() and _DRAW() are called at 60fps<br> - half the PICO-8 CPU is available per 
-    frame before dropping down to 30fps
+Both \_UPDATE60() and _DRAW() are called at 60fps\
+half the PICO-8 CPU is available per frame before dropping down to 30fps.
 
-    Note that not all host machines are capable of running at 60fps. Older machines, and / or web 
-    versions might also request PICO-8 to run at 30 fps (or 15 fps), even when the PICO-8 CPU is 
-    not over capacity. In this case, multiple _UPDATE60 calls are made for every _DRAW call in the 
-    same way.
+Note that not all host machines are capable of running at 60fps. Older machines, and / or web versions might also request PICO-8 to run at 30 fps (or 15 fps), even when the PICO-8 CPU is not over capacity. In this case, multiple _UPDATE60 calls are made for every_DRAW call in the same way.
 
-:: #INCLUDE
+### \#INCLUDE
 
-    Source code can be injected into a program at cartridge boot (but not during runtime), using 
-    "#INCLUDE FILENAME", where FILENAME is either a plaintext file (containing Lua code), a tab 
-    from another cartridge, or all tabs from another cartridge:
+Source code can be injected into a program at cartridge boot (but not during runtime), using "#INCLUDE FILENAME", where FILENAME is either a plaintext file (containing Lua code), a tab from another cartridge, or all tabs from another cartridge:
 
-        #INCLUDE SOMECODE.LUA
-        #INCLUDE ONETAB.P8:1
-        #INCLUDE ALLTABS.P8
+```lua
+#INCLUDE SOMECODE.LUA
+#INCLUDE ONETAB.P8:1
+#INCLUDE ALLTABS.P8
+```
 
-    When the cartridge is run, the contents of each included file is treated as if it had been 
-    pasted into the editor in place of that line.
+When the cartridge is run, the contents of each included file is treated as if it had been pasted into the editor in place of that line.
 
-        - Filenames are relative to the current cartridge (so, need to save first)<br> - Includes 
-        are not performed recursively.<br> - Normal character count and token limits apply.
+Filenames are relative to the current cartridge (so, need to save first)
 
-    When a cartridge is saved as .P8.PNG, or exported to a binary, any included files are  
-    flattened and saved with the cartridge so that there are no external dependencies.
+- Includes are not performed recursively.
+- Normal character count and token limits apply.
 
-    #INCLUDE can be used for things like:
+When a cartridge is saved as .P8.PNG, or exported to a binary, any included files are flattened and saved with the cartridge so that there are no external dependencies.
 
-        - Sharing code between cartridge (libraries or common multi-cart code)<br> - Using an 
-        external code editor without needing to edit the .p8 file directly.<br> - Treating a 
-        cartridge as a data file that loads a PICO-8 editing tool to modify it.<br> - Loading and 
-        storing data generated by an external (non-PICO-8) tool.
+\#INCLUDE can be used for things like
 
-:: Quirks of PICO-8
+- Sharing code between cartridge (libraries or common multi-cart code)
+- Using an external code editor without needing to edit the .p8 file directly.
+- Treating a cartridge as a data file that loads a PICO-8 editing tool to modify it.
+- Loading and storing data generated by an external (non-PICO-8) tool.
 
-    Common gotchas to watch out for:
+### Quirks of PICO-8
 
-    - The bottom half of the sprite sheet and bottom half of the map occupy the same memory. // 
-    Best use only one or the other if you're unsure how this works.
+Common gotchas to watch out for:
 
-    - PICO-8 numbers have limited accuracy and range; the minimum step between numbers is 
-    approximately 0.00002 (0x0.0001), with a range of -32768 (-0x8000) to approximately 32767.99999 
-    (0x7fff.ffff)<br> // If you add 1 to a counter each frame, it will overflow after around 18 
-    minutes!
+- The bottom half of the sprite sheet and bottom half of the map occupy the same memory.\
+Best use only one or the other if you're unsure how this works.
+- PICO-8 numbers have limited accuracy and range; the minimum step between numbers is approximately 0.00002 (0x0.0001), with a range of -32768 (-0x8000) to approximately 32767.99999 (0x7fff.ffff)\
+If you add 1 to a counter each frame, it will overflow after around 18 minutes!
+- Lua arrays are 1-based by default, not 0-based. FOREACH starts at TBL[1], not TBL[0].
+- @COS() and @SIN() take 0..1 instead of 0..PI*2, and @SIN() is inverted.
+- @SGN(0) returns 1.
 
-    - Lua arrays are 1-based by default, not 0-based. FOREACH starts at TBL[1], not TBL[0].
+### CPU
 
-    - @COS() and @SIN() take 0..1 instead of 0..PI*2, and @SIN() is inverted.
+Although PICO-8 does not have a clearly defined CPU, there is a virtual CPU speed of 8MHz, where each lua vm instruction costs around 2 cycles. Built-in operations like drawing sprites also have a CPU cost. This means that a PICO-8 cartridge made on a host machine with a powerful CPU can still be guaranteed to run (reasonably) well on much slower machines, and to not drain too much battery on phones / when running on the web.
 
-    - @SGN(0) returns 1.
-
-:: CPU
-
-    Although PICO-8 does not have a clearly defined CPU, there is a virtual CPU speed of 8MHz, 
-    where each lua vm instruction costs around 2 cycles. Built-in operations like drawing sprites 
-    also have a CPU cost. This means that a PICO-8 cartridge made on a host machine with a powerful 
-    CPU can still be guaranteed to run (reasonably) well on much slower machines, and to not drain 
-    too much battery on phones / when running on the web.
-
-    To view the CPU load while a cartridge is running, press CTRL-P to toggle a CPU meter, or print  
-    out @STAT(1) at the end of each frame.
+To view the CPU load while a cartridge is running, press CTRL-P to toggle a CPU meter, or print out @STAT(1) at the end of each frame.
 
 ## API Reference
 
-    PICO-8 is built on the Lua programming language, but does not include the Lua standard library. 
-    Instead, a small api is offered in keeping with PICO-8's minimal design and limited screen 
-    space. For an example program that uses most of the api functions, see /DEMOS/API.P8 
+PICO-8 is built on the Lua programming language, but does not include the Lua standard library. Instead, a small api is offered in keeping with PICO-8's minimal design and limited screen space. For an example program that uses most of the api functions, see /DEMOS/API.P8
 
-    Functions are written here as:
+Functions are written here as:
 
-    FUNCTION_NAME(PARAMETER, [OPTIONAL_PARAMETER])
+```lua
+FUNCTION_NAME(PARAMETER, [OPTIONAL_PARAMETER])
+```
 
-    Note that PICO-8 does not have upper or lower case characters -- if you are editing a .p8 or 
-    .lua file directly, function names should all be in lower case.
+Note that PICO-8 does not have upper or lower case characters -- if you are editing a .p8 or .lua file directly, function names should all be in lower case.
 
 ### System
 
 System functions called from commandline can omit the usual brackets and string quotes. For example, instead of LOAD("BLAH.P8"), it is possible to write:
 
 ```bash
->LOAD BLAH.P8
+> LOAD BLAH.P8
 ```
 
-LOAD(FILENAME, [BREADCRUMB], [PARAM_STR])
+#### LOAD(FILENAME, [BREADCRUMB], [PARAM_STR])
 
-SAVE(FILENAME)
+#### SAVE(FILENAME)
 
-    Load or save a cartridge
+Load or save a cartridge
 
-    When loading from a running cartridge, the loaded cartridge is immediately run with 
-    parameter string PARAM_STR (accessible with STAT(6)), and a menu item is inserted and named 
-    BREADCRUMB, that returns the user to the previous cartridge.
+When loading from a running cartridge, the loaded cartridge is immediately run with parameter string PARAM_STR (accessible with STAT(6)), and a menu item is inserted and named BREADCRUMB, that returns the user to the previous cartridge.
 
-    Filenames that start with '#' are taken to be a BBS cart id, that is immediately downloaded 
-    and run:
+Filenames that start with '#' are taken to be a BBS cart id, that is immediately downloaded and run:
 
-    > LOAD("#MYGAME_LEVEL2", "BACK TO MAP", "LIVES="..LIVES)
+```bash
+> LOAD("#MYGAME_LEVEL2", "BACK TO MAP", "LIVES="..LIVES)
+```
 
-    If the id is the cart's parent post, or a revision number is not specified, then the latest 
-    version is fetched. BBS carts can be loaded from other BBS carts or local carts, but not 
-    from  exported carts. 
+If the id is the cart's parent post, or a revision number is not specified, then the latest version is fetched. BBS carts can be loaded from other BBS carts or local carts, but not from  exported carts.
 
-FOLDER
+#### FOLDER
 
-    Open the carts folder in the host operating system.
+Open the carts folder in the host operating system.
 
-LS
+#### LS
 
-DIR
+#### DIR
 
-    List files in the current directory. When called from a running program, returns a list  of 
-    all .p8 and .p8.png files in the same directory.
+List files in the current directory. When called from a running program, returns a list  of all .p8 and .p8.png files in the same directory.
 
-RUN([PARAM_STR])
+#### RUN([PARAM_STR])
 
-    Run from the start of the program.
+Run from the start of the program.
 
-    RUN() Can be called from inside a running program to reset.
+RUN() Can be called from inside a running program to reset.
 
-    When PARAM_STR is supplied, it can be accessed during runtime with STAT(6)
+When PARAM_STR is supplied, it can be accessed during runtime with STAT(6)
 
-STOP([MESSAGE])
+#### STOP([MESSAGE])
 
-    Stop the cart and optionally print a message.
+Stop the cart and optionally print a message.
 
-RESUME
+#### RESUME
 
-    Resume the program. Use R for short.
+Resume the program. Use R for short.
 
-    Use a single "." from the commandline to advance a single frame. This enters frame-by-frame 
-    mode, that can be read with stat(110). While frame-by-frame mode is active, entering an 
-    empty command (by pressing enter) advances one frames.
+Use a single "." from the commandline to advance a single frame. This enters frame-by-frame mode, that can be read with stat(110). While frame-by-frame mode is active, entering an empty command (by pressing enter) advances one frames.
 
-ASSERT(CONDITION, [MESSAGE])
+#### ASSERT(CONDITION, [MESSAGE])
 
-    If CONDITION is false, stop the program and print MESSAGE if it is given. This can be 
-    useful for debugging cartridges, by ASSERT()'ing that things that you expect to be true are 
-    indeed true.
+If CONDITION is false, stop the program and print MESSAGE if it is given. This can be useful for debugging cartridges, by ASSERT()'ing that things that you expect to be true are indeed true.
 
-    ASSERT(ADDR >= 0 AND ADDR <= 0x7FFF, "OUT OF RANGE")
-    POKE(ADDR, 42) -- THE MEMORY ADDRESS IS OK, FOR SURE!
+```lua
+ASSERT(ADDR >= 0 AND ADDR <= 0x7FFF, "OUT OF RANGE")
+POKE(ADDR, 42) -- THE MEMORY ADDRESS IS OK, FOR SURE!
+```
 
-REBOOT
+#### REBOOT
 
-    Reboot the machine Useful for starting a new project
+Reboot the machine Useful for starting a new project
 
-RESET()
+#### RESET()
 
-    Reset the values in RAM from 0x5f00..0x5f7f to their default values.  This includes the 
-    palette, camera position, clipping and fill pattern. If you get lost at the command prompt 
-    because the draw state makes viewing text  impossible, try typing RESET! It can also be 
-    called from a running program.
+Reset the values in RAM from 0x5f00..0x5f7f to their default values.  This includes the palette, camera position, clipping and fill pattern. If you get lost at the command prompt because the draw state makes viewing text  impossible, try typing RESET! It can also be called from a running program.
 
-INFO()
+#### INFO()
 
-    Print out some information about the cartridge: Code size, tokens, compressed size
+Print out some information about the cartridge: Code size, tokens, compressed size
 
-    Also displayed:
+Also displayed:
 
-        UNSAVED CHANGES   When the cartridge in memory differs to the one on disk
-        EXTERNAL CHANGES  When the cartridge on disk has changed since it was loaded
-            (e.g. by editing the program using a separate text editor)
+- UNSAVED CHANGES   When the cartridge in memory differs to the one on disk
+- EXTERNAL CHANGES  When the cartridge on disk has changed since it was loaded (e.g. by editing the program using a separate text editor)
 
-FLIP()
+#### FLIP()
 
-    Flip the back buffer to screen and wait for next frame. This call is not needed when there 
-    is a @_DRAW() or @_UPDATE() callback defined, as the flip is performed automatically. But 
-    when using a custom main loop, a call to FLIP is normally needed:
+Flip the back buffer to screen and wait for next frame. This call is not needed when there is a @_DRAW() or @_UPDATE() callback defined, as the flip is performed automatically. But when using a custom main loop, a call to FLIP is normally needed:
 
-    ::_::
-    CLS()
-    FOR I=1,100 DO
-        A=I/50 - T()
-        X=64+COS(A)*I
-        Y=64+SIN(A)*I
-        CIRCFILL(X,Y,1,8+(I/4)%8)
-    END
-    FLIP()GOTO _
+```lua
+::_::
+CLS()
+FOR I=1,100 DO
+    A=I/50 - T()
+    X=64+COS(A)*I
+    Y=64+SIN(A)*I
+    CIRCFILL(X,Y,1,8+(I/4)%8)
+END
+FLIP()GOTO _
+```
 
-    If your program does not call FLIP before a frame is up, and a @_DRAW() callback is not in 
-    progress, the current contents of the back buffer are copied to screen.
+If your program does not call FLIP before a frame is up, and a @_DRAW() callback is not in progress, the current contents of the back buffer are copied to screen.
 
-PRINTH(STR, [FILENAME], [OVERWRITE], [SAVE_TO_DESKTOP])
+#### PRINTH(STR, [FILENAME], [OVERWRITE], [SAVE_TO_DESKTOP])
 
-    Print a string to the host operating system's console for debugging.
+Print a string to the host operating system's console for debugging.
 
-    If filename is set, append the string to a file on the host operating system (in the 
-    current directory by default -- use FOLDER to view).
+If filename is set, append the string to a file on the host operating system (in the current directory by default -- use FOLDER to view).
 
-    Setting OVERWRITE to true causes that file to be overwritten rather than appended.
+Setting OVERWRITE to true causes that file to be overwritten rather than appended.
 
-    Setting SAVE_TO_DESKTOP to true saves to the desktop instead of the current path.
+Setting SAVE_TO_DESKTOP to true saves to the desktop instead of the current path.
 
-    Use a filename of "@clip" to write to the host's clipboard.
+Use a filename of "@clip" to write to the host's clipboard.
 
-    Use stat(4) to read the clipboard, but the contents of the clipboard are only available 
-    after pressing CTRL-V during runtime (for security).
+Use stat(4) to read the clipboard, but the contents of the clipboard are only available after pressing CTRL-V during runtime (for security).
 
-TIME()
+#### TIME()
 
-T()
+#### T()
 
-    Returns the number of seconds elapsed since the cartridge was run.
+Returns the number of seconds elapsed since the cartridge was run.
 
-    This is not the real-world time, but is calculated by counting the number of times
+This is not the real-world time, but is calculated by counting the number of times _UPDATE or @_UPDATE60 is called. Multiple calls of TIME() from the same frame return the same result.
 
+#### STAT(X)
 
-    _UPDATE or @_UPDATE60 is called. Multiple calls of TIME() from the same frame return
+Get system status where X is:
 
-    the same result.
+| status no.| description   |
+| ---       | ---           |
+| 0         | Memory usage (0..2048)|
+| 1         | CPU used since last flip (1.0 == 100% CPU)|
+| 4         | Clipboard contents (after user has pressed CTRL-V)|
+| 6         | Parameter string|
+| 7         | Current framerate   |
+| 46..49    | Index of currently playing SFX on channels 0..3|
+| 50..53    | Note number (0..31) on channel 0..3|
+| 54        | Currently playing pattern index|
+| 55        | Total patterns played|
+| 56        | Ticks played on current pattern|
+| 57        | (Boolean) TRUE when music is playing|
+| 80..85    | UTC time: year, month, day, hour, minute, second|
+| 90..95    | Local time|
+| 100       | Current breadcrumb label, or nil|
+| 110       | Returns true when in frame-by-frame mode|
 
-STAT(X)
+Audio values 16..26 are the legacy version of audio state queries 46..56. They only report on the current state of the audio mixer, which changes only ~20 times a second (depending on the host sound driver and other factors). 46..56 instead stores a history of mixer state at each tick to give a higher resolution estimate of the currently audible state.
 
-    Get system status where X is:
+#### EXTCMD(CMD_STR, [P1, P2])
 
-    0  Memory usage (0..2048)
-    1  CPU used since last flip (1.0 == 100% CPU)
-    4  Clipboard contents (after user has pressed CTRL-V)
-    6  Parameter string
-    7  Current framerate
-        
-    46..49  Index of currently playing SFX on channels 0..3
-    50..53  Note number (0..31) on channel 0..3
-    54      Currently playing pattern index
-    55      Total patterns played
-    56      Ticks played on current pattern
-    57      (Boolean) TRUE when music is playing
-        
-    80..85  UTC time: year, month, day, hour, minute, second
-    90..95  Local time
-        
-    100     Current breadcrumb label, or nil
-    110     Returns true when in frame-by-frame mode
+Special system command, where CMD_STR is a string:
 
-Audio values 16..26 are the legacy version of audio state queries 46..56. They only report on
-the current state of the audio mixer, which changes only ~20 times a second (depending on the
-host sound driver and other factors). 46..56 instead stores a history of mixer state at each
-tick to give a higher resolution estimate of the currently audible state.
+| string        | description                                               |
+| ---           | ---   |
+| "pause"       | request the pause menu be opened|
+| "reset"       | request a cart reset|
+| "go_back"     | return to the previous cart if there is one|
+| "label"       | set cart label|
+| "screen"      | save a screenshot|
+| "rec"         | set video start point|
+| "rec_frames"  | set video start point in frames mode|
+| "video"       | save a .gif to desktop|
+| "audio_rec"   | start recording audio|
+| "audio_end"   | save recorded audio to desktop (no supported from web)|
+| "shutdown"    | quit cartridge (from exported binary)|
+| "folder"      | open current working folder on the host operating system|
+| "set_filename"| set the filename for screenshots / gifs / audio recordings|
+| "set_title"   | set the host window title|
 
-EXTCMD(CMD_STR, [P1, P2])
+Some commands have optional number parameters:
 
-    Special system command, where CMD_STR is a string:
+- "video" and "screen": P1: an integer scaling factor that overrides the system setting. P2: when > 0, save to the current folder instead of to desktop
+- "audio_end" P1: when > 0, save to the current folder instead of to desktop
 
-        "pause"         request the pause menu be opened
-        "reset"         request a cart reset
-        "go_back"       return to the previous cart if there is one
-        "label"         set cart label
-        "screen"        save a screenshot
-        "rec"           set video start point
-        "rec_frames"    set video start point in frames mode
-        "video"         save a .gif to desktop
-        "audio_rec"     start recording audio
-        "audio_end"     save recorded audio to desktop (no supported from web)
-        "shutdown"      quit cartridge (from exported binary)
-        "folder"        open current working folder on the host operating system
-        "set_filename"  set the filename for screenshots / gifs / audio recordings
-        "set_title"     set the host window title
+##### Recording GIFs
 
-    Some commands have optional number parameters:
+EXTCMD("REC"), EXTCMD("VIDEO") is the same as using ctrl-8, ctrl-9 and saves a gif to the desktop using the current GIF_SCALE setting (use CONFIG GIF_SCALE to change).
 
-        "video" and "screen": P1: an integer scaling factor that overrides the system setting. 
-        P2: when > 0, save to the current folder instead of to desktop
+The two additional parameters can be used to override these defaults:
 
-        "audio_end" P1: when > 0, save to the current folder instead of to desktop
+```lua
+EXTCMD("VIDEO", 4)    -- SCALE *4 (512 X 512)
+EXTCMD("VIDEO", 0, 1) -- DEFAULT SCALING, SAVE TO USER DATA FOLDER
+```
 
-    :: Recording GIFs
+The user data folder can be opened with EXTCMD("FOLDER") and defaults to the same path as the cartridge, or {pico-8 appdata}/appdata/appname for exported binaries.
 
-        EXTCMD("REC"), EXTCMD("VIDEO") is the same as using ctrl-8, ctrl-9 and saves a gif to 
-        the desktop using the current GIF_SCALE setting (use CONFIG GIF_SCALE to change).
+Due to the nature of the gif format, all gifs are recorded at 33.3fps, and frames produced by PICO-8 are skipped or duplicated in the gif to match roughly what the user is seeing. To record exactly one frame each time @FLIP() is called, regardless of the runtime framerate or how long it took to generate the frame, use:
 
-        The two additional parameters can be used to override these defaults:
+```lua
+EXTCMD("REC_FRAMES")
+```
 
-            EXTCMD("VIDEO", 4)    -- SCALE *4 (512 X 512)
-            EXTCMD("VIDEO", 0, 1) -- DEFAULT SCALING, SAVE TO USER DATA FOLDER
-
-        The user data folder can be opened with EXTCMD("FOLDER") and defaults to the same path 
-        as the cartridge, or {pico-8 appdata}/appdata/appname for exported binaries.
-
-        Due to the nature of the gif format, all gifs are recorded at 33.3fps, and frames 
-        produced by PICO-8 are skipped or duplicated in the gif to match roughly what the user 
-        is seeing. To record exactly one frame each time @FLIP() is called, regardless of the 
-        runtime framerate or how long it took to generate the frame, use:
-
-            EXTCMD("REC_FRAMES")
-
-        The default filename for gifs (and screenshots, audio) is foo_%d, where foo is the name 
-        of the cartridge, and %d is a number starting at 0 and automatically incremented until 
-        a file of that name does not exist. Use EXTCMD("SET_FILENAME","FOO") to override that 
-        default. If the custom filename includes "%d", then the auto- incrementing number 
-        behaviour is used, but otherwise files are written even if  there is an existing file 
-        with the same name.
+The default filename for gifs (and screenshots, audio) is foo_%d, where foo is the name of the cartridge, and %d is a number starting at 0 and automatically incremented until a file of that name does not exist. Use EXTCMD("SET_FILENAME","FOO") to override that default. If the custom filename includes "%d", then the auto- incrementing number behaviour is used, but otherwise files are written even if  there is an existing file with the same name.
 
 ### Graphics
 
-PICO-8 has a fixed capacity of 128 8x8 sprites, plus another 128 that overlap with the bottom
-half of the map data ("shared data"). These 256 sprites are collectively called the sprite
-sheet, and can be thought of as a 128x128 pixel image.
+PICO-8 has a fixed capacity of 128 8x8 sprites, plus another 128 that overlap with the bottom half of the map data ("shared data"). These 256 sprites are collectively called the sprite sheet, and can be thought of as a 128x128 pixel image.
 
-All of PICO-8's drawing operations are subject to the current draw state. The draw state
-includes a camera position (for adding an offset to all coordinates), palette mapping  (for
-recolouring sprites), clipping rectangle, a drawing colour, and a fill pattern.
+All of PICO-8's drawing operations are subject to the current draw state. The draw state includes a camera position (for adding an offset to all coordinates), palette mapping  (for recolouring sprites), clipping rectangle, a drawing colour, and a fill pattern.
 
 The draw state is reset each time a program is run, or by calling @RESET().
 
 Colour indexes:
 
-```
+```text
 0  black   1  dark_blue   2  dark_purple   3  dark_green  
 4  brown   5  dark_gray   6  light_gray    7  white
 8  red     9  orange      10 yellow        11 green       
 12 blue    13 indigo      14 pink          15 peach
 ```
 
-CLIP(X, Y, W, H, [CLIP_PREVIOUS])
+#### CLIP(X, Y, W, H, [CLIP_PREVIOUS])
 
-    Sets the screen's clipping region in pixels CLIP() to reset When clip_previous is true, 
-    clip the new clipping region by the old one.
+Sets the screen's clipping region in pixels CLIP() to reset When clip_previous is true, clip the new clipping region by the old one.
 
-PSET(X, Y, [COL])
+#### PSET(X, Y, [COL])
 
-    Sets the pixel at x, y to colour index COL (0..15).
+Sets the pixel at x, y to colour index COL (0..15).
 
-    When COL is not specified, the current draw colour is used.
+When COL is not specified, the current draw colour is used.
 
-    FOR Y=0,127 DO
-        FOR X=0,127 DO
-            PSET(X, Y, X*Y/8)
-        END
+```lua
+FOR Y=0,127 DO
+    FOR X=0,127 DO
+        PSET(X, Y, X*Y/8)
     END
+END
+```
 
-PGET(X, Y)
+#### PGET(X, Y)
 
-    Returns the colour of a pixel at (X, Y), or 0 when (X, Y) is outside the clipping region.
+Returns the colour of a pixel at (X, Y), or 0 when (X, Y) is outside the clipping region.
 
-    WHILE (TRUE) DO
-        X, Y = RND(128), RND(128)
-        DX, DY = RND(4)-2, RND(4)-2
-        PSET(X, Y, PGET(DX+X, DY+Y))
-    END
+```lua
+WHILE (TRUE) DO
+    X, Y = RND(128), RND(128)
+    DX, DY = RND(4)-2, RND(4)-2
+    PSET(X, Y, PGET(DX+X, DY+Y))
+END
+```
 
-SGET(X, Y)
+#### SGET(X, Y)
 
-SSET(X, Y, [COL])
+#### SSET(X, Y, [COL])
 
-    Get or set the colour (COL) of a sprite sheet pixel.
+Get or set the colour (COL) of a sprite sheet pixel.
 
-FGET(N, [F])
+#### FGET(N, [F])
 
-FSET(N, [F], VAL)
+#### FSET(N, [F], VAL)
 
-    Get or set the value (VAL) of sprite N's flag F.
+Get or set the value (VAL) of sprite N's flag F.
 
-    F is the flag index 0..7.
+F is the flag index 0..7.
 
-    VAL is TRUE or FALSE.
+VAL is TRUE or FALSE.
 
-    The initial state of flags 0..7 are settable in the sprite editor, so can be used to create 
-    custom sprite attributes. It is also possible to draw only a subset of map tiles by 
-    providing a mask in @MAP().
+The initial state of flags 0..7 are settable in the sprite editor, so can be used to create custom sprite attributes. It is also possible to draw only a subset of map tiles by providing a mask in @MAP().
 
-    When F is omitted, all flags are retrieved/set as a single bitfield.
+When F is omitted, all flags are retrieved/set as a single bitfield.
 
-    FSET(2, 1 | 2 | 8)   -- SETS BITS 0,1 AND 3
-    FSET(2, 4, TRUE)     -- SETS BIT 4
-    PRINT(FGET(2))       -- 27 (1 | 2 | 8 | 16)
+```lua
+FSET(2, 1 | 2 | 8)   -- SETS BITS 0,1 AND 3
+FSET(2, 4, TRUE)     -- SETS BIT 4
+PRINT(FGET(2))       -- 27 (1 | 2 | 8 | 16)
+```
 
-PRINT(STR, X, Y, [COL])
+#### PRINT(STR, X, Y, [COL])
 
-PRINT(STR, [COL])
+#### PRINT(STR, [COL])
 
-    Print a string STR and optionally set the draw colour to COL.
+Print a string STR and optionally set the draw colour to COL.
 
-    Shortcut: written on a single line, ? can be used to call print without brackets: 
+Shortcut: written on a single line, ? can be used to call print without brackets:
 
-        ?"HI"
+```lua
+?"HI"
+```
 
-    When X, Y are not specified, a newline is automatically appended. This can be omitted by 
-    ending the string with an explicit termination control character:
+When X, Y are not specified, a newline is automatically appended. This can be omitted by ending the string with an explicit termination control character:
 
-        ?"THE QUICK BROWN FOX\0"
+```lua
+?"THE QUICK BROWN FOX\0"
+```
 
-    Additionally, when X, Y are not specified, printing text below 122 causes  the console to 
-    scroll. This can be disabled during runtime with POKE(0x5f36,0x40).
+Additionally, when X, Y are not specified, printing text below 122 causes  the console to scroll. This can be disabled during runtime with POKE(0x5f36,0x40).
 
-    PRINT returns the right-most x position that occurred while printing. This can be used to 
-    find out the width of some text by printing it off-screen:
+PRINT returns the right-most x position that occurred while printing. This can be used to find out the width of some text by printing it off-screen:
 
-        W = PRINT("HOGE", 0, -20) -- returns 16
+```lua
+W = PRINT("HOGE", 0, -20) -- returns 16
+```
 
-    See @{Appendix A} (P8SCII) for information about control codes and custom fonts.
+See @{Appendix A} (P8SCII) for information about control codes and custom fonts.
 
-CURSOR(X, Y, [COL])
+#### CURSOR(X, Y, [COL])
 
-    Set the cursor position.
+Set the cursor position.\
+If COL is specified, also set the current colour.
 
-    If COL is specified, also set the current colour.
+#### COLOR([COL])
 
-COLOR([COL])
+Set the current colour to be used by drawing functions.\
+If COL is not specified, the current colour is set to 6
 
-    Set the current colour to be used by drawing functions.
+#### CLS([COL])
 
-    If COL is not specified, the current colour is set to 6
+Clear the screen and reset the clipping rectangle.\
+COL defaults to 0 (black)
 
-CLS([COL])
+#### CAMERA([X, Y])
 
-    Clear the screen and reset the clipping rectangle.
+Set a screen offset of -x, -y for all drawing operations\
+CAMERA() to reset
 
-    COL defaults to 0 (black)
+#### CIRC(X, Y, R, [COL])
 
-CAMERA([X, Y])
+#### CIRCFILL(X, Y, R, [COL])
 
-    Set a screen offset of -x, -y for all drawing operations
+Draw a circle or filled circle at x,y with radius r\
+If r is negative, the circle is not drawn
 
-    CAMERA() to reset
+#### OVAL(X0, Y0, X1, Y1, [COL])
 
-CIRC(X, Y, R, [COL])
+#### OVALFILL(X0, Y0, X1, Y1, [COL])
 
-CIRCFILL(X, Y, R, [COL])
+Draw an oval that is symmetrical in x and y (an ellipse), with the given bounding     rectangle.
 
-    Draw a circle or filled circle at x,y with radius r
+#### LINE(X0, Y0, [X1, Y1, [COL]])
 
-    If r is negative, the circle is not drawn
+Draw a line from (X0, Y0) to (X1, Y1)\
+If (X1, Y1) are not given, the end of the last drawn line is used.
 
-OVAL(X0, Y0, X1, Y1, [COL])
+#### RECT(X0, Y0, X1, Y1, [COL])
 
-OVALFILL(X0, Y0, X1, Y1, [COL])
+#### RECTFILL(X0, Y0, X1, Y1, [COL])
 
-    Draw an oval that is symmetrical in x and y (an ellipse), with the given bounding 
-    rectangle.
+Draw a rectangle or filled rectangle with corners at (X0, Y0), (X1, Y1).
 
-LINE(X0, Y0, [X1, Y1, [COL]])
+#### PAL(C0, C1, [P])
 
-    Draw a line from (X0, Y0) to (X1, Y1)
+PAL() swaps colour c0 for c1 for one of three palette re-mappings (p defaults to 0):
 
-    If (X1, Y1) are not given, the end of the last drawn line is used.
+0. Draw Palette
+    The draw palette re-maps colours when they are drawn. For example, an orange flower sprite can be drawn as a red flower by setting the 9th palette value to 8:
 
-RECT(X0, Y0, X1, Y1, [COL])
+    ```lua
+    PAL(9,8)     -- draw subsequent orange (colour 9) pixels as red (colour 8) SPR(1,70,60) 
+    -- any orange pixels in the sprite will be drawn with red instead
+    ```
 
-RECTFILL(X0, Y0, X1, Y1, [COL])
+    Changing the draw palette does not affect anything that was already drawn to the screen.
 
-    Draw a rectangle or filled rectangle with corners at (X0, Y0), (X1, Y1).
+1. Display Palette
+    The display palette re-maps the whole screen when it is displayed at the end of a frame. For example, if you boot PICO-8 and then type PAL(6,14,1), you can see all of the gray (colour 6) text immediate change to pink (colour 14) even though it has already been drawn. This is useful for screen-wide effects such as fading in/out.
 
-PAL(C0, C1, [P])
+2. Secondary Palette
+    Used by @FILLP() for drawing sprites. This provides a mapping from a single 4-bit colour index to two 4-bit colour indexes.
 
-    PAL() swaps colour c0 for c1 for one of three palette re-mappings (p defaults to 0):
+PAL()  resets all palettes to system defaults (including transparency values) PAL(P) resets a particular palette (0..2) to system defaults
 
-    0: Draw Palette
+#### PAL(TBL, [P])
 
-        The draw palette re-maps colours when they are drawn. For example, an orange flower 
-        sprite can be drawn as a red flower by setting the 9th palette value to 8:
+When the first parameter of pal is a table, colours are assigned for each entry. For example, to re-map colour 12 and 14 to red:
 
-        PAL(9,8)     -- draw subsequent orange (colour 9) pixels as red (colour 8) SPR(1,70,60) 
-        -- any orange pixels in the sprite will be drawn with red instead
+```lua
+PAL({[12]=9, [14]=8})
+```
 
-        Changing the draw palette does not affect anything that was already drawn to the 
-        screen.
+Or to re-colour the whole screen shades of gray (including everything that is already drawn):
 
-    1: Display Palette
+```lua
+PAL({1,1,5,5,5,6,7,13,6,7,7,6,13,6,7,1}, 1)
+```
 
-        The display palette re-maps the whole screen when it is displayed at the end of a 
-        frame. For example, if you boot PICO-8 and then type PAL(6,14,1), you can see all of 
-        the gray (colour 6) text immediate change to pink (colour 14) even though it has 
-        already been drawn. This is useful for screen-wide effects such as fading in/out.
+Because table indexes start at 1, colour 0 is given at the end in this case.
 
-    2: Secondary Palette
-
-        Used by @FILLP() for drawing sprites. This provides a mapping from a single 4-bit 
-        colour index to two 4-bit colour indexes.
-
-    PAL()  resets all palettes to system defaults (including transparency values) PAL(P) resets 
-    a particular palette (0..2) to system defaults
-
-PAL(TBL, [P])
-
-    When the first parameter of pal is a table, colours are assigned for each entry. For 
-    example, to re-map colour 12 and 14 to red:
-
-        PAL({[12]=9, [14]=8})
-
-    Or to re-colour the whole screen shades of gray (including everything that is already 
-    drawn):
-
-        PAL({1,1,5,5,5,6,7,13,6,7,7,6,13,6,7,1}, 1)
-
-    Because table indexes start at 1, colour 0 is given at the end in this case.
-
+```lua
 PALT(C, [T])
+```
 
-    Set transparency for colour index to T (boolean) Transparency is observed by @SPR(), 
-    @SSPR(), @MAP() AND @TLINE()
+Set transparency for colour index to T (boolean) Transparency is observed by @SPR(), @SSPR(), @MAP() AND @TLINE()
 
-    PALT(8, TRUE) -- RED PIXELS NOT DRAWN IN SUBSEQUENT SPRITE/TLINE DRAW CALLS
+```lua
+PALT(8, TRUE) -- RED PIXELS NOT DRAWN IN SUBSEQUENT SPRITE/TLINE DRAW CALLS
+```
 
-    PALT() resets to default: all colours opaque except colour 0
+PALT() resets to default: all colours opaque except colour 0\
+When C is the only parameter, it is treated as a bitfield used to set all 16 values. For example: to set colours 0 and 1 as transparent:
 
-    When C is the only parameter, it is treated as a bitfield used to set all 16 values. For 
-    example: to set colours 0 and 1 as transparent:
+```lua
+PALT(0B1100000000000000)
+```
 
-    PALT(0B1100000000000000)
+#### SPR(N, X, Y, [W, H], [FLIP_X], [FLIP_Y])
 
-SPR(N, X, Y, [W, H], [FLIP_X], [FLIP_Y])
+Draw sprite N (0..255) at position X,Y\
+W (width) and H (height) are 1, 1 by default and specify how many sprites wide to blit.\
+Colour 0 drawn as transparent by default (see @PALT())\
+When FLIP_X is TRUE, flip horizontally.\
+When FLIP_Y is TRUE, flip vertically.
 
-    Draw sprite N (0..255) at position X,Y
+#### SSPR(SX, SY, SW, SH, DX, DY, [DW, DH], [FLIP_X], [FLIP_Y]]
 
-    W (width) and H (height) are 1, 1 by default and specify how many sprites wide to blit.
+Stretch an rectangle of the sprite sheet (sx, sy, sw, sh) to a destination rectangle on the screen (sx, sy, dw, dh). In both cases, the x and y values are coordinates (in pixels) of the rectangle's top left corner, with a width of w, h.\
+Colour 0 drawn as transparent by default (see @PALT())\
+dw, dh defaults to sw, sh\
+When FLIP_X is TRUE, flip horizontally.\
+When FLIP_Y is TRUE, flip vertically.
 
-    Colour 0 drawn as transparent by default (see @PALT())
+#### FILLP(P)
 
-    When FLIP_X is TRUE, flip horizontally.
+The PICO-8 fill pattern is a 4x4 2-colour tiled pattern observed by: @CIRC() @CIRCFILL() @RECT() @RECTFILL() @OVAL() @OVALFILL() @PSET() @LINE()
 
-    When FLIP_Y is TRUE, flip vertically.
+P is a bitfield in reading order starting from the highest bit. To calculate the value of P for a desired pattern, add the bit values together:
 
-SSPR(SX, SY, SW, SH, DX, DY, [DW, DH], [FLIP_X], [FLIP_Y]]
+```text
+.-----------------------.
+|32768|16384| 8192| 4096|
+|-----|-----|-----|-----|
+| 2048| 1024| 512 | 256 |
+|-----|-----|-----|-----|
+| 128 |  64 |  32 |  16 |
+|-----|-----|-----|-----|
+|  8  |  4  |  2  |  1  |
+'-----------------------'
+```
 
-    Stretch an rectangle of the sprite sheet (sx, sy, sw, sh) to a destination rectangle on the 
-    screen (sx, sy, dw, dh). In both cases, the x and y values are coordinates (in pixels) of 
-    the rectangle's top left corner, with a width of w, h.
+For example, FILLP(4+8+64+128+  256+512+4096+8192) would create a checkerboard pattern.\
+This can be more neatly expressed in binary: FILLP(0b0011001111001100).\
+The default fill pattern is 0, which means a single solid colour is drawn.\
+To specify a second colour for the pattern, use the high bits of any colour parameter:
 
-    Colour 0 drawn as transparent by default (see @PALT())
+```lua
+FILLP(0b0011010101101000)
+CIRCFILL(64,64,20, 0x4E) -- brown and pink
+```
 
-    dw, dh defaults to sw, sh
+Additional settings are given in bits 0b0.111:
 
-    When FLIP_X is TRUE, flip horizontally.
+##### 0b0.100 Transparency
 
-    When FLIP_Y is TRUE, flip vertically.
+When this bit is set, the second colour is not drawn
 
-FILLP(P)
+```lua
+-- checkboard with transparent squares
+FILLP(0b0011001111001100.1) 
+```
 
-    The PICO-8 fill pattern is a 4x4 2-colour tiled pattern observed by: @CIRC() @CIRCFILL() 
-    @RECT() @RECTFILL() @OVAL() @OVALFILL() @PSET() @LINE()
+##### 0b0.010 Apply to Sprites
 
-    P is a bitfield in reading order starting from the highest bit. To calculate the value of P 
-    for a desired pattern, add the bit values together:
+When set, the fill pattern is applied to sprites (spr, sspr, map, tline), using a colour mapping provided by the secondary palette.
 
-        .-----------------------.
-        |32768|16384| 8192| 4096|
-        |-----|-----|-----|-----|
-        | 2048| 1024| 512 | 256 |
-        |-----|-----|-----|-----|
-        | 128 |  64 |  32 |  16 |
-        |-----|-----|-----|-----|
-        |  8  |  4  |  2  |  1  |
-        '-----------------------'
+Each pixel value in the sprite (after applying the draw palette as usual) is taken to be an index into the secondary palette. Each entry in the secondary palette contains the two colours used to render the fill pattern. For example, to draw a white and red (7 and 8) checkerboard pattern for only blue pixels (colour 12) in a sprite:
 
-    For example, FILLP(4+8+64+128+  256+512+4096+8192) would create a checkerboard pattern.
+```lua
+FOR I=0,15 DO PAL(I, I+I*16, 2) END  --  all other colours map to themselves
+PAL(12, 0x87, 2)                     --  remap colour 12 in the secondary palette
+    
+FILLP(0b0011001111001100.01)         --  checkerboard palette, applied to sprites
+SPR(1, 64,64)                        --  draw the sprite
+```
 
-    This can be more neatly expressed in binary: FILLP(0b0011001111001100).
+##### 0b0.001 Apply Secondary Palette Globally
 
-    The default fill pattern is 0, which means a single solid colour is drawn.
+When set, the secondary palette mapping is also applied by all draw functions that respect fill patterns (circfill, line etc). This can be useful when used in conjunction with sprite drawing functions, so that the colour index of each sprite pixel means the same thing as the colour index supplied to the drawing functions.
 
-    To specify a second colour for the pattern, use the high bits of any colour parameter:
+```lua
+FILLP(0b0011001111001100.001)
+PAL(12, 0x87, 2)
+CIRCFILL(64,64,20,12)                -- red and white checkerboard circle
+```
 
-        FILLP(0b0011010101101000)
-        CIRCFILL(64,64,20, 0x4E) -- brown and pink
+The secondary palette mapping is applied after the regular draw palette mapping. So the following would also draw a red and white checkered circle:
 
-    Additional settings are given in bits 0b0.111:
+```lua
+PAL(3,12)
+CIRCFILL(64,64,20,3)
+```
 
-        0b0.100 Transparency
+The fill pattern can also be set by setting bits in any colour parameter:
 
-            When this bit is set, the second colour is not drawn
+```lua
+POKE(0x5F34, 1) -- sets integrated fillpattern + colour mode 
+CIRCFILL(64,64,20, 0x114E.ABCD) -- sets fill pattern to ABCD
+```
 
-            -- checkboard with transparent squares
-            FILLP(0b0011001111001100.1) 
+- bit 0x1000.0000 means the non-colour bits should be observed
+- bit 0x0700.0000 0x1 transparency, 0x2 apply to sprites, 0x4 apply secondary palette  
+- bits 0x00FF.0000 are the usual colour bits
+- bits 0x0000.FFFF are interpreted as the fill pattern
 
-        0b0.010 Apply to Sprites
+The fill pattern can be applied to sprites (spr, sspr, map, tline) using bit 0b0.01
 
-            When set, the fill pattern is applied to sprites (spr, sspr, map, tline), using a 
-            colour mapping provided by the secondary palette.
-
-            Each pixel value in the sprite (after applying the draw palette as usual) is taken 
-            to be an index into the secondary palette. Each entry in the secondary palette 
-            contains the two colours used to render the fill pattern. For example, to draw a 
-            white and red (7 and 8) checkerboard pattern for only blue pixels (colour 12) in a 
-            sprite:
-
-            FOR I=0,15 DO PAL(I, I+I*16, 2) END  --  all other colours map to themselves
-            PAL(12, 0x87, 2)                     --  remap colour 12 in the secondary palette
-                
-            FILLP(0b0011001111001100.01)         --  checkerboard palette, applied to sprites
-            SPR(1, 64,64)                        --  draw the sprite
-
-        0b0.001 Apply Secondary Palette Globally
-
-            When set, the secondary palette mapping is also applied by all draw functions that 
-            respect fill patterns (circfill, line etc). This can be useful when used in  
-            conjunction with sprite drawing functions, so that the colour index of each sprite  
-            pixel means the same thing as the colour index supplied to the drawing functions.
-
-            FILLP(0b0011001111001100.001)
-            PAL(12, 0x87, 2)
-            CIRCFILL(64,64,20,12)                -- red and white checkerboard circle
-
-            The secondary palette mapping is applied after the regular draw palette mapping. So 
-            the following would also draw a red and white checkered circle:
-
-            PAL(3,12)
-            CIRCFILL(64,64,20,3)
-
-    The fill pattern can also be set by setting bits in any colour parameter:
-
-        POKE(0x5F34, 1) -- sets integrated fillpattern + colour mode CIRCFILL(64,64,20, 
-        0x114E.ABCD) -- sets fill pattern to ABCD
-
-        -- bit  0x1000.0000 means the non-colour bits should be observed -- bit  0x0700.0000 
-        0x1 transparency, 0x2 apply to sprites, 0x4 apply secondary palette  -- bits 
-        0x00FF.0000 are the usual colour bits -- bits 0x0000.FFFF are interpreted as the fill 
-        pattern
-
-    The fill pattern can be applied to sprites (spr, sspr, map, tline) using bit 0b0.01
-
-        FILLP(0b0011001111001100.011)
+```lua
+FILLP(0b0011001111001100.011)
+```
 
 ### Table Functions
 
 With the exception of PAIRS(), the following functions and the # operator apply only to tables that are indexed starting from 1 and do not have NIL entries. All other forms of tables can  be considered as hash maps or sets, rather than arrays that have a length.
 
-ADD(TBL, VAL, [INDEX])
+#### ADD(TBL, VAL, [INDEX])
 
-    Add value VAL to the end of table TBL. Equivalent to:
+Add value VAL to the end of table TBL. Equivalent to:
 
-    TBL[#TBL + 1] = VAL
+```lua
+TBL[#TBL + 1] = VAL
+```
 
-    If index is given then the element is inserted at that position:
+If index is given then the element is inserted at that position:
 
-        FOO={}        -- CREATE EMPTY TABLE
-        ADD(FOO, 11)
-        ADD(FOO, 22)
-        PRINT(FOO[2]) -- 22
+```lua
+FOO={}        -- CREATE EMPTY TABLE
+ADD(FOO, 11)
+ADD(FOO, 22)
+PRINT(FOO[2]) -- 22
+```
 
-DEL(TBL, VAL)
+#### DEL(TBL, VAL)
 
-    Delete the first instance of value VAL in table TBL. The remaining entries are shifted left 
-    one index to avoid holes.
+Delete the first instance of value VAL in table TBL. The remaining entries are shifted left one index to avoid holes.
 
-    Note that VAL is the value of the item to be deleted, not the index into the table. (To 
-    remove an item at a particular index, use DELI instead). DEL returns the deleted item, or 
-    returns no value when nothing was deleted.
+Note that VAL is the value of the item to be deleted, not the index into the table. (To remove an item at a particular index, use DELI instead). DEL returns the deleted item, or returns no value when nothing was deleted.
 
-        A={1,10,2,11,3,12}
-        FOR ITEM IN ALL(A) DO
-            IF (ITEM < 10) THEN DEL(A, ITEM) END
-        END
-        FOREACH(A, PRINT) -- 10,11,12
-        PRINT(A[3])       -- 12
+```lua
+A={1,10,2,11,3,12}
+FOR ITEM IN ALL(A) DO
+    IF (ITEM < 10) THEN DEL(A, ITEM) END
+END
+FOREACH(A, PRINT) -- 10,11,12
+PRINT(A[3])       -- 12
+```
 
-DELI(TBL, [I])
+#### DELI(TBL, [I])
 
-    Like @DEL(), but remove the item from table TBL at index I When I is not given, the last 
-    element of the table is removed and returned.
+Like @DEL(), but remove the item from table TBL at index I When I is not given, the last element of the table is removed and returned.
 
-COUNT(TBL, [VAL])
+#### COUNT(TBL, [VAL])
 
-    Returns the length of table t (same as #TBL) When VAL is given, returns the number of 
-    instances of VAL in that table.
+Returns the length of table t (same as #TBL) When VAL is given, returns the number of instances of VAL in that table.
 
-ALL(TBL)
+#### ALL(TBL)
 
-    Used in FOR loops to iterate over all items in a table (that have a 1-based integer index),  
-    in the order they were added.
+Used in FOR loops to iterate over all items in a table (that have a 1-based integer index), in the order they were added.
 
-        T = {11,12,13}
-        ADD(T,14)
-        ADD(T,"HI")
-        FOR V IN ALL(T) DO PRINT(V) END -- 11 12 13 14 HI
-        PRINT(#T) -- 5
+```lua
+T = {11,12,13}
+ADD(T,14)
+ADD(T,"HI")
+FOR V IN ALL(T) DO PRINT(V) END -- 11 12 13 14 HI
+PRINT(#T) -- 5
+```
 
-FOREACH(TBL, FUNC)
+#### FOREACH(TBL, FUNC)
 
-    For each item in table TBL, call function FUNC with the item as a single parameter.
+For each item in table TBL, call function FUNC with the item as a single parameter.
 
-        > FOREACH({1,2,3}, PRINT)
+```lua
+FOREACH({1,2,3}, PRINT)
+```
 
-PAIRS(TBL)
+#### PAIRS(TBL)
 
-    Used in FOR loops to iterate over table TBL, providing both the key and value for each 
-    item. Unlike @ALL(), PAIRS() iterates over every item regardless of indexing scheme. Order 
-    is not guaranteed.
+Used in FOR loops to iterate over table TBL, providing both the key and value for each item. Unlike @ALL(), PAIRS() iterates over every item regardless of indexing scheme. Order is not guaranteed.
 
-        T = {["HELLO"]=3, [10]="BLAH"}
-        T.BLUE = 5;
-        FOR K,V IN PAIRS(T) DO
-            PRINT("K: "..K.."  V:"..V)
-        END
+```lua
+T = {["HELLO"]=3, [10]="BLAH"}
+T.BLUE = 5;
+FOR K,V IN PAIRS(T) DO
+    PRINT("K: "..K.."  V:"..V)
+END
+```
 
-    Output:
+Output:
 
-        K: 10  v:BLAH
-        K: HELLO  v:3
-        K: BLUE  v:5
+```text
+K: 10  v:BLAH
+K: HELLO  v:3
+K: BLUE  v:5
+```
 
 ### Input
 
-BTN([B], [PL])
+#### BTN([B], [PL])
 
-    Get button B state for player PL (default 0) 
+Get button B state for player PL (default 0)
 
-    B: 0..5: left right up down button_o button_x<br> PL: player index 0..7
+B: 0..5: left right up down button_o button_x\
+PL: player index 0..7
 
-    Instead of using a number for B, it is also possible to use a button glyph. (In the coded 
-    editor, use Shift-L R U D O X)
+Instead of using a number for B, it is also possible to use a button glyph. (In the coded editor, use Shift-L R U D O X)
 
-    If no parameters supplied, returns a bitfield of all 12 button states for player 0 & 1 // 
-    P0: bits 0..5  P1: bits 8..13
+If no parameters supplied, returns a bitfield of all 12 button states for player 0 & 1\
+P0: bits 0..5  P1: bits 8..13
 
-    Default keyboard mappings to player buttons:
-        
-        player 0: [DPAD]: cursors, [O]: Z C N   [X]: X V M
-        player 1: [DPAD]: SFED,    [O]: LSHIFT  [X]: TAB W  Q A
+Default keyboard mappings to player buttons:
 
-    Although PICO-8 accepts all button combinations, note that it is generally impossible to 
-    press both LEFT and RIGHT at the same time on a physical game controller. On some 
-    controllers, UP + LEFT/RIGHT is also awkward if [X] or [O] could be used instead of UP 
-    (e.g. to jump / accelerate).
+```text
+player 0: [DPAD]: cursors, [O]: Z C N   [X]: X V M
+player 1: [DPAD]: SFED,    [O]: LSHIFT  [X]: TAB W  Q A
+```
 
-BTNP(B, [PL])
+Although PICO-8 accepts all button combinations, note that it is generally impossible to press both LEFT and RIGHT at the same time on a physical game controller. On some controllers, UP + LEFT/RIGHT is also awkward if [X] or [O] could be used instead of UP (e.g. to jump / accelerate).
 
-    BTNP is short for "Button Pressed"; Instead of being true when a button is held down,  BTNP 
-    returns true when a button is down AND it was not down the last frame. It also repeats 
-    after 15 frames, returning true every 4 frames after that (at 30fps -- double that at 
-    60fps). This can be used for things like menu navigation or grid-wise player  movement.
+#### BTNP(B, [PL])
 
-    The state that BTNP reads is reset at the start of each call to @_UPDATE or @_UPDATE60, so 
-    it is preferable to use BTNP from inside one of those functions.
+BTNP is short for "Button Pressed"; Instead of being true when a button is held down,  BTNP returns true when a button is down AND it was not down the last frame. It also repeats after 15 frames, returning true every 4 frames after that (at 30fps -- double that at 60fps). This can be used for things like menu navigation or grid-wise player  movement.
 
-    Custom delays (in frames @ 30fps) can be set by poking the following memory addresses:
+The state that BTNP reads is reset at the start of each call to @_UPDATE or @_UPDATE60, so it is preferable to use BTNP from inside one of those functions.
 
-    POKE(0X5F5C, DELAY) -- SET THE INITIAL DELAY BEFORE REPEATING. 255 MEANS NEVER REPEAT.
-    POKE(0X5F5D, DELAY) -- SET THE REPEATING DELAY.
+Custom delays (in frames @ 30fps) can be set by poking the following memory addresses:
 
-    In both cases, 0 can be used for the default behaviour (delays 15 and 4)
+```lua
+POKE(0X5F5C, DELAY) -- SET THE INITIAL DELAY BEFORE REPEATING. 255 MEANS NEVER REPEAT.
+POKE(0X5F5D, DELAY) -- SET THE REPEATING DELAY.
+```
+
+In both cases, 0 can be used for the default behaviour (delays 15 and 4)
 
 ### Audio
 
-SFX(N, [CHANNEL], [OFFSET], [LENGTH])
+#### SFX(N, [CHANNEL], [OFFSET], [LENGTH])
 
-    Play sfx N (0..63) on CHANNEL (0..3) from note OFFSET (0..31 in notes) for LENGTH notes.
+Play sfx N (0..63) on CHANNEL (0..3) from note OFFSET (0..31 in notes) for LENGTH notes.
 
-    Using negative CHANNEL values have special meanings:
+Using negative CHANNEL values have special meanings:
+| channel no.   | description   |
+| ---           | ---           |
+| CHANNEL -1    | (default) to automatically choose a channel that is not being used|
+| CHANNEL -2    | to stop the given sound from playing on any channel|
 
-    CHANNEL -1: (default) to automatically choose a channel that is not being used
-    CHANNEL -2: to stop the given sound from playing on any channel
+N can be a command for the given CHANNEL (or all channels when CHANNEL < 0):
+| sfx no.       | description   |
+| ---           | ---           |
+| N -1          | to stop sound on that channel |
+| N -2          | to release sound on that channel from looping|
 
-    N can be a command for the given CHANNEL (or all channels when CHANNEL < 0):
+```lua
+SFX(3)    --  PLAY SFX 3
+SFX(3,2)  --  PLAY SFX 3 ON CHANNEL 2
+SFX(3,-2) --  STOP SFX 3 FROM PLAYING ON ANY CHANNEL
+SFX(-1,2) --  STOP WHATEVER IS PLAYING ON CHANNEL 2
+SFX(-2,2) --  RELEASE LOOPING ON CHANNEL 2
+SFX(-1)   --  STOP ALL SOUNDS ON ALL CHANNELS
+SFX(-2)   --  RELEASE LOOPING ON ALL CHANNELS
+```
 
-    N -1: to stop sound on that channel
-    N -2: to release sound on that channel from looping
+#### MUSIC(N, [FADE_LEN], [CHANNEL_MASK])
 
-    SFX(3)    --  PLAY SFX 3
-    SFX(3,2)  --  PLAY SFX 3 ON CHANNEL 2
-    SFX(3,-2) --  STOP SFX 3 FROM PLAYING ON ANY CHANNEL
-    SFX(-1,2) --  STOP WHATEVER IS PLAYING ON CHANNEL 2
-    SFX(-2,2) --  RELEASE LOOPING ON CHANNEL 2
-    SFX(-1)   --  STOP ALL SOUNDS ON ALL CHANNELS
-    SFX(-2)   --  RELEASE LOOPING ON ALL CHANNELS
+Play music starting from pattern N (0..63)
+N -1 to stop music
 
-MUSIC(N, [FADE_LEN], [CHANNEL_MASK])
+FADE_LEN is in ms (default: 0). So to fade pattern 0 in over 1 second:
 
-    Play music starting from pattern N (0..63)
-    N -1 to stop music
-        
-    FADE_LEN is in ms (default: 0). So to fade pattern 0 in over 1 second:
+```lua
+MUSIC(0, 1000)
+```
 
-    MUSIC(0, 1000)
+CHANNEL_MASK specifies which channels to reserve for music only. For example, to play only on channels 0..2:
 
-    CHANNEL_MASK specifies which channels to reserve for music only. For example, to play only 
-    on channels 0..2:
+```lua
+MUSIC(0, NIL, 7) -- 1 | 2 | 4
+```
 
-    MUSIC(0, NIL, 7) -- 1 | 2 | 4
-
-    Reserved channels can still be used to play sound effects on, but only when that channel 
-    index is explicitly requested by @SFX().
+Reserved channels can still be used to play sound effects on, but only when that channel index is explicitly requested by @SFX().
 
 ### Map
 
-The PICO-8 map is a 128x32 grid of 8-bit cells, or 128x64 when using the shared memory. When  
-using the map editor, the meaning of each cell is taken to be an index into the sprite sheet  
-(0..255). However, it can instead be used as a general block of data.
+The PICO-8 map is a 128x32 grid of 8-bit cells, or 128x64 when using the shared memory. When using the map editor, the meaning of each cell is taken to be an index into the sprite sheet (0..255). However, it can instead be used as a general block of data.
 
-MGET(X, Y)
+#### MGET(X, Y)
 
-MSET(X, Y, VAL)
+#### MSET(X, Y, VAL)
 
-    Get or set map value (VAL) at X,Y
+Get or set map value (VAL) at X,Y\
+When X,Y is outside of the map range, MSET returns 0.
 
-    When X,Y is outside of the map range, MSET returns 0.
+#### MAP([CELL_X], CELL_Y, [SX, SY], [CELL_W, CELL_H], [LAYERS])
 
-MAP([CELL_X], CELL_Y, [SX, SY], [CELL_W, CELL_H], [LAYERS])
+Draw section of map (starting from CELL_X, CELL_Y) at screen position SX, SY (pixels).
 
-    Draw section of map (starting from CELL_X, CELL_Y) at screen position SX, SY (pixels).
+To draw a 4x2 blocks of cells starting from 0,0 in the map, to the screen at 20,20:
 
-    To draw a 4x2 blocks of cells starting from 0,0 in the map, to the screen at 20,20:
+```lua
+MAP(0, 0, 20, 20, 4, 2) 
+```
 
-    MAP(0, 0, 20, 20, 4, 2) 
+CELL_W and CELL_H default to 128,32 (the top half of the map). To draw the whole map, including the bottom half shared with the sprite sheet, use:
 
-    CELL_W and CELL_H default to 128,32 (the top half of the map). To draw the whole map, 
-    including the bottom half shared with the sprite sheet, use:
+```lua
+MAP(0, 0, 0, 0, 128, 64)
+```
 
-    MAP(0, 0, 0, 0, 128, 64)
+MAP() is often used in conjunction with CAMERA(). To draw the map so that a player object (at PL.X in PL.Y in pixels) is centered:
 
-    MAP() is often used in conjunction with CAMERA(). To draw the map so that a player object 
-    (at PL.X in PL.Y in pixels) is centered:
+```lua
+CAMERA(PL.X - 64, PL.Y - 64)
+MAP()
+```
 
-    CAMERA(PL.X - 64, PL.Y - 64
-    MAP()
+LAYERS is a bitfield. When given, only sprites with matching sprite flags are drawn. For example, when LAYERS is 0x5, only sprites with flag 0 and 2 are drawn.
 
-    LAYERS is a bitfield. When given, only sprites with matching sprite flags are drawn. For 
-    example, when LAYERS is 0x5, only sprites with flag 0 and 2 are drawn.
+Sprite 0 is taken to mean "empty" and is not drawn. To disable this behaviour, use:
 
-    Sprite 0 is taken to mean "empty" and is not drawn. To disable this behaviour, use: 
-    POKE(0x5F36, 0x8)
+```lua
+POKE(0x5F36, 0x8)
+```
 
-TLINE(X0, Y0, X1, Y1, MX, MY, [MDX, MDY], [LAYERS])
+#### TLINE(X0, Y0, X1, Y1, MX, MY, [MDX, MDY], [LAYERS])
 
-    Draw a textured line from (X0,Y0) to (X1,Y1), sampling colour values from the map. When 
-    LAYERS is specified, only sprites with matching flags are drawn (similar to MAP()) 
+Draw a textured line from (X0,Y0) to (X1,Y1), sampling colour values from the map. When LAYERS is specified, only sprites with matching flags are drawn (similar to MAP())
 
-    MX, MY are map coordinates to sample from, given in tiles. Colour values are sampled from 
-    the 8x8 sprite present at each map tile. For example:
+MX, MY are map coordinates to sample from, given in tiles. Colour values are sampled from the 8x8 sprite present at each map tile. For example:
 
-        2.0, 1.0  means the top left corner of the sprite at position 2,1 on the map
-        2.5, 1.5  means pixel (4,4) of the same sprite
+```text
+2.0, 1.0  means the top left corner of the sprite at position 2,1 on the map
+2.5, 1.5  means pixel (4,4) of the same sprite
+```
 
-    MDX, MDY are deltas added to mx, my after each pixel is drawn. (Defaults to 0.125, 0)
+MDX, MDY are deltas added to mx, my after each pixel is drawn. (Defaults to 0.125, 0)
 
-    The map coordinates (MX, MY) are masked by values calculated by subtracting 0x0.0001 from 
-    the values at address 0x5F38 and 0x5F39. In simpler terms, this means you can loop a 
-    section of the map by poking the width and height you want to loop within, as  long as they 
-    are powers of 2 (2,4,8,16..)
+The map coordinates (MX, MY) are masked by values calculated by subtracting 0x0.0001 from the values at address 0x5F38 and 0x5F39. In simpler terms, this means you can loop a section of the map by poking the width and height you want to loop within, as  long as they are powers of 2 (2,4,8,16..)
 
-    For example, to loop every 8 tiles horizontally, and every 4 tiles vertically:
+For example, to loop every 8 tiles horizontally, and every 4 tiles vertically:
 
-        POKE(0x5F38, 8)
-        POKE(0x5F39, 4)
-        TLINE(...)
+```lua
+POKE(0x5F38, 8)
+POKE(0x5F39, 4)
+TLINE(...)
+```
 
-    The default values (0,0) gives a masks of 0xff.ffff, which means that the samples will loop 
-    every 256 tiles.
+The default values (0,0) gives a masks of 0xff.ffff, which means that the samples will loop every 256 tiles.
 
-    An offset to sample from (also in tiles) can also be specified at addresses 0x5f3a, 0x5f3b:
+An offset to sample from (also in tiles) can also be specified at addresses 0x5f3a, 0x5f3b:
 
-        POKE(0x5F3A, OFFSET_X)
-        POKE(0x5F3B, OFFSET_Y)
+```lua
+POKE(0x5F3A, OFFSET_X)
+POKE(0x5F3B, OFFSET_Y)
+```
 
-    Sprite 0 is taken to mean "empty" and not drawn. To disable this behaviour, use: 
-    POKE(0x5F36, 0x8)
+Sprite 0 is taken to mean "empty" and not drawn. To disable this behaviour, use:
+
+```lua
+POKE(0x5F36, 0x8)
+```
 
 ### Memory
 
 PICO-8 has 3 types of memory:
 
-    1. Base RAM (64k): see layout below. Access with PEEK() POKE() MEMCPY() MEMSET()
-    2. Cart ROM (32k): same layout as base ram until 0x4300
-    3. Lua RAM (2MB): compiled program + variables
+1. Base RAM (64k): see layout below. Access with PEEK() POKE() MEMCPY() MEMSET()
+2. Cart ROM (32k): same layout as base ram until 0x4300
+3. Lua RAM (2MB): compiled program + variables
 
-    Technical note: While using the editor, the data being modified is in cart rom, but api 
-    functions such as @SPR()  and @SFX() only operate on base ram. PICO-8 automatically copies 
-    cart rom to base ram (i.e. calls @RELOAD()) in 3 cases:<br> 1. When a cartridge is 
-    loaded<br> 2. When a cartridge is run<br> 3. When exiting any of the editor modes // can 
-    turn off with: poke(0x5f37,1)<br>
+Technical note: While using the editor, the data being modified is in cart rom, but api functions such as @SPR()  and @SFX() only operate on base ram. PICO-8 automatically copies cart rom to base ram (i.e. calls @RELOAD()) in 3 cases:
 
-:: Base RAM Memory Layout
+1. When a cartridge is loaded
+2. When a cartridge is run
+3. When exiting any of the editor modes (can turn off with: poke(0x5f37,1))
 
-    0X0    GFX
-    0X1000 GFX2/MAP2 (SHARED)
-    0X2000 MAP
-    0X3000 GFX FLAGS
-    0X3100 SONG
-    0X3200 SFX
-    0X4300 USER DATA
-    0X5600 CUSTOM FONT (IF ONE IS DEFINED)
-    0X5E00 PERSISTENT CART DATA (256 BYTES)
-    0X5F00 DRAW STATE
-    0X5F40 HARDWARE STATE
-    0X5F80 GPIO PINS (128 BYTES)
-    0X6000 SCREEN (8K)
-    0x8000 USER DATA
+#### Base RAM Memory Layout
 
-    User data has no particular meaning and can be used for anything via @MEMCPY(), @PEEK() & 
-    @POKE(). Persistent cart data is mapped to 0x5e00..0x5eff but only stored if @CARTDATA() 
-    has been called. Colour format (gfx/screen) is 2 pixels per byte: low bits encode the left 
-    pixel of each pair. Map format is one byte per cel, where each byte normally encodes a 
-    sprite index.
+| address   | content                   |
+| ---       | ---                       |
+| 0X0       | GFX|
+| 0X1000    | GFX2/MAP2 (SHARED)|
+| 0X2000    | MAP|
+| 0X3000    | GFX FLAGS|
+| 0X3100    | SONG|
+| 0X3200    | SFX|
+| 0X4300    | USER DATA|
+| 0X5600    | CUSTOM FONT (IF ONE IS DEFINED)|
+| 0X5E00    | PERSISTENT CART DATA (256 BYTES)|
+| 0X5F00    | DRAW STATE|
+| 0X5F40    | HARDWARE STATE|
+| 0X5F80    | GPIO PINS (128 BYTES)|
+| 0X6000    | SCREEN (8K)|
+| 0x8000    | USER DATA|
 
-:: Remapping Graphics and Map Data
+User data has no particular meaning and can be used for anything via @MEMCPY(), @PEEK() & @POKE(). Persistent cart data is mapped to 0x5e00..0x5eff but only stored if @CARTDATA() has been called. Colour format (gfx/screen) is 2 pixels per byte: low bits encode the left pixel of each pair. Map format is one byte per cel, where each byte normally encodes a sprite index.
 
-    The GFX, MAP and SCREEN memory areas can be reassigned by setting values at the following 
-    addresses:
+#### Remapping Graphics and Map Data
 
-    0X5F54 GFX:    can be 0x00 (default) or 0x60 (use the screen memory as the spritesheet)
-    0X5F55 SCREEN: can be 0x60 (default) or 0x00 (use the spritesheet as screen memory)
-    0X5F56 MAP:    can be 0x20 (default) or 0x10..0x2f, or 0x80 and above.
-    0X5F57 MAP SIZE: map width. 0 means 256. Defaults to 128.
+The GFX, MAP and SCREEN memory areas can be reassigned by setting values at the following addresses:
+| address   | name      | description |
+| ---       | ---       | ---         |  
+| 0X5F54    | GFX       | can be 0x00 (default) or 0x60 (use the screen memory as the spritesheet)|
+| 0X5F55    | SCREEN    | can be 0x60 (default) or 0x00 (use the spritesheet as screen memory)|
+| 0X5F56    | MAP       | can be 0x20 (default) or 0x10..0x2f, or 0x80 and above.|
+| 0X5F57    | MAP SIZE  | map width. 0 means 256. Defaults to 128.|
 
-    Addresses can be expressed in 256 byte increments. So 0x20 means 0x2000, 0x21 means 0x2100 
-    etc. Map addresses 0x30..0x3f are taken to mean 0x10..0x1f (shared memory area) Map data 
-    can only be contained inside the memory regions 0x1000..0x2fff, 0x8000..0xffff, and  the 
-    map height is determined to be the largest possible size that fits in the given region.
+Addresses can be expressed in 256 byte increments. So 0x20 means 0x2000, 0x21 means 0x2100 etc. Map addresses 0x30..0x3f are taken to mean 0x10..0x1f (shared memory area) Map data can only be contained inside the memory regions 0x1000..0x2fff, 0x8000..0xffff, and  the map height is determined to be the largest possible size that fits in the given region.
 
-PEEK(ADDR, [N])
+#### PEEK(ADDR, [N])
 
-    Read a byte from an address in base ram. If N is specified, PEEK() returns that number of 
-    results (max: 8192). For example, to read the first 2 bytes of video memory:
+Read a byte from an address in base ram. If N is specified, PEEK() returns that number of     results (max: 8192). For example, to read the first 2 bytes of video memory:
 
-        A, B = PEEK(0x6000, 2)
+```lua
+A, B = PEEK(0x6000, 2)
+```
 
-POKE(ADDR, VAL1, VAL2, ...)
+#### POKE(ADDR, VAL1, VAL2, ...)
 
-    Write one or more bytes to an address in base ram. If more than one parameter is provided, 
-    they are written sequentially (max: 8192).
+Write one or more bytes to an address in base ram. If more than one parameter is provided, they are written sequentially (max: 8192).
 
-PEEK2(ADDR)
+#### PEEK2(ADDR)
 
-POKE2(ADDR, VAL)
+#### POKE2(ADDR, VAL)
 
-PEEK4(ADDR)
+#### PEEK4(ADDR)
 
-POKE4(ADDR, VAL)
+#### POKE4(ADDR, VAL)
 
-    16-bit and 32-bit versions of PEEK and POKE. Read and write one number (VAL) in 
-    little-endian format:
+16-bit and 32-bit versions of PEEK and POKE. Read and write one number (VAL) in little-endian format:
 
-        16 bit: 0xffff.0000
-        32 bit: 0xffff.ffff
+```text
+16 bit: 0xffff.0000
+32 bit: 0xffff.ffff
+```
 
-    ADDR does not need to be aligned to 2 or 4-byte boundaries.
+ADDR does not need to be aligned to 2 or 4-byte boundaries.
 
-Alternatively, the following operators can be used to peek (but not poke), and are slightly
-faster:
+Alternatively, the following operators can be used to peek (but not poke), and are slightly faster:
 
-    @ADDR  -- PEEK(ADDR)
-    %ADDR  -- PEEK2(ADDR)
-    $ADDR  -- PEEK4(ADDR)
+```lua
+@ADDR  -- PEEK(ADDR)
+%ADDR  -- PEEK2(ADDR)
+$ADDR  -- PEEK4(ADDR)
+```
 
-MEMCPY(DEST_ADDR, SOURCE_ADDR, LEN)
+#### MEMCPY(DEST_ADDR, SOURCE_ADDR, LEN)
 
-    Copy LEN bytes of base ram from source to dest. Sections can be overlapping
+Copy LEN bytes of base ram from source to dest. Sections can be overlapping
 
-RELOAD(DEST_ADDR, SOURCE_ADDR LEN, [FILENAME])
+#### RELOAD(DEST_ADDR, SOURCE_ADDR LEN, [FILENAME])
 
-    Same as MEMCPY, but copies from cart rom.
+Same as MEMCPY, but copies from cart rom.
 
-    The code section ( >= 0x4300) is protected and can not be read.
+The code section ( >= 0x4300) is protected and can not be read.
 
-    If filename specified, load data from a separate cartridge. In this case, the cartridge 
-    must be local (BBS carts can not be read in this way).
+If filename specified, load data from a separate cartridge. In this case, the cartridge must be local (BBS carts can not be read in this way).
 
-CSTORE(DEST_ADDR, SOURCE_ADDR, LEN, [FILENAME])
+#### CSTORE(DEST_ADDR, SOURCE_ADDR, LEN, [FILENAME])
 
-    Same as memcpy, but copies from base ram to cart rom.
+Same as memcpy, but copies from base ram to cart rom.
 
-    CSTORE() is equivalent to CSTORE(0, 0, 0x4300)
+CSTORE() is equivalent to CSTORE(0, 0, 0x4300)
 
-    The code section ( >= 0x4300) is protected and can not be written to.
+The code section ( >= 0x4300) is protected and can not be written to.
 
-    If FILENAME is specified, the data is written directly to that cartridge on disk. Up to 64 
-    cartridges can be written in one session. See @{Cartridge Data} for more information.
+If FILENAME is specified, the data is written directly to that cartridge on disk. Up to 64 cartridges can be written in one session. See @{Cartridge Data} for more information.
 
-MEMSET(DEST_ADDR, VAL, LEN)
+#### MEMSET(DEST_ADDR, VAL, LEN)
 
-    Write the 8-bit value VAL into memory starting at DEST_ADDR, for LEN bytes.
+Write the 8-bit value VAL into memory starting at DEST_ADDR, for LEN bytes.
 
-    For example, to fill half of video memory with 0xC8:
+For example, to fill half of video memory with 0xC8:
 
-    > MEMSET(0x6000, 0xC8, 0x1000)
+```lua
+> MEMSET(0x6000, 0xC8, 0x1000)
+```
 
 ### Math
 
-MAX(X, Y)
+#### MAX(X, Y)
 
-MIN(X, Y)
+#### MIN(X, Y)
 
-MID(X, Y, Z)
+#### MID(X, Y, Z)
 
-    Returns the maximum, minimum, or middle value of parameters
+Returns the maximum, minimum, or middle value of parameters
 
-    > ?MID(7,5,10) -- 7
+```lua
+?MID(7,5,10) -- 7
+```
 
-FLR(X)
+#### FLR(X)
 
-    > ?FLR ( 4.1) -->  4  
-    > ?FLR (-2.3) --> -3
+```lua
+?FLR ( 4.1) -->  4  
+?FLR (-2.3) --> -3
+```
 
-CEIL(X)
+#### CEIL(X)
 
-    Returns the closest integer that is equal to or below x
+Returns the closest integer that is equal to or below x
 
-    > ?CEIL( 4.1) -->  5
-    > ?CEIL(-2.3) --> -2
+```lua
+?CEIL( 4.1) -->  5
+?CEIL(-2.3) --> -2
+```
 
-COS(X)
+#### COS(X)
 
-SIN(X)
+#### SIN(X)
 
-    Returns the cosine or sine of x, where 1.0 means a full turn. For example, to animate a 
-    dial that turns once every second:
+Returns the cosine or sine of x, where 1.0 means a full turn. For example, to animate a dial that turns once every second:
 
-    FUNCTION _DRAW()
-        CLS()
-        CIRC(64, 64, 20, 7)
-        X = 64 + COS(T()) * 20
-        Y = 64 + SIN(T()) * 20
-        LINE(64, 64, X, Y) 
+```lua
+FUNCTION _DRAW()
+    CLS()
+    CIRC(64, 64, 20, 7)
+    X = 64 + COS(T()) * 20
+    Y = 64 + SIN(T()) * 20
+    LINE(64, 64, X, Y) 
+END
+```
+
+PICO-8's SIN() returns an inverted result to suit screenspace (where Y means "DOWN", as opposed  to mathematical diagrams where Y typically means "UP").
+
+```lua
+ SIN(0.25) -- RETURNS -1
+```
+
+To get conventional radian-based trig functions without the y inversion,  paste the following snippet near the start of your program:
+
+```lua
+P8COS = COS FUNCTION COS(ANGLE) RETURN P8COS(ANGLE/(3.1415*2)) END
+P8SIN = SIN FUNCTION SIN(ANGLE) RETURN -P8SIN(ANGLE/(3.1415*2)) END
+```
+
+#### ATAN2(DX, DY)
+
+Converts DX, DY into an angle from 0..1
+
+As with cos/sin, angle is taken to run anticlockwise in screenspace. For example:
+
+```lua
+?ATAN(0, -1) -- RETURNS 0.25
+```
+
+ATAN2 can be used to find the direction between two points:
+
+```lua
+X=20 Y=30
+FUNCTION _UPDATE()
+    IF (BTN(0)) X-=2
+    IF (BTN(1)) X+=2
+    IF (BTN(2)) Y-=2
+    IF (BTN(3)) Y+=2 
+END
+    
+FUNCTION _DRAW()
+    CLS()
+    CIRCFILL(X,Y,2,14)
+    CIRCFILL(64,64,2,7)
+        
+    A=ATAN2(X-64, Y-64)
+    PRINT("ANGLE: "..A)
+    LINE(64,64,
+        64+COS(A)*10,
+        64+SIN(A)*10,7)
+END
+```
+
+#### SQRT(X)
+
+Return the square root of x
+
+#### ABS(X)
+
+Returns the absolute (positive) value of x
+
+#### RND(X)
+
+Returns a random number n, where 0 <= n < x
+
+If you want an integer, use flr(rnd(x)). If x is an array-style table, return a random element between table[1] and table[#table].
+
+#### SRAND(X)
+
+Sets the random number seed. The seed is automatically randomized on cart startup.
+
+```lua
+FUNCTION _DRAW()
+    CLS()
+    SRAND(33)
+    FOR I=1,100 DO
+        PSET(RND(128),RND(128),7)
     END
+END
+```
 
-    PICO-8's SIN() returns an inverted result to suit screenspace (where Y means "DOWN", as 
-    opposed  to mathematical diagrams where Y typically means "UP").
+#### Bitwise Operations
 
-    > SIN(0.25) -- RETURNS -1
+Bitwise operations are similar to logical expressions, except that they work at the bit level.
 
-    To get conventional radian-based trig functions without the y inversion,  paste the 
-    following snippet near the start of your program:
+Say you have two numbers (written here in binary using the "0b" prefix):
 
-    P8COS = COS FUNCTION COS(ANGLE) RETURN P8COS(ANGLE/(3.1415*2)) END
-    P8SIN = SIN FUNCTION SIN(ANGLE) RETURN -P8SIN(ANGLE/(3.1415*2)) END
+```lua
+X = 0b1010
+Y = 0b0110
+```
 
-ATAN2(DX, DY)
+A bitwise AND will give you bits set when the corresponding bits in X /and/ Y are both set
 
-    Converts DX, DY into an angle from 0..1
+```lua
+PRINT(BAND(X,Y)) -- RESULT:0B0010 (2 IN DECIMAL)
+```
 
-    As with cos/sin, angle is taken to run anticlockwise in screenspace. For example:
+There are 9 bitwise functions available in PICO-8:
 
-        > ?ATAN(0, -1) -- RETURNS 0.25
+```lua
+BAND(X, Y) -- BOTH BITS ARE SET
+BOR(X, Y)  -- EITHER BIT IS SET
+BXOR(X, Y) -- EITHER BIT IS SET, BUT NOT BOTH OF THEM
+BNOT(X)    -- EACH BIT IS NOT SET
+SHL(X, N)  -- SHIFT LEFT N BITS (ZEROS COME IN FROM THE RIGHT)
+SHR(X, N)  -- ARITHMETIC RIGHT SHIFT (THE LEFT-MOST BIT STATE IS DUPLICATED)
+LSHR(X, N) -- LOGICAL RIGHT SHIFT (ZEROS COMES IN FROM THE LEFT)
+ROTL(X, N) -- ROTATE ALL BITS IN X LEFT BY N PLACES
+ROTR(X, N) -- ROTATE ALL BITS IN X RIGHT BY N PLACES
+```
 
-    ATAN2 can be used to find the direction between two points:
+Operator versions are also available: & | ^^ ~ << >> >>> <<> >><
 
-        X=20 Y=30
-        FUNCTION _UPDATE()
-            IF (BTN(0)) X-=2
-            IF (BTN(1)) X+=2
-            IF (BTN(2)) Y-=2
-            IF (BTN(3)) Y+=2 
-        END
-            
-        FUNCTION _DRAW()
-            CLS()
-            CIRCFILL(X,Y,2,14)
-            CIRCFILL(64,64,2,7)
-                
-            A=ATAN2(X-64, Y-64)
-            PRINT("ANGLE: "..A)
-            LINE(64,64,
-                64+COS(A)*10,
-                64+SIN(A)*10,7)
-        END
+For example: PRINT(67 & 63) -- result:3  equivalent to BAND(67,63)
 
-SQRT(X)
+Operators are slightly faster than their corresponding functions. They behave exactly the same, except that if any operands are not numbers the result is a runtime error (the function versions instead default to a value of 0).
 
-    Return the square root of x
+#### Integer Division
 
-ABS(X)
+Integer division can be performed with a \
 
-    Returns the absolute (positive) value of x
-
-RND(X)
-
-    Returns a random number n, where 0 <= n < x
-
-    If you want an integer, use flr(rnd(x)). If x is an array-style table, return a random 
-    element between table[1] and table[#table].
-
-SRAND(X)
-
-    Sets the random number seed. The seed is automatically randomized on cart startup.
-
-    FUNCTION _DRAW()
-        CLS()
-        SRAND(33)
-        FOR I=1,100 DO
-            PSET(RND(128),RND(128),7)
-        END
-    END
-
-:: Bitwise Operations
-
-    Bitwise operations are similar to logical expressions, except that they work at the bit 
-    level.
-
-    Say you have two numbers (written here in binary using the "0b" prefix): 
-
-        X = 0b1010
-        Y = 0b0110
-
-    A bitwise AND will give you bits set when the corresponding bits in X /and/ Y are both set
-
-    > PRINT(BAND(X,Y)) -- RESULT:0B0010 (2 IN DECIMAL)
-
-    There are 9 bitwise functions available in PICO-8:
-
-        BAND(X, Y) -- BOTH BITS ARE SET
-        BOR(X, Y)  -- EITHER BIT IS SET
-        BXOR(X, Y) -- EITHER BIT IS SET, BUT NOT BOTH OF THEM
-        BNOT(X)    -- EACH BIT IS NOT SET
-        SHL(X, N)  -- SHIFT LEFT N BITS (ZEROS COME IN FROM THE RIGHT)
-        SHR(X, N)  -- ARITHMETIC RIGHT SHIFT (THE LEFT-MOST BIT STATE IS DUPLICATED)
-        LSHR(X, N) -- LOGICAL RIGHT SHIFT (ZEROS COMES IN FROM THE LEFT)
-        ROTL(X, N) -- ROTATE ALL BITS IN X LEFT BY N PLACES
-        ROTR(X, N) -- ROTATE ALL BITS IN X RIGHT BY N PLACES
-
-    Operator versions are also available: & | ^^ ~ << >> >>> <<> >><
-
-    For example: PRINT(67 & 63) -- result:3  equivalent to BAND(67,63)
-
-    Operators are slightly faster than their corresponding functions. They behave exactly the 
-    same, except that if any operands are not numbers the result is a runtime error (the 
-    function versions instead default to a value of 0).
-
-:: Integer Division
-
-    Integer division can be performed with a \
-
-    > PRINT(9\2) -- RESULT:4  EQUIVALENT TO FLR(9/2)
+```lua
+PRINT(9\2) -- RESULT:4  EQUIVALENT TO FLR(9/2)
+```
 
 ### Custom Menu Items
 
-MENUITEM(INDEX, [LABEL], [CALLBACK])
+#### MENUITEM(INDEX, [LABEL], [CALLBACK])
 
-    Add an extra item to the pause menu
+Add an extra item to the pause menu
 
-    Index should be 1..5 and determines the order each menu item is displayed label should be a 
-    string up to 16 characters long callback is a function called when the item is selected by 
-    the users
+Index should be 1..5 and determines the order each menu item is displayed label should be a string up to 16 characters long callback is a function called when the item is selected by the users.
 
-    When no label or function is supplied, the menu item is removed
+When no label or function is supplied, the menu item is removed
 
-    MENUITEM(1, "RESTART PUZZLE",
-        FUNCTION() RESET_PUZZLE() SFX(10) END
-    )
+```lua
+MENUITEM(1, "RESTART PUZZLE",
+    FUNCTION() RESET_PUZZLE() SFX(10) END
+)
+```
 
-    If the callback returns true, the pause menu remains open. The callback takes a single 
-    parameter that is a bitfield of L,R,X button presses
+If the callback returns true, the pause menu remains open. The callback takes a single parameter that is a bitfield of L,R,X button presses
 
-    MENUITEM(1, "FOO", 
-        FUNCTION(B) IF (B&1 > 0) THEN PRINTH("LEFT WAS PRESSED") END END
-    )
+```lua
+MENUITEM(1, "FOO", 
+    FUNCTION(B) IF (B&1 > 0) THEN PRINTH("LEFT WAS PRESSED") END END
+)
+```
 
 ### Strings and Type Conversion
 
@@ -2169,95 +2140,105 @@ When used as part of an arithmetic expression, string values are converted to nu
 PRINT(2+"3")   --> 5
 ```
 
-TOSTR(VAL, [FORMAT_FLAGS])
+#### TOSTR(VAL, [FORMAT_FLAGS])
 
-    Convert VAL to a string.
+Convert VAL to a string.
 
-    FORMAT_FLAGS is a bitfield:
+FORMAT_FLAGS is a bitfield:
 
-        0x1: Write the raw hexadecimal value of numbers, functions or tables.
-        0x2: Write VAL as a signed 32-bit integer by shifting it left by 16 bits.
+0x1: Write the raw hexadecimal value of numbers, functions or tables.\
+0x2: Write VAL as a signed 32-bit integer by shifting it left by 16 bits.
 
-    TOSTR(NIL) returns "[nil]"
+```lua
+TOSTR(NIL) returns "[nil]"
 
-    TOSTR() returns ""
+TOSTR() returns ""
 
-    TOSTR(17)       -- "17"
-    TOSTR(17,0x1)   -- "0x0011.0000"
-    TOSTR(17,0x3)   -- "0x00110000"
-    TOSTR(17,0x2)   -- "1114112"
+TOSTR(17)       -- "17"
+TOSTR(17,0x1)   -- "0x0011.0000"
+TOSTR(17,0x3)   -- "0x00110000"
+TOSTR(17,0x2)   -- "1114112"
+```
 
-TONUM(VAL, [FORMAT_FLAGS])
+#### TONUM(VAL, [FORMAT_FLAGS])
 
-    Converts VAL to a number.
+Converts VAL to a number.
 
-    TONUM("17.5")  -- 17.5
-    TONUM(17.5)    -- 17.5
-    TONUM("HOGE")  -- NO RETURN VALUE
+```lua
+TONUM("17.5")  -- 17.5
+TONUM(17.5)    -- 17.5
+TONUM("HOGE")  -- NO RETURN VALUE
+```
 
-    FORMAT_FLAGS is a bitfield:
+FORMAT_FLAGS is a bitfield:
 
-        0x1: Read the string as written in (unsigned, integer) hexadecimal without the "0x" prefix
-                Non-hexadecimal characters are taken to be '0'.
-        0x2: Read the string as a signed 32-bit integer, and shift right 16 bits.
-        0x4: When VAL can not be converted to a number, return 0
+|flag | description|
+| --- | --- |
+|0x1    | Read the string as written in (unsigned, integer) hexadecimal without the "0x" prefix. Non-hexadecimal characters are taken to be '0'.|
+|0x2    | Read the string as a signed 32-bit integer, and shift right 16 bits.|
+|0x4    | When VAL can not be converted to a number, return 0|
 
-    TONUM("FF",       0x1)  -- 255
-    TONUM("1114112",  0x2)  -- 17
-    TONUM("1234abcd", 0x3)  -- 0x1234.abcd
+```lua
+TONUM("FF",       0x1)  -- 255
+TONUM("1114112",  0x2)  -- 17
+TONUM("1234abcd", 0x3)  -- 0x1234.abcd
+```
 
-CHR(VAL0, VAL1, ...)
+#### CHR(VAL0, VAL1, ...)
 
-    Convert one or more ordinal character codes to a string.
+Convert one or more ordinal character codes to a string.\
+When
 
-    When 
+```lua
+CHR(64)                    -- "@"
+CHR(104,101,108,108,111)   -- "@"
+```
 
-    CHR(64)                    -- "@"
-    CHR(104,101,108,108,111)   -- "@"
+#### ORD(STR, [INDEX], [NUM_RESULTS])
 
-ORD(STR, [INDEX], [NUM_RESULTS])
+Convert one or more characters from string STR to their ordinal (0..255) character codes.
 
-    Convert one or more characters from string STR to their ordinal (0..255) character codes.
+Use the INDEX parameter to specify which character in the string to use. When INDEX is out of range or str is not a string, ORD returns nil.
 
-    Use the INDEX parameter to specify which character in the string to use. When INDEX is out 
-    of range or str is not a string, ORD returns nil.
+When NUM_RESULTS is given, ORD returns multiple values starting from INDEX.
 
-    When NUM_RESULTS is given, ORD returns multiple values starting from INDEX.
+```lua
+ORD("@")         -- 64
+ORD("123",2)     -- 50 (THE SECOND CHARACTER: "2")
+ORD("123",2,3)   -- 50,51,52
+```
 
-    ORD("@")         -- 64
-    ORD("123",2)     -- 50 (THE SECOND CHARACTER: "2")
-    ORD("123",2,3)   -- 50,51,52
+#### SUB(STR, POS0, [POS1])
 
-SUB(STR, POS0, [POS1])
+Grab a substring from string str, from pos0 up to and including pos1. When POS1 is not specified, the remainder of the string is returned. When POS1 is specified, but not a number, a single character at POS0 is returned.
 
-    Grab a substring from string str, from pos0 up to and including pos1. When POS1 is not 
-    specified, the remainder of the string is returned. When POS1 is specified, but not a 
-    number, a single character at POS0 is returned.
+```lua
+S = "THE QUICK BROWN FOX"
+PRINT(SUB(S,5,9))   --> "QUICK"
+PRINT(SUB(S,5))     --> "QUICK BROWN FOX"
+PRINT(SUB(S,5,_))   --> "Q"
+```
 
-    S = "THE QUICK BROWN FOX"
-    PRINT(SUB(S,5,9))   --> "QUICK"
-    PRINT(SUB(S,5))     --> "QUICK BROWN FOX"
-    PRINT(SUB(S,5,_))   --> "Q"
+#### SPLIT(STR, [SEPARATOR], [CONVERT_NUMBERS])
 
-SPLIT(STR, [SEPARATOR], [CONVERT_NUMBERS])
+Split a string into a table of elements delimited by the given separator (defaults to ","). When separator is a number n, the string is split into n-character groups. When convert_numbers is true, numerical tokens are stored as numbers (defaults to true). Empty elements are stored as empty strings.
 
-    Split a string into a table of elements delimited by the given separator (defaults to ","). 
-    When separator is a number n, the string is split into n-character groups. When 
-    convert_numbers is true, numerical tokens are stored as numbers (defaults to true). Empty 
-    elements are stored as empty strings.
+```lua
+SPLIT("1,2,3")               -- {1,2,3}
+SPLIT("ONE:TWO:3",":",FALSE) -- {"ONE","TWO","3"}
+SPLIT("1,,2,")               -- {1,"",2,""}
+```
 
-    SPLIT("1,2,3")               -- {1,2,3}
-    SPLIT("ONE:TWO:3",":",FALSE) -- {"ONE","TWO","3"}
-    SPLIT("1,,2,")               -- {1,"",2,""}
+#### TYPE(VAL)
 
-TYPE(VAL)
+Returns the type of val as a string.
 
-    Returns the type of val as a string.
-
-    > PRINT(TYPE(3))
-    NUMBER
-    > PRINT(TYPE("3"))
-    STRING
+```lua
+> PRINT(TYPE(3))
+NUMBER
+> PRINT(TYPE("3"))
+STRING
+```
 
 ### Cartridge Data
 
@@ -2267,44 +2248,40 @@ If more than 256 bytes is needed, it is also possible to write directly to the c
 
 Another alternative is to write directly to a second cartridge by specifying a fourth parameter to @CSTORE(). This requires a cart swap (which in reality only means the user needs to watch a spinny cart animation for 1 second).
 
-    CSTORE(0,0,0X2000, "SPRITE SHEET.P8")
-    -- LATER, RESTORE THE SAVED DATA:
-    RELOAD(0,0,0X2000, "SPRITE SHEET.P8")
+```lua
+CSTORE(0,0,0X2000, "SPRITE SHEET.P8")
+-- LATER, RESTORE THE SAVED DATA:
+RELOAD(0,0,0X2000, "SPRITE SHEET.P8")
+```
 
 CARTDATA(ID)
 
-    Opens a permanent data storage slot indexed by ID that can be used to store and retrieve up 
-    to 256 bytes (64 numbers) worth of data using @DSET() and @DGET().
+Opens a permanent data storage slot indexed by ID that can be used to store and retrieve up to 256 bytes (64 numbers) worth of data using @DSET() and @DGET().
 
-        CARTDATA("ZEP_DARK_FOREST")
-        DSET(0, SCORE)
+```lua
+CARTDATA("ZEP_DARK_FOREST")
+DSET(0, SCORE)
+```
 
-    ID is a string up to 64 characters long, and should be unusual enough that  other 
-    cartridges do not accidentally use the same id. Legal characters are a..z, 0..9 and 
-    underscore (_)
+ID is a string up to 64 characters long, and should be unusual enough that  other cartridges do not accidentally use the same id. Legal characters are a..z, 0..9 and underscore (\_)
 
-    Returns true if data was loaded, otherwise false.
+Returns true if data was loaded, otherwise false.
 
-    CARTDATA can be called once per cartridge execution, and so only a single data slot can be 
-    used.
+CARTDATA can be called once per cartridge execution, and so only a single data slot can be used.
 
-    Once a cartdata ID has been set, the area of memory 0X5E00..0X5EFF is mapped  to permanent 
-    storage, and can either be accessed directly or via @DGET()/@DSET().
+Once a cartdata ID has been set, the area of memory 0X5E00..0X5EFF is mapped  to permanent storage, and can either be accessed directly or via @DGET()/@DSET().
 
-    There is no need to flush written data -- it is automatically saved to permanent storage 
-    even if modified by directly @POKE()'ing 0X5E00..0X5EFF.
+There is no need to flush written data -- it is automatically saved to permanent storage even if modified by directly @POKE()'ing 0X5E00..0X5EFF.
 
-DGET(INDEX)
+#### DGET(INDEX)
 
-    Get the number stored at INDEX (0..63)
+Get the number stored at INDEX (0..63)\
+Use this only after you have called @CARTDATA()
 
-    Use this only after you have called @CARTDATA()
+#### DSET(INDEX, VALUE)
 
-DSET(INDEX, VALUE)
-
-    Set the number stored at index (0..63)
-
-    Use this only after you have called @CARTDATA()
+Set the number stored at index (0..63)\
+Use this only after you have called @CARTDATA()
 
 ### GPIO
 
@@ -2313,13 +2290,11 @@ GPIO stands for "General Purpose Input Output", and allows machines to communica
 POKE()ed (to output a value -- e.g. to make an LED light up) or @PEEK()ed (e.g. to read the state of a switch).
 
 GPIO means different things for different host platforms:
-
-CHIP:         0x5f80..0x5f87 mapped to xio-p0..xio-p7
-Pocket CHIP:  0x5f82..0x5f87 mapped to GPIO1..GPIO6
-    // xio-p0 & p1 are exposed inside the prototyping area inside the case.
-Raspberry Pi: 0x5f80..0x5f9f mapped to wiringPi pins 0..31
-    // see <http://wiringpi.com/pins/> for mappings on different models.
-    // also: watch out for BCM vs. WiringPi GPIO indexing!
+| platform      | mapping                                               |
+| ---           |   ---                                                 |
+| CHIP          | 0x5f80..0x5f87 mapped to xio-p0..xio-p7               |
+Pocket CHIP     | 0x5f82..0x5f87 mapped to GPIO1..GPIO6. xio-p0 & p1 are exposed inside the prototyping area inside the case.|
+| Raspberry Pi  | 0x5f80..0x5f9f mapped to wiringPi pins 0..31. see <http://wiringpi.com/pins/> for mappings on different models. also: watch out for BCM vs. WiringPi GPIO indexing!|
 
 CHIP and Raspberry Pi values are all digital: 0 (LOW) and 255 (HIGH)
 
@@ -2339,91 +2314,92 @@ FUNCTION _DRAW()
 END
 ```
 
-:: Serial
+#### Serial
 
-    For more precise timing, the @SERIAL() command can be used. GPIO writes are buffered and  
-    dispatched at the end of each frame, allowing clock cycling at higher and/or more regular  
-    speeds than is possible by manually bit-banging using @POKE() calls.
+For more precise timing, the @SERIAL() command can be used. GPIO writes are buffered and  dispatched at the end of each frame, allowing clock cycling at higher and/or more regular  speeds than is possible by manually bit-banging using @POKE() calls.
 
+#### SERIAL(CHANNEL, ADDRESS, LENGTH)
 
-    SERIAL(CHANNEL, ADDRESS, LENGTH)
+| CHANNEL           | description |
+| ---               | ---         |
+| 0x000..0x0fe      | corresponds to gpio pin numbers; send 0x00 for LOW or 0xFF for HIGH|
+| 0x0ff             | delay; length is taken to mean "duration" in microseconds (excl. overhead)|
+| 0x400..0x401      | ws281x LED string (experimental)|
 
-        CHANNEL:
-            0x000..0x0fe    corresponds to gpio pin numbers; send 0x00 for LOW or 0xFF for HIGH
-            0x0ff           delay; length is taken to mean "duration" in microseconds (excl. overhead)
-            0x400..0x401    ws281x LED string (experimental)
+ADDRESS: The PICO-8 memory location to read from / write to.
 
-        ADDRESS: The PICO-8 memory location to read from / write to.
+LENGTH:  Number of bytes to send. 1/8ths are allowed to send partial bit strings.
 
-        LENGTH:  Number of bytes to send. 1/8ths are allowed to send partial bit strings.
+For example, to send a byte one bit at a time to a typical APA102 LED string:
 
-    For example, to send a byte one bit at a time to a typical APA102 LED string:
+```lua
+VAL = 42          -- VALUE TO SEND
+DAT = 16 CLK = 15 -- DATA AND CLOCK PINS DEPEND ON DEVICE
+POKE(0X4300,0)    -- DATA TO SEND (SINGLE BYTES: 0 OR 0XFF)
+POKE(0X4301,0XFF)
+FOR B=0,7 DO
+    -- SEND THE BIT (HIGH FIRST)
+    SERIAL(DAT, BAND(VAL, SHL(1,7-B))>0 AND 0X4301 OR 0X4300, 1)
+    -- CYCLE THE CLOCK
+    SERIAL(CLK, 0X4301)
+    SERIAL(0XFF, 5) -- DELAY 5
+    SERIAL(CLK, 0X4300)
+    SERIAL(0XFF, 5) -- DELAY 5
+END
+```
 
-        VAL = 42          -- VALUE TO SEND
-        DAT = 16 CLK = 15 -- DATA AND CLOCK PINS DEPEND ON DEVICE
-        POKE(0X4300,0)    -- DATA TO SEND (SINGLE BYTES: 0 OR 0XFF)
-        POKE(0X4301,0XFF)
-        FOR B=0,7 DO
-            -- SEND THE BIT (HIGH FIRST)
-            SERIAL(DAT, BAND(VAL, SHL(1,7-B))>0 AND 0X4301 OR 0X4300, 1)
-            -- CYCLE THE CLOCK
-            SERIAL(CLK, 0X4301)
-            SERIAL(0XFF, 5) -- DELAY 5
-            SERIAL(CLK, 0X4300)
-            SERIAL(0XFF, 5) -- DELAY 5
-        END
+Additional channels are available for bytestreams to and from the host operating system. These are intended to be most useful for UNIX-like environments while developing toolchains, and are not available while running a BBS or exported cart [1]. Maximum transfer rate in all  cases is 64k/sec (blocks cpu).
+| CHANNEL   | description|
+| ---       |     ---   |
+| 0x800     | dropped file   (stat(120) returns TRUE when data is available)|
+| 0x802     | dropped image  (stat(121) returns TRUE when data is available)|
+| 0x804     | stdin|
+| 0x805     | stdout|
+| 0x806     | file specified with: pico8 -i filename|
+| 0x807     | file specified with: pico8 -o filename|
 
-    Additional channels are available for bytestreams to and from the host operating system. 
-    These are intended to be most useful for UNIX-like environments while developing 
-    toolchains, and are not available while running a BBS or exported cart [1]. Maximum 
-    transfer rate in all  cases is 64k/sec (blocks cpu).
+Image files dropped into PICO-8 show up on channel 0x802 as a bytestream with a special format: The first 4 bytes are the image's width and height (2 bytes each little-endian, like PEEK2), followed by the image in reading order, one byte per pixel, colour-fitted to the display palette at the time the file was dropped.
 
-            0x800  dropped file   //  stat(120) returns TRUE when data is available
-            0x802  dropped image  //  stat(121) returns TRUE when data is available
-            0x804  stdin
-            0x805  stdout
-            0x806  file specified with: pico8 -i filename
-            0x807  file specified with: pico8 -o filename
+[1] Channels 0x800 and 0x802 are available from exported binaries, but with a maximum file size of 256k, or 128x128 for images.
 
-    Image files dropped into PICO-8 show up on channel 0x802 as a bytestream with a special 
-    format: The first 4 bytes are the image's width and height (2 bytes each little-endian, 
-    like PEEK2), followed by the image in reading order, one byte per pixel, colour-fitted to 
-    the display palette at the time the file was dropped.
+#### HTML
 
-    [1] Channels 0x800 and 0x802 are available from exported binaries, but with a maximum file 
-    size of 256k, or 128x128 for images.
+Cartridges exported as HTML / .js use a global array of integers (pico8_gpio) to  represent gpio pins. The shell HTML should define the array:
 
-:: HTML
-
-    Cartridges exported as HTML / .js use a global array of integers (pico8_gpio) to  represent 
-    gpio pins. The shell HTML should define the array:
-
-    var pico8_gpio = Array(128);
+```JavaScript
+var pico8_gpio = Array(128);
+```
 
 ### Mouse and Keyboard Input
 
-// EXPERIMENTAL -- but mostly working on all platforms
+__EXPERIMENTAL__ -- but mostly working on all platforms
 
 Mouse and keyboard input can be achieved by enabling devkit input mode:
 
+```lua
 POKE(0x5F2D, flags)  -- where flags are:
+```
 
-    0x1 Enable
-    0x2 Mouse buttons trigger btn(4)..btn(6)
-    0x4 Pointer lock (use stat 38..39 to read movements)
+| flag  | description |
+| ---   | ---         |
+| 0x1   | Enable|
+| 0x2   | Mouse buttons trigger btn(4)..btn(6)|
+| 0x4   | Pointer lock (use stat 38..39 to read movements)|
 
 Note that not every PICO-8 will have a keyboard or mouse attached to it, so when posting carts to the Lexaloffle BBS, it is encouraged to make keyboard and/or mouse control  optional and off by default, if possible. When devkit input mode is enabled, a message is displayed to BBS users warning them that the program may be expecting input beyond the  standard 6-button controllers.
 
 The state of the mouse and keyboard can be found in stat(x):
 
-    STAT(30) -- (Boolean) True when a keypress is available
-    STAT(31) -- (String) character returned by keyboard
-    STAT(32) -- Mouse X
-    STAT(33) -- Mouse Y
-    STAT(34) -- Mouse buttons (bitfield)
-    STAT(36) -- Mouse wheel event
-    STAT(38) -- Relative x movement (in host desktop pixels) -- requires flag 0x4
-    STAT(39) -- Relative y movement (in host desktop pixels) -- requires flag 0x4
+```lua
+STAT(30) -- (Boolean) True when a keypress is available
+STAT(31) -- (String) character returned by keyboard
+STAT(32) -- Mouse X
+STAT(33) -- Mouse Y
+STAT(34) -- Mouse buttons (bitfield)
+STAT(36) -- Mouse wheel event
+STAT(38) -- Relative x movement (in host desktop pixels) -- requires flag 0x4
+STAT(39) -- Relative y movement (in host desktop pixels) -- requires flag 0x4
+```
 
 ### Additional Lua Features
 
@@ -2431,11 +2407,9 @@ PICO-8 also exposes 2 features of Lua for advanced users: Metatables and Corouti
 
 For more information, please refer to the Lua 5.2 manual.
 
-:: Metatables
+#### Metatables
 
-    Metatables can be used to define the behaviour of objects under particular operations. For 
-    example, to use tables to represent 2D vectors that can be added together, the  '+' operator is 
-    redefined by defining an "__add" function for the metatable:
+Metatables can be used to define the behaviour of objects under particular operations. For example, to use tables to represent 2D vectors that can be added together, the  '+' operator is redefined by defining an "__add" function for the metatable:
 
 ```lua
 VEC2D={
@@ -2450,97 +2424,90 @@ V3 = V1+V2
 PRINT(V3.X..","..V3.Y) -- 3,14
 ```
 
-    SETMETATABLE(TBL, M)
+#### SETMETATABLE(TBL, M)
 
-        Set table TBL metatable to M
+Set table TBL metatable to M
 
+#### GETMETATABLE(TBL)
 
-    GETMETATABLE(TBL)
+return the current metatable for table t, or nil if none is set
 
-        return the current metatable for table t, or nil if none is set
+#### RAWSET(TBL, KEY, VALUE)
 
+#### RAWGET(TBL, KEY)
 
-    RAWSET(TBL, KEY, VALUE)
+#### RAWEQUAL(TBL1,TBL2
 
-    RAWGET(TBL, KEY)
+#### RAWLEN(TBL)
 
-    RAWEQUAL(TBL1,TBL2
+Raw access to the table, as if no metamethods were defined.
 
-    RAWLEN(TBL)
+#### Function Arguments
 
-        Raw access to the table, as if no metamethods were defined.
+The list of function arguments can be specifed with ...
 
-:: Function Arguments
+```lua
+FUNCTION PREPRINT(PRE, S, ...)
+    LOCAL S2 = PRE..TOSTR(S)
+    PRINT(S2, ...) -- PASS THE REMAINING ARGUMENTS ON TO PRINT()
+END
+```
 
-    The list of function arguments can be specifed with ... 
+To accept a variable number of arguments, use them to define a table and/or use Lua's select() function. select(index, ...) returns all of the arguments after index.
 
-        FUNCTION PREPRINT(PRE, S, ...)
-            LOCAL S2 = PRE..TOSTR(S)
-            PRINT(S2, ...) -- PASS THE REMAINING ARGUMENTS ON TO PRINT()
-        END
+```lua
+FUNCTION FOO(...)
+    LOCAL ARGS={...} -- BECOMES A TABLE OF ARGUMENTS
+    FOREACH(ARGS, PRINT)
+    ?SELECT("#",...)    -- ALTERNATIVE WAY TO COUNT THE NUMBER OF ARGUMENTS
+    FOO2(SELECT(3,...)) -- PASS ARGUMENTS FROM 3 ONWARDS TO FOO2()
+END
+```
 
-    To accept a variable number of arguments, use them to define a table and/or use Lua's select() 
-    function. select(index, ...) returns all of the arguments after index.
+#### Coroutines
 
-        FUNCTION FOO(...)
-            LOCAL ARGS={...} -- BECOMES A TABLE OF ARGUMENTS
-            FOREACH(ARGS, PRINT)
-            ?SELECT("#",...)    -- ALTERNATIVE WAY TO COUNT THE NUMBER OF ARGUMENTS
-            FOO2(SELECT(3,...)) -- PASS ARGUMENTS FROM 3 ONWARDS TO FOO2()
-        END
+Coroutines offer a way to run different parts of a program in a somewhat concurrent  way, similar to threads. A function can be called as a coroutine, suspended with
 
-:: Coroutines
+#### YIELD() any number of times, and then resumed again at the same points
 
-    Coroutines offer a way to run different parts of a program in a somewhat concurrent  way, 
-    similar to threads. A function can be called as a coroutine, suspended with 
-
-
-    YIELD() any number of times, and then resumed again at the same points.
-
-        FUNCTION HEY()
-            PRINT("DOING SOMETHING")
-            YIELD()
-            PRINT("DOING THE NEXT THING")
-            YIELD()
-            PRINT("FINISHED")
-        END
+```lua
+FUNCTION HEY()
+    PRINT("DOING SOMETHING")
+    YIELD()
+    PRINT("DOING THE NEXT THING")
+    YIELD()
+    PRINT("FINISHED")
+END
          
-        C = COCREATE(HEY)
-        FOR I=1,3 DO CORESUME(C) END
+C = COCREATE(HEY)
+FOR I=1,3 DO CORESUME(C) END
+```
 
+#### COCREATE(F)
 
-    COCREATE(F)
+Create a coroutine for function f.
 
-        Create a coroutine for function f.
+#### CORESUME(C, [P0, P1 ..])
 
+Run or continue the coroutine c. Parameters p0, p1.. are passed to the coroutine's function.
 
-    CORESUME(C, [P0, P1 ..])
+Returns true if the coroutine completes without any errors Returns false, error_message if there is an error.
 
-        Run or continue the coroutine c. Parameters p0, p1.. are passed to the coroutine's 
-        function.
+** Runtime errors that occur inside coroutines do not cause the program to stop running. It is a good idea to wrap CORESUME() inside an @ASSERT(). If the assert fails, it will print the error message generated by  coresume.
 
-        Returns true if the coroutine completes without any errors Returns false, error_message if 
-        there is an error.
+#### ASSERT(CORESUME(C))
 
-        ** Runtime errors that occur inside coroutines do not cause the program to stop running. It 
-        is a good idea to wrap CORESUME() inside an @ASSERT(). If the assert fails, it will print 
-        the error message generated by  coresume.
+#### COSTATUS(C)
 
+Return the status of coroutine C as a string:
 
-        ASSERT(CORESUME(C))
+- "running"
+- "suspended"
+- "dead"
 
+#### YIELD
 
-    COSTATUS(C)
-
-        Return the status of coroutine C as a string:
-            "running"
-            "suspended"
-            "dead"
-
-
-    YIELD
-
-        Suspend execution and return to the caller.
+Suspend execution and return to the caller.
 
 ## Appendix
 
@@ -2558,169 +2525,186 @@ PRINT("\#C\F5 BLUE ")
 
 The only side-effects on the draw state are changes in cursor position and foreground color all other attributes are reset each time @PRINT() is called.
 
-:: Control Codes
+#### Control Codes
 
-    0 "\0"   terminate printing
-    1 "\*"   repeat next character P0 times. ?"\*3a" --> aaa
-    2 "\#"   draw solid background with colour P0 
-    3 "\-"   shift cursor horizontally by P0-16 pixels
-    4 "\|"   shift cursor vertically by P0-16 pixels
-    5 "\+"   shift cursor by P0-16, P1-16 pixels
-    6 "\^"   special command (see below)
-    7 "\a"   audio (see below)
-    8 "\b"   backspace
-    9 "\t"   tab
-    a "\n"   newline
-    b "\v"   decorate previous character (see below)
-    c "\f"   set foreground colour
-    d "\r"   carriage return
-    e "\014" switch to font defined at 0x5600
-    f "\015" switch to default font
+|code       | description|
+| ---       | ---        |
+| 0 "\0"    | terminate printing|
+| 1 "\*"    | repeat next character P0 times. ?"\*3a" --> aaa|
+| 2 "\#"    | draw solid background with colour P0 |
+| 3 "\-"    | shift cursor horizontally by P0-16 pixels|
+| 4 "\|"    | shift cursor vertically by P0-16 pixels|
+| 5 "\+"    | shift cursor by P0-16, P1-16 pixels|
+| 6 "\^"    | special command (see below)|
+| 7 "\a"    | audio (see below)|
+| 8 "\b"    | backspace|
+| 9 "\t"    | tab|
+| a "\n"    | newline|
+| b "\v"    | decorate previous character (see below)|
+| c "\f"    | set foreground colour|
+| d "\r"    | carriage return|
+| e "\014"  | switch to font defined at 0x5600|
+| f "\015"  | switch to default font|
 
-:: Special Commands
+#### Special Commands
 
-    These commands all start with "\^" and take up to 2 parameters (P0, P1) For example, to 
-    clear screen to dark blue: print("\^c1")
+These commands all start with "\^" and take up to 2 parameters (P0, P1) For example, to clear screen to dark blue: print("\^c1")
+| command   | description |
+| ---       | ---         |
+| 1..9| skip 1,2,4,8,16,32..256 frames  |
+| c| cls to colour P0, set cursor to 0,0|
+| d| set delay to P0 frames for every character printed|
+| g| set cursor position to home|
+| h| set home to cursor position|
+| j| jump to absolute P0*4, P1*4 (in screen pixels)|
+| r| set rhs character wrap boundary to P0*4|
+| s| set tab stop width to P0 pixels (used by "\t")|
+| x| set character width  (default: 4)|
+| y| set character height (default: 6)|
 
-        1..9 skip 1,2,4,8,16,32..256 frames  
-        c cls to colour P0, set cursor to 0,0
-        d set delay to P0 frames for every character printed
-        g set cursor position to home
-        h set home to cursor position
-        j jump to absolute P0*4, P1*4 (in screen pixels)
-        r set rhs character wrap boundary to P0*4
-        s set tab stop width to P0 pixels (used by "\t")
-        x set character width  (default: 4)
-        y set character height (default: 6)
+#### Rendering mode options  
 
-    :: Rendering mode options  
+prefix these with "-" to disable: e.g. ?"\^i on \^-i off "
+| command   | description |
+| ---       | ---         |
+|w |wide mode: scales by 2x1 |
+|t |tall mode: scales by 1x2|
+|= |stripey mode: when wide or tall, draw only even pixels|
+|p |pinball mode: equivalent to setting wide, tall and stripey|
+|i |invert|
+|b |border: toggle 1px padding on left and top // on by default|
+|# |solid background  // off by default, but enabled automatically by \#|
 
-        // prefix these with "-" to disable: e.g. ?"\^i on \^-i off "
+#### Raw memory writes
 
-        w wide mode: scales by 2x1 
-        t tall mode: scales by 1x2
-        = stripey mode: when wide or tall, draw only even pixels
-        p pinball mode: equivalent to setting wide, tall and stripey
-        i invert
-        b border: toggle 1px padding on left and top // on by default
-        # solid background  // off by default, but enabled automatically by \#
+The following two commands take 4-character hex parameters:
+| command   | description |
+| ---       | ---         |
+|@addrnnnn[binstr] |poke nnnn bytes to address addr|
+|!addr[binstr]     |poke all remaining characters to address addr|
 
-    :: Raw memory writes
+For example, to write 4 bytes to video memory halfway down the screen:
 
-        The following two commands take 4-character hex parameters:
+```lua
+?"\^@70000004xxxxhello"
+```
 
-        @addrnnnn[binstr] poke nnnn bytes to address addr
-        !addr[binstr]     poke all remaining characters to address addr
+#### One-off characters
 
-        For example, to write 4 bytes to video memory halfway down the screen:
+Character data can be specified and printed in-line using \^. followed by 8 bytes of raw binary data, or \^: followed by 8 2-digit hexadecimal values. The data format is the same as custom fonts; each byte specifies a row of 1-bit pixel values, with the  low bit on the left.
 
-        >?"\^@70000004xxxxhello"
+```text
+\^.[8 chars of raw binary data]
+\^:[16 chars of hexadecimal]
+```
 
-    :: One-off characters
+To print a cat:
 
-        Character data can be specified and printed in-line using \^. followed by 8 bytes of 
-        raw binary data, or \^: followed by 8 2-digit hexadecimal values. The data format is 
-        the same as custom fonts; each byte specifies a row of 1-bit pixel values, with the  
-        low bit on the left.
+```lua
+ ?"\^:447cb67c3e7f0106"
+```
 
-        \^.[8 chars of raw binary data]
-        \^:[16 chars of hexadecimal]
+#### Audio
 
-        To print a cat:
+```lua
+?"\A"   -- SINGLE BEEP 
+?"\A12" -- PLAY EXISTING DATA AT SFX 12
+```
 
-        > ?"\^:447cb67c3e7f0106"
+If an sfx index is not specified, a non-active sfx between 60..63 is selected automatically. To fill the SFX with data before playback, the following commands can then be appended.
 
-:: Audio
+1. (optional) SFX attributes must appear once at the start as they apply to the whole sound:
+   | attributes | description |
+   | ---        |   ---       |
+   | s P0       | set the sfx speed|
+   | l P0 P1    | set the sfx loop start and end points|
 
-    ? ?"\A"   -- SINGLE BEEP ?"\A12" -- PLAY EXISTING DATA AT SFX 12
+2. Note data:
 
-    If an sfx index is not specified, a non-active sfx between 60..63 is selected 
-    automatically. To fill the SFX with data before playback, the following commands can then 
-    be appended.
+    Note are written as a..g, optionally followed by a sharp # or flat -, and octave number.
 
-    1. (optional) SFX attributes must appear once at the start as they apply to the whole 
-    sound:
+    ```lua
+    PRINT "\ACE-G" -- MINOR TRIAD
+    ```
 
-        s P0     set the sfx speed
-        l P0 P1  set the sfx loop start and end points
+    Empty notes Can be written with a dot:
 
-    1. Note data:
+    ```lua
+    PRINT "\AC..E-..G" -- STACCATO MINOR TRIAD 
+    ```
 
-        Note are written as a..g, optionally followed by a sharp # or flat -, and octave 
-        number.
+    Note attribute commands apply to following notes:
+    | attributes | description |
+    | ---        |   ---       |
+    |i P0        | set the instrument (default: 5)|
+    |v P0        | set the volume     (default: 5)|
+    |x P0        | set the effect     (default: 0)|
 
-            PRINT "\ACE-G" -- MINOR TRIAD
+    For example, to play a fast (speed 4), staccato (effect 5) arpeggio starting at C1:
 
-        Empty notes Can be written with a dot:
+    ```lua
+    PRINT "\AS4X5C1EGC2EGC3EGC4"
+    ```
 
-            PRINT "\AC..E-..G" -- STACCATO MINOR TRIAD 
+#### Decoration Characters
 
-        Note attribute commands apply to following notes:
+The control character \v can be used to decorate the last printed character with another character at a given offset, without needing to otherwise manage the cursor position. After the decorating character is printed, the previous cursor position is restored.
 
-        i P0    set the instrument (default: 5)
-        v P0    set the volume     (default: 5)
-        x P0    set the effect     (default: 0)
+The format is \v P0 char, where P0 is a number giving the desired offset, and char is any character to print at that offset (relative to the previous printed character).
 
-        For example, to play a fast (speed 4), staccato (effect 5) arpeggio starting at C1:
+The offset has x packed into the lowest 2 bits, and starts (-2,-8) in reading order. So 3 means (+1, -8), 4 means (-2, -7) and so on.
 
-            PRINT "\AS4X5C1EGC2EGC3EGC4"
+For example, to write "café!", using a comma to draw the acute accent:
 
-:: Decoration Characters
+```lua
+PRINT"\NCAFE\VB,!"
+```
 
-    The control character \v can be used to decorate the last printed character with another 
-    character at a given offset, without needing to otherwise manage the cursor position. After 
-    the decorating character is printed, the previous cursor position is restored.
+In this case P0 is 'b', which is read as the number 11. So the comma is drawn at:
 
-    The format is \v P0 char, where P0 is a number giving the desired offset, and char is any 
-    character to print at that offset (relative to the previous printed character).
+```lua
+x = (11%4)-2 = 1
+y = (11\4)-8 = -6
+```
 
-    The offset has x packed into the lowest 2 bits, and starts (-2,-8) in reading order. So 3 
-    means (+1, -8), 4 means (-2, -7) and so on.
+#### Custom Font
 
-    For example, to write "café!", using a comma to draw the acute accent:
+A custom font can be defined at 0x5600, consisting of 8 bytes per character * 256 characters = 2048 bytes. Each character is an 8x8 bitfield (1 bit/pixel), where starting from the top, each row is a single byte starting with 0x1 on the left.
 
-        PRINT"\NCAFE\VB,!"
+The first five bytes (character 0 is never drawn) describes attributes of the font:
+| address |  description |
+| 0x5600 | character width in pixels (can be more than 8, but only 8 pixels are drawn)|
+| 0x5601 | character width for character 128 and above|
+| 0x5602 | character height in pixels|
+| 0x5603 | draw offset x|
+| 0x5604 | draw offset y|
 
-    In this case P0 is 'b', which is read as the number 11. So the comma is drawn at:
+#### Default Attributes
 
-        x = (11%4)-2 = 1
-        y = (11\4)-8 = -6
+Although attributes are reset every time @PRINT() is called, it is possible to set their default values by writing to memory addresses 0x5f58..0x5f5b.
 
-:: Custom Font
+- 0x5f58 // bitfield
+    | value      | description |
+    | ---        |   ---       |
+    |0x1         | when set to 0x1, bits 1..7 are observed|
+    |0x2         | padding|
+    |0x4         | wide|
+    |0x8         | tall|
+    |0x10        | solid background|
+    |0x20        | invert|
+    |0x40        | stripey (when wide or tall)|
+    |0x80        | use custom font|
+    e.g.
 
-    A custom font can be defined at 0x5600, consisting of 8 bytes per character * 256 
-    characters = 2048 bytes. Each character is an 8x8 bitfield (1 bit/pixel), where starting 
-    from the top, each row is a single byte starting with 0x1 on the left.
+    ```lua
+    poke(0x5f58, 0x1 | 0x2 | 0x4 | 0x8 | 0x20 | 0x40)  -- pinball everywhere
+     ```
 
-    The first five bytes (character 0 is never drawn) describes attributes of the font:
+- 0x5f59 char_w   (low nibble), char_h   (high)
+- 0x5f5a char_w2  (low nibble), tab_w    (high)
+- 0x5f5b offset_x (low nibble), offset_y (high)
 
-        0x5600 character width in pixels (can be more than 8, but only 8 pixels are drawn)
-        0x5601 character width for character 128 and above
-        0x5602 character height in pixels
-        0x5603 draw offset x
-        0x5604 draw offset y
-
-:: Default Attributes
-
-    Although attributes are reset every time @PRINT() is called, it is possible to set their 
-    default values by writing to memory addresses 0x5f58..0x5f5b.
-
-    0x5f58 // bitfield
-        0x1  when set to 0x1, bits 1..7 are observed:
-        0x2  padding
-        0x4  wide
-        0x8  tall
-        0x10 solid background
-        0x20 invert
-        0x40 stripey (when wide or tall)
-        0x80 use custom font
-        
-        // e.g. poke(0x5f58, 0x1 | 0x2 | 0x4 | 0x8 | 0x20 | 0x40)  -- pinball everywhere
-    0x5f59 char_w   (low nibble), char_h   (high)
-    0x5f5a char_w2  (low nibble), tab_w    (high)
-    0x5f5b offset_x (low nibble), offset_y (high)
-
-    // any nibbles equal to 0 are ignored // tab_w values are mapped to 4..64
+any nibbles equal to 0 are ignored // tab_w values are mapped to 4..64
 
 ### PICO-8 VERSION HISTORY
 
@@ -3425,7 +3409,7 @@ The only side-effects on the draw state are changes in cursor position and foreg
 - Changed: .p8 format skips storing tailing rows of data that match default state
 - Changed/Fixed: shr(x,n) is now equivalent to calling shr(x,1) n times when n >= 32
 - Fixed: Error message and stack trace line numbers 0 or slightly out
-- Fixed: Unclosed block error navigates cursor to <eof> rather than start of block
+- Fixed: Unclosed block error navigates cursor to __eof__ rather than start of block
 - Fixed: Exported binaries can load carts outside of bundle
 - Fixed: BBS cart loaded from a local cart loses data cstore()ed during previous run
 - Fixed: btn() returns same as btnp()
