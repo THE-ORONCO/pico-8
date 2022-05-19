@@ -27,7 +27,7 @@ The harsh limitations of PICO-8 are carefully chosen to be fun to work with, enc
 
 ## Specifications
 
-| thing     | spec                                          |
+| component | description                                   |
 |---        |---                                            |
 | Display   | 128x128, fixed 16 colour palette              |
 | Input     | 6-button controllers                          |
@@ -662,9 +662,9 @@ A cartridges map or source code can be exported as a single image named .map.png
 
 Map images are 1024x512 (128x32 8x8 sprites). Lua images are sized to fit, but each line is fixed (and cropped) at 192 pixels wide.
 
-#### Cartridges (.p8, .p8.png, .p8.rom)
+### Cartridges (.p8, .p8.png, .p8.rom)
 
-Using `EXPORT` to save a cartridge is the same as using SAVE, but without changing the current working cartridge. This can be useful for example, to save a copy in .p8.png format for distribution without accidentally continuing to make changes to that file instead of the original .p8 file.
+Using `EXPORT` to save a cartridge is the same as using SAVE, but without changing the current working cartridge. This can be useful for example, to save a copy in.p8.png format for distribution without accidentally continuing to make changes to that file instead of the original .p8 file.
 
 `EXPORT` can also be used to perform cartridge file format conversions from commandline. For example, from a Linux shell:
 
