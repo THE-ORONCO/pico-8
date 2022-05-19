@@ -461,7 +461,7 @@ Hold SHIFT to snap to circle, square, or low-integer-ratio line.
 
 The 8 coloured circles are sprite flags for the current sprite. These  have no particular meaning, but can be accessed using the @FGET() / @FSET() functions. They are indexed from 0 starting from the left.
 
-See @FSET() for more information.
+See [@FSET()](#fsetn-f-val) for more information.
 
 #### Loading .png files into the sprite sheet
 
@@ -1348,7 +1348,7 @@ PRINT returns the right-most x position that occurred while printing. This can b
 W = PRINT("HOGE", 0, -20) -- returns 16
 ```
 
-See @{Appendix A} (P8SCII) for information about control codes and custom fonts.
+See [@{Appendix A}](#appendix-a-p8scii-control-codes) (P8SCII) for information about control codes and custom fonts.
 
 #### CURSOR(X, Y, [COL])
 
@@ -1906,7 +1906,7 @@ CSTORE() is equivalent to CSTORE(0, 0, 0x4300)
 
 The code section ( >= 0x4300) is protected and can not be written to.
 
-If FILENAME is specified, the data is written directly to that cartridge on disk. Up to 64 cartridges can be written in one session. See @{Cartridge Data} for more information.
+If FILENAME is specified, the data is written directly to that cartridge on disk. Up to 64 cartridges can be written in one session. See[@{Cartridge Data}](#cartridge-data) for more information.
 
 #### MEMSET(DEST_ADDR, VAL, LEN)
 
