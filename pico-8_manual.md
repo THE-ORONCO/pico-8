@@ -190,7 +190,7 @@ To generate a label image saved with the cart, run the program first and press C
 grab whatever is on the screen. The first two lines of the program starting with '--' are
 also drawn to the cart's label.
 
-```
+```lua
 -- OCEAN DIVER LEGENDS
 -- BY LOOPY
 ```
@@ -212,13 +212,13 @@ It is possible to edit .p8 files directly with a separate text editor. Using CTR
 
 If there are changes to both the cart on disk and in the editor, a notification is displayed:
 
-```
+``` text
 DIDN'T RELOAD; UNSAVED CHANGES
 ```
 
 Alternatively, .lua text files can be modified in a separate editor and then included into the cartridge's code each time it is run using @{#INCLUDE} (in the desired code location):
 
-```
+``` lua
 #INCLUDE YOURFILE.LUA
 ```
 
@@ -257,7 +257,7 @@ Some settings can be changed while running PICO-8 by typing CONFIG SETTING VALUE
 
 // note: these override settings found in config.txt
 
-```
+``` bash
 pico8 [switches] [filename.p8]
 ```
 
@@ -403,19 +403,11 @@ reached, a warning light will flash. This can be disabled by right-clicking.
 
 ### Sprite Editor
 
-The sprite editor is designed to be used both for sprite-wise editing and for freeform  
-pixel-level editing. The sprite navigator at the bottom of the screen provides an 8x8
-sprite-wise  view into the sprite sheet, but it is possible to use freeform tools (pan, select)
-when dealing with larger or oddly sized areas.
+The sprite editor is designed to be used both for sprite-wise editing and for freeform  pixel-level editing. The sprite navigator at the bottom of the screen provides an 8x8 sprite-wise  view into the sprite sheet, but it is possible to use freeform tools (pan, select) when dealing with larger or oddly sized areas.
 
-:: Draw Tool
+#### Draw Tool
 
-    Click and drag on the sprite to plot pixels, or use RMB to select the colour under the 
-    cursor.
-
-    All operations apply only to the visible area, or the section if there is one.
-
-    Hold CTRL to search and replace a colour.
+Click and drag on the sprite to plot pixels, or use RMB to select the colour under the cursor. All operations apply only to the visible area, or the section if there is one. Hold CTRL to search and replace a colour.
 
 :: Stamp Tool
 
