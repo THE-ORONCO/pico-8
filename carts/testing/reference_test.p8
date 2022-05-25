@@ -1,22 +1,44 @@
 pico-8 cartridge // http://www.pico-8.com
 version 36
 __lua__
-left,right,up,down,fire1,fire2=0,1,2,3,4,5
-black,dark_blue,dark_purple,dark_green,brown,dark_gray,light_gray,white,red,orange,yellow,green,blue,indigo,pink,peach=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+-- reference test
+-- THE_ORONCO
 
-
-function _init()
-	print("pissbaby",20,20,green)
-    
+function printTable(tb)
+    for k,v in pairs(tb) do
+        if (k == "brother") then 
+            print("brother:")
+            printTable(v)
+        else print("  ["..k.."]: "..v) end
+    end
 end
 
-function _update60()
-    
+function modifyBruh(tb)
+    tb.bruh = 10
 end
 
-function _draw()
-    
+function modifyBrother(tb)
+    tb.age = 420
 end
+
+p = {
+    ["bruh"] = 2,
+    ["brother"] ={
+        ["age"] = 69
+    },
+    2, 3
+}
+
+print("unmodified")
+printTable(p)
+
+modifyBruh(p)
+modifyBrother(p.brother)
+
+print("modified")
+printTable(p)
+
+
 
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

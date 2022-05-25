@@ -15,5 +15,8 @@ sdl_controllers.txt
 # userspecific log data
 log.txt
 
+carts/demos/*
+
 # IDE stuff
 .vscode
+
